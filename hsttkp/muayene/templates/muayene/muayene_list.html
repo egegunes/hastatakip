@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row" style="padding:20px">
+    {% if muayene_list %}
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            <tr>
+                <th>#</th>
+                <th>HASTA</th>
+                <th>TARİH</th>
+                <th>YAKINMA</th>
+                <th>TANI</th>
+            </tr>
+            {% for muayene in muayene_list %}
+            <tr>
+                <td>{{muayene.id}}</td>
+                <td><a href="{% url 'muayene:detail' muayene.id %}">{{ muayene.hasta }}</a></td>
+                <td>{{muayene.tarih}}</td>
+                <td>{{muayene.yakinma}}</td>
+                <td>{{muayene.ontani_tani}}</td>
+                <td><a href="{% url 'muayene:detail' muayene.id %}">Detay</a></td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% else %}
+        <h3> Aramanızla eşleşen muayene bulunamadı. </h3>
+    {% endif %}
+</div>
+
+{% endblock %}

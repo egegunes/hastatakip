@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if form.errors %}
+{% for key, value in form.errors.items %}
+<div class="alert alert-danger" role="alert">
+<p> <strong> {{ key }} </strong> {{ value }} </p>
+</div>
+{% endfor %}
+{% endif %}
+
+<form method="post" class="form-group">
+    {% csrf_token %}
+    <div class="row" style="padding:20px">
+        <div class="col-xs-2">
+            <label for="{{ form.hasta.id_for_label }}">Hasta:</label>
+            {{ form.hasta }}
+            <div id="is-only"></div>
+        </div>
+    </div>
+    <div class="row" style="padding:20px">
+        <div class="col-xs-10">
+            <label for="{{ form.kullandigi_ilaclar.id_for_label }}">Kullandığı ilaçlar:</label>
+            {{ form.kullandigi_ilaclar }}
+            <br>
+            <label for="{{ form.yakinma.id_for_label }}" id="yakinma-label">Yakınma:</label>
+            {{ form.yakinma }}
+            <br>
+            <label for="{{ form.baki.id_for_label }}" id="baki-label">Muayene:</label>
+            {{ form.baki }}
+            <br>
+            <label for="{{ form.ontani_tani.id_for_label }}" id="tani-label">Öntanı / tanı:</label>
+            {{ form.ontani_tani }}
+            <br>
+            <label for="{{ form.oneri_gorusler.id_for_label }}" id="oneri-label">Öneri ve Gorüşler</label>
+            {{ form.oneri_gorusler }}
+            <br>
+            <label for="{{ form.ozel_notlar.id_for_label }}">Özel notlar</label>
+            {{ form.ozel_notlar }}
+            <br>
+            <input class="btn btn-primary btn-lg" type="submit" role="button" value="Kaydet" />
+        </div>
+    </div>
+</form>
+
+{{ form.media }}
+
+{% endblock %}

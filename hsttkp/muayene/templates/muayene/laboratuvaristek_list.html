@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row" style="padding:20px">
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            {% if istek_list %}
+            <tr>
+                <th>#</th>
+                <th>HASTA</th>
+                <th>TARİH</th>
+                <th>İSTEKLER</th>
+            </tr>
+            {% for istek in istek_list %}
+            <tr>
+                <td>{{istek.id}}</td>
+                <td><a href="{% url 'hasta:detail' istek.hasta.slug %}">{{ istek.hasta }}</a></td>
+                <td>{{istek.tarih}}</td>
+                <td>
+                    <ol>
+                    {% for name in istek.get_true_fields %}
+                        <li>{{name}}</li>
+                    {% endfor %}
+                    </ol>
+                    <a class="btn btn-primary" href="{% url 'muayene:lab-sonuc' istek.id %}">SONUÇ GİR</a>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr> Kayıtlı tetkik yok. </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

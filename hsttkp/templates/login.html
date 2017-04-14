@@ -1,0 +1,12 @@
+{% if login_failed %}
+<p>Kullanıcı adı ile şifre uyuşmuyor. Lütfen bilgilerinizi kontrol edin.</p>
+{% endif %}
+
+<form method="post" class="form-inline" action="{% url 'login' %}">
+{% csrf_token %}
+<label for="{{form.username.id_for_label}}">Kullanıcı adı:</label>
+{{ form.username }}
+<label for="{{form.password.id_for_label}}">Şifre:</label>
+{{ form.password }}
+<input class="btn btn-primary" type="submit" value="login" />
+</form>

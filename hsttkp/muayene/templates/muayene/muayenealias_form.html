@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="col-md-6">
+    {% if form.errors %}
+    {% for key, value in form.errors.items %}
+    <div class="alert alert-danger" role="alert">
+        <p> <strong> {{ key }} </strong> {{ value }} </p>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        <label for="{{form.shorthand.id_for_label}}">Kısa: </label>
+        {{form.shorthand}}
+        <label for="{{form.longhand.id_for_label}}">Uzun: </label>
+        {{form.longhand}}
+        <br />
+        <br />
+        <input type="submit" class="btn btn-primary" value="KAYDET" style="float:right">
+    </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+{% if alias_list %}
+<div class="page-header">
+    <h3>Kısaltmalar <small>Toplam: {{alias_list | length}} <a href="{% url 'muayene:alias-create' %}">Yeni ekle</a></small></h3>
+</div>
+
+<table class="table table-hover table-stripped">
+    <tr>
+        <th>#</th>
+        <th>KISA</th>
+        <th>UZUN</th>
+    </tr>
+    {% for alias in alias_list %}
+    <tr>
+        <td>{{alias.id}}</td>
+        <td>{{alias.shorthand}}</td>
+        <td>{{alias.longhand}}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endif %}
+
+{% endblock %}

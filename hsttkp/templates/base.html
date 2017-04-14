@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>
+{% block title %} HastaTakip {% endblock %}
+</title>
+
+{% load staticfiles %}
+<link rel="shortcut icon" href="{% static "favicon.ico" %}" type="image/png" />
+
+<!-- CSS -->
+<link rel="stylesheet" type="text/css" href="{% static "bootstrap/css/bootstrap.min.css" %}" />
+<link rel="stylesheet" type="text/css" href="{% static "autocomplete_light/vendor/select2/dist/css/select2.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "autocomplete_light/select2.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "bootstrap-datepicker/css/bootstrap-datepicker3.min.css" %}">
+<link rel="stylesheet" type="text/css" href="{% static "css/bootstrap-table.min.css" %}">
+
+<!-- JS -->
+<script src="{% static "js/vendor/jquery.min.js" %}"></script>
+<script src="{% static "bootstrap/js/bootstrap.min.js" %}"></script>
+<script src="{% static "autocomplete_light/jquery.init.js" %}"></script>
+<script src="{% static "autocomplete_light/autocomplete.init.js" %}"></script>
+<script src="{% static "autocomplete_light/vendor/select2/dist/js/select2.js" %}">
+<script src="{% static "autocomplete_light/select2.js" %}"></script>
+<script src="{% static "bootstrap-datepicker/js/bootstrap-datepicker.min.js" %}"></script>
+<script src="{% static "bootstrap-datepicker/locales/bootstrap-datepicker.tr.min.js" %}"></script>
+<script src="{% static "js/script.js" %}"></script>
+
+<script> {% block script %} {% endblock %} </script>
+
+</head>
+
+<body>
+
+<!-- Container -->
+<div class="container-fluid">
+
+<!-- Header -->
+<nav class="navbar navbar-default"> 
+
+    <div class="container-fluid"> 
+
+        <div class="navbar-header"> 
+
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="{% url 'index' %}">HastaTakip</a>
+
+        </div>
+
+        <div class="collapse navbar-collapse" id="bs-navbar-collapse-1">
+
+            <ul class="nav navbar-nav">
+                <li><a href="{% url 'hasta:create' %}">Yeni hasta</a></li>
+                <li><a href="{% url 'muayene:create' %}">Yeni muayene</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listeler <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'hasta:list' %}">Tüm hastalar</a></li>
+                        <li><a href="{% url 'hasta:sozlesme-list' %}">Sözleşmeli hastalar</a></li>
+                        <li><a href="{% url 'hasta:created-last' %}">Son eklenen hastalar</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'muayene:archive-custom' %}">Geçmiş Muayeneler</a></li>
+                        <li><a href="{% url 'muayene:archive-last' %}">Son eklenen muayeneler</a></li>
+                        <li><a href="{% url 'muayene:lab-last' %}">Son istenen tetkikler</a></li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="{% url 'muayene:ilac-list' %}">İlaçlar</a></li>
+                        <li><a href="{% url 'muayene:alias-list' %}">Kısaltmalar</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Oturum <span class="caret"></span></a>
+                    <ul class="dropdown-menu"> 
+                        <li><a href="#">Kullanıcı: {{ user }}</a></li>
+                        <li><a href="{% url 'logout' %}">Çıkış yap</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <form class="navbar-form navbar-right form-group" method="POST" action="{% url 'hasta:search' %}">
+                {% csrf_token %}
+                <input type="text" class="form-control" placeholder="Hasta ara" name="term">
+                <button type="submit" class="btn btn-default">Ara</button>
+            </form>
+
+        </div>
+
+    </div>
+</nav>
+<!-- END Header -->
+
+<!-- Content -->
+<div id="content">
+{% block content %}
+{{ content }}
+{% endblock %}
+</div>
+<!-- END Content -->
+
+</div>
+<!-- END Container -->
+
+</body>
+
+</html>

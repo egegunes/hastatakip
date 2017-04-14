@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row" style="padding:20px">
+    <div class="table-responsive">
+        <table class="table table-hover table-condensed">
+            {% if recete_list %}
+            <tr>
+                <th>#</th>
+                <th>HASTA</th>
+                <th>TARİH</th>
+                <th>İLAÇLAR</th>
+            </tr>
+            {% for recete in recete_list %}
+            <tr>
+                <td>{{recete.id}}</td>
+                <td><a href="{% url 'hasta:detail' recete.hasta.slug %}">{{ recete.hasta }}</a></td>
+                <td>{{recete.tarih}}</td>
+                <td>
+                    <ol>
+                        <li>{{recete.ilac1}}
+                            <ul>
+                                <li>{{recete.ilac1_kullanim}}</li>
+                                <li>{{recete.ilac1_kutu}} kutu</li>
+                            </ul>
+                        </li>
+                        {% if recete.ilac2 %}
+                        <li>{{recete.ilac2}}
+                            <ul>
+                                <li>{{recete.ilac2_kullanim}}</li>
+                                <li>{{recete.ilac2_kutu}} kutu</li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% if recete.ilac3 %}
+                        <li>{{recete.ilac3}}
+                            <ul>
+                                <li>{{recete.ilac3_kullanim}}</li>
+                                <li>{{recete.ilac3_kutu}} kutu</li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% if recete.ilac4 %}
+                        <li>{{recete.ilac4}}
+                            <ul>
+                                <li>{{recete.ilac4_kullanim}}</li>
+                                <li>{{recete.ilac4_kutu}} kutu</li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                        {% if recete.ilac5 %}
+                        <li>{{recete.ilac5}}
+                            <ul>
+                                <li>{{recete.ilac5_kullanim}}</li>
+                                <li>{{recete.ilac5_kutu}} kutu</li>
+                            </ul>
+                        </li>
+                        {% endif %}
+                    </ol>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                Kayıtlı reçete yok.
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+</div>
+
+{% endblock %}

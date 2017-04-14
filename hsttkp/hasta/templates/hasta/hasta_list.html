@@ -1,0 +1,74 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="page-header">
+    <h1> Tüm Hastalar <small> Toplam: {{ hasta_count }} </small> </h1>
+</div>
+
+<div class="row" style="padding:20px;margin-top:10px">
+
+        <table class="table table-hover table-condensed">
+            {% if hasta_list %}
+            <thead>
+                <tr>
+                    <th> ID </th>
+                    <th> HASTA </th>
+                    <th> KAYIT TARİHİ </th>
+                    <th> PROVİZYON NO </th>
+                    <th> SIGORTA </th>
+                    <th> AH SEVK </th>
+                    <th> SÖZLEŞME </th>
+                    <th> SON MUAYENE </th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for hasta in hasta_list %}
+                <tr>
+                    <td> {{ hasta.id }} </td>
+                    <td><a href="{% url 'hasta:detail' hasta.slug %}">{{ hasta }}</a></td>
+                    <td> {{ hasta.kayit_tarihi }} </td>
+                    <td> {{hasta.id}}/{{hasta.kayit_tarihi.year}} </td>
+                    <td> {{ hasta.sigorta }} </td>
+                    <td> {% if hasta.ahsevk_done is True %} {{hasta.ahsevk_done_tarih}} {% else %} Yapılmadı {% endif %}</td>
+                    <td> {% if hasta.sozlesme_set.latest.is_active %} Aktif {% else %} Yok {% endif %}</td>
+                    <td> {{hasta.muayene_set.latest.tarih}} </td>
+                    <td><a href="{% url 'hasta:detail' hasta.slug %}">Detay</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+            {% else %}
+            <h3> Aramanız ile eşleşen hasta bulunamadı. </h3>
+            {% endif %}
+
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li>
+                <a href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            {% endif %}
+            <li class="active">
+                <a href="#">{{ page_obj.number }}
+                    <span class="sr-only">(current)</span>
+                </a>
+            </li>
+            {% if page_obj.has_next %}
+            <li>
+                <a href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
+</div>
+
+{% endblock %}

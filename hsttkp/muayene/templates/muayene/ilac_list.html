@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h3>İlaçlar <small>Toplam: {{ilac_list | length}} <a href="{% url 'muayene:ilac-create' %}">Yeni ekle</a></small></h3>
+    <form method="post" class="form-inline" action="{% url 'muayene:ilac-ara' %}">
+        {% csrf_token %}
+        <input type="text" name="term" placeholder="İlaç ad" class="form-control"/>
+        <input type="submit" value="ARA" class="btn btn-default" />
+    </form>
+</div>
+
+<div class="row" style="padding:20px">
+    <div class="col-md-3">
+    </div>
+</div>
+
+<div class="row" style="padding:20px">
+    <div class="table-responsive">
+        {% if ilac_list %}
+        <table class="table table-hover table-condensed">
+            <tr>
+                <th>#</th>
+                <th>AD</th>
+                <th>KULLANIM</th>
+                <th>BİLGİ</th>
+            </tr>
+            {% for ilac in ilac_list %}
+            <tr>
+                <td>{{ilac.id}}</td>
+                <td>{{ilac.ad}}</td>
+                <td>{{ilac.kullanim}}</td>
+                <td>{{ilac.bilgi}}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <h1> Kayıtlı ilaç yok. </h1>
+        {% endif %}
+    </div>
+</div>
+
+{% endblock %}

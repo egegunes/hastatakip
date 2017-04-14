@@ -1,0 +1,271 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="row" style="padding:20px">
+    <div class="col-md-4">
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            {% if form.errors %}
+            {% for key, value in form.errors.items %}
+            <div class="alert alert-danger" role="alert">
+                <p> <strong> {{ key }} </strong> {{ value }} </p>
+            </div>
+            {% endfor %}
+            {% endif %}
+            {% if form.hemogram.value is True %}
+            <label for="{{form.hemogram_sonuc.id_for_label}}">Hemogram:</label> 
+            {{form.hemogram_sonuc}}
+            {% endif %}
+            {% if form.sedim.value is True %}
+            <label for="{{form.sedim_sonuc.id_for_label}}">Sedim:</label> 
+            {{form.sedim_sonuc}}
+            {% endif %}
+            {% if form.serum_demir.value is True %}
+            <label for="{{form.serum_demir_sonuc.id_for_label}}">Serum Demir:</label> 
+            {{form.serum_demir_sonuc}}
+            {% endif %}
+            {% if form.tdbk.value is True %}
+            <label for="{{form.tdbk_sonuc.id_for_label}}">TDBK:</label> 
+            {{form.tdbk_sonuc}}
+            {% endif %}
+            {% if form.ferritin.value is True %}
+            <label for="{{form.ferritin_sonuc.id_for_label}}">Ferritin:</label> 
+            {{form.ferritin_sonuc}}
+            {% endif %}
+            {% if form.b12.value is True %}
+            <label for="{{form.b12_sonuc.id_for_label}}">B-12:</label> 
+            {{form.b12_sonuc}}
+            {% endif %}
+            {% if form.folik_asit.value is True %}
+            <label for="{{form.folik_asit_sonuc.id_for_label}}">Folik Asit:</label> 
+            {{form.folik_asit_sonuc}}
+            {% endif %}
+            {% if form.hemoglobin.value is True %}
+            <label for="{{form.hemoglobin_sonuc.id_for_label}}">Hemoglobin Elektroforezi:</label> 
+            {{form.hemoglobin_sonuc}}
+            {% endif %}
+            {% if form.aclik_kan.value is True %}
+            <label for="{{form.aclik_kan_sonuc.id_for_label}}">Açlık Kan Şekeri:</label> 
+            {{form.aclik_kan_sonuc}}
+            {% endif %}
+            {% if form.tokluk_kan.value is True %}
+            <label for="{{form.tokluk_kan_sonuc.id_for_label}}">Tokluk Kan Şekeri:</label> 
+            {{form.tokluk_kan_sonuc}}
+            {% endif %}
+            {% if form.hba1c.value is True %}
+            <label for="{{form.hba1c_sonuc.id_for_label}}">HbA1c:</label> 
+            {{form.hba1c_sonuc}}
+            {% endif %}
+            {% if form.sgot.value is True %}
+            <label for="{{form.sgot_sonuc.id_for_label}}">SGOT (AST):</label> 
+            {{form.sgot_sonuc}}
+            {% endif %}
+            {% if form.sgpt.value is True %}
+            <label for="{{form.sgpt_sonuc.id_for_label}}">SGPT (ALT):</label> 
+            {{form.sgpt_sonuc}}
+            {% endif %}
+            {% if form.ggt.value is True %}
+            <label for="{{form.ggt_sonuc.id_for_label}}">GGT:</label> 
+            {{form.ggt_sonuc}}
+            {% endif %}
+            {% if form.alp.value is True %}
+            <label for="{{form.alp_sonuc.id_for_label}}">ALP:</label> 
+            {{form.alp_sonuc}}
+            {% endif %}
+            {% if form.ure.value is True %}
+            <label for="{{form.ure_sonuc.id_for_label}}">Üre:</label> 
+            {{form.ure_sonuc}}
+            {% endif %}
+            {% if form.kreatinin.value is True %}
+            <label for="{{form.kreatinin_sonuc.id_for_label}}">Kreatinin:</label> 
+            {{form.kreatinin_sonuc}}
+            {% endif %}
+            {% if form.urik_asit.value is True %}
+            <label for="{{form.urik_asit_sonuc.id_for_label}}">Ürik Asit:</label> 
+            {{form.urik_asit_sonuc}}
+            {% endif %}
+            {% if form.total_kolesterol.value is True %}
+            <label for="{{form.total_kolesterol_sonuc.id_for_label}}">Total Kolesterol:</label> 
+            {{form.total_kolesterol_sonuc}}
+            {% endif %}
+            {% if form.hdl.value is True %}
+            <label for="{{form.hdl_sonuc.id_for_label}}">HDL:</label> 
+            {{form.hdl_sonuc}}
+            {% endif %}
+            {% if form.trigliserit.value is True %}
+            <label for="{{form.trigliserit_sonuc.id_for_label}}">Trigliserit:</label> 
+            {{form.trigliserit_sonuc}}
+            {% endif %}
+            {% if form.ldl.value is True %}
+            <label for="{{form.ldl_sonuc.id_for_label}}">LDL:</label> 
+            {{form.ldl_sonuc}}
+            {% endif %}
+            {% if form.free_t3.value is True %}
+            <label for="{{form.free_t3_sonuc.id_for_label}}">Free T3:</label> 
+            {{form.free_t3_sonuc}}
+            {% endif %}
+            {% if form.free_t4.value is True %}
+            <label for="{{form.free_t4_sonuc.id_for_label}}">Free T4:</label> 
+            {{form.free_t4_sonuc}}
+            {% endif %}
+            {% if form.tsh.value is True %}
+            <label for="{{form.tsh_sonuc.id_for_label}}">TSH:</label> 
+            {{form.tsh_sonuc}}
+            {% endif %}
+            {% if form.anti_tpo.value is True %}
+            <label for="{{form.anti_tpo_sonuc.id_for_label}}">anti-TPO:</label> 
+            {{form.anti_tpo_sonuc}}
+            {% endif %}
+            {% if form.anti_tg.value is True %}
+            <label for="{{form.anti_tg_sonuc.id_for_label}}">anti-TG:</label> 
+            {{form.anti_tg_sonuc}}
+            {% endif %}
+            {% if form.aso.value is True %}
+            <label for="{{form.aso_sonuc.id_for_label}}">ASO:</label> 
+            {{form.aso_sonuc}}
+            {% endif %}
+            {% if form.crp.value is True %}
+            <label for="{{form.crp_sonuc.id_for_label}}">CRP:</label> 
+            {{form.crp_sonuc}}
+            {% endif %}
+            {% if form.rf.value is True %}
+            <label for="{{form.rf_sonuc.id_for_label}}">RF:</label> 
+            {{form.rf_sonuc}}
+            {% endif %}
+            {% if form.psa.value is True %}
+            <label for="{{form.psa_sonuc.id_for_label}}">PSA:</label> 
+            {{form.psa_sonuc}}
+            {% endif %}
+            {% if form.free_psa.value is True %}
+            <label for="{{form.free_psa_sonuc.id_for_label}}">Free PSA:</label> 
+            {{form.free_psa_sonuc}}
+            {% endif %}
+            {% if form.tam_idrar.value is True %}
+            <label for="{{form.tam_idrar_sonuc.id_for_label}}">Tam İdrar:</label> 
+            {{form.tam_idrar_sonuc}}
+            {% endif %}
+            {% if form.idrar_kab.value is True %}
+            <label for="{{form.idrar_kab_sonuc.id_for_label}}">İdrar KAB:</label> 
+            {{form.idrar_kab_sonuc}}
+            {% endif %}
+            {% if form.gaita.value is True %}
+            <label for="{{form.gaita_sonuc.id_for_label}}">Gaita Direkt Bakısı:</label> 
+            {{form.gaita_sonuc}}
+            {% endif %}
+            {% if form.bogaz_kab.value is True %}
+            <label for="{{form.bogaz_kab_sonuc.id_for_label}}">Boğaz KAB:</label> 
+            {{form.bogaz_kab_sonuc}}
+            {% endif %}
+            {% if form.ejaculat_kab.value is True %}
+            <label for="{{form.ejaculat_kab_sonuc.id_for_label}}">Ejaculat KAB:</label> 
+            {{form.ejaculat_kab_sonuc}}
+            {% endif %}
+            {% if form.ekg.value is True %}
+            <label for="{{form.ekg_sonuc.id_for_label}}">EKG:</label> 
+            {{form.ekg_sonuc}}
+            {% endif %}
+            {% if form.eforlu_ekg.value is True %}
+            <label for="{{form.eforlu_ekg_sonuc.id_for_label}}">Eforlu EKG:</label> 
+            {{form.eforlu_ekg_sonuc}}
+            {% endif %}
+            {% if form.ekokardiografi.value is True %}
+            <label for="{{form.ekokardiografi_sonuc.id_for_label}}">Ekokardiografi:</label> 
+            {{form.ekokardiografi_sonuc}}
+            {% endif %}
+            {% if form.tansiyon_holter.value is True %}
+            <label for="{{form.tansiyon_holter_sonuc.id_for_label}}">Tansiyon Holter:</label> 
+            {{form.tansiyon_holter_sonuc}}
+            {% endif %}
+            {% if form.ekg_holter.value is True %}
+            <label for="{{form.ekg_holter_sonuc.id_for_label}}">EKG Holter:</label> 
+            {{form.ekg_holter_sonuc}}
+            {% endif %}
+            {% if form.pa_akciger.value is True %}
+            <label for="{{form.pa_akciger_sonuc.id_for_label}}">PA Akciğer Grafisi:</label> 
+            {{form.pa_akciger_sonuc}}
+            {% endif %}
+            {% if form.waters.value is True %}
+            <label for="{{form.waters_sonuc.id_for_label}}">Waters Grafisi:</label> 
+            {{form.waters_sonuc}}
+            {% endif %}
+            {% if form.ikiyonlu_servikal.value is True %}
+            <label for="{{form.ikiyonlu_servikal_sonuc.id_for_label}}">2 Yönlü Servikal Grafisi:</label> 
+            {{form.ikiyonlu_servikal_sonuc}}
+            {% endif %}
+            {% if form.ikiyonlu_lsv.value is True %}
+            <label for="{{form.ikiyonlu_lsv_sonuc.id_for_label}}">2 Yönlü LSV Grafisi:</label> 
+            {{form.ikiyonlu_lsv_sonuc}}
+            {% endif %}
+            {% if form.tum_batin.value is True %}
+            <label for="{{form.tum_batin_sonuc.id_for_label}}">Tüm Batın US:</label> 
+            {{form.tum_batin_sonuc}}
+            {% endif %}
+            {% if form.ust_batin.value is True %}
+            <label for="{{form.ust_batin_sonuc.id_for_label}}">Üst Batın US:</label> 
+            {{form.ust_batin_sonuc}}
+            {% endif %}
+            {% if form.alt_batin.value is True %}
+            <label for="{{form.alt_batin_sonuc.id_for_label}}">Alt Batın US:</label> 
+            {{form.alt_batin_sonuc}}
+            {% endif %}
+            {% if form.uriner.value is True %}
+            <label for="{{form.uriner_sonuc.id_for_label}}">Üriner US:</label> 
+            {{form.uriner_sonuc}}
+            {% endif %}
+            {% if form.tiroid.value is True %}
+            <label for="{{form.tiroid_sonuc.id_for_label}}">Tiroid US:</label> 
+            {{form.tiroid_sonuc}}
+            {% endif %}
+            {% if form.meme.value is True %}
+            <label for="{{form.meme_sonuc.id_for_label}}">Meme US:</label> 
+            {{form.meme_sonuc}}
+            {% endif %}
+            {% if form.tiroid_sintigrafi.value is True %}
+            <label for="{{form.tiroid_sintigrafi_sonuc.id_for_label}}">Tiroid Sintigrafisi:</label> 
+            {{form.tiroid_sintigrafi_sonuc}}
+            {% endif %}
+            {% if form.aclik_insulin.value is True %}
+            <label for="{{form.aclik_insulin_sonuc.id_for_label}}">Açlık İnsülin:</label> 
+            {{form.aclik_insulin_sonuc}}
+            {% endif %}
+            {% if form.yuzyirmi_insulin.value is True %}
+            <label for="{{form.yuzyirmi_insulin_sonuc.id_for_label}}">120 dk İnsülin:</label> 
+            {{form.yuzyirmi_insulin_sonuc}}
+            {% endif %}
+            {% if form.yirmibesohd.value is True %}
+            <label for="{{form.yirmibesohd_sonuc.id_for_label}}">25 OH D3:</label> 
+            {{form.yirmibesohd_sonuc}}
+            {% endif %}
+            {% if form.og11.value is True %}
+            <label for="{{form.og11_sonuc.id_for_label}}">OG11 (75 gr Glikoz ile 0-60-120-180 dakikalarda):</label> 
+            {{form.og11_sonuc}}
+            {% endif %}
+            {% if form.custom1.value is True %}
+            <label for="{{form.custom1_sonuc.id_for_label}}">{{form.custom1_ad.value}}</label> 
+            {{form.custom1_sonuc}}
+            {% endif %}
+            {% if form.custom2.value is True %}
+            <label for="{{form.custom2_sonuc.id_for_label}}">{{form.custom2_ad.value}}</label> 
+            {{form.custom2_sonuc}}
+            {% endif %}
+            {% if form.custom3.value is True %}
+            <label for="{{form.custom3_sonuc.id_for_label}}">{{form.custom3_ad.value}}</label> 
+            {{form.custom3_sonuc}}
+            {% endif %}
+            {% if form.custom4.value is True %}
+            <label for="{{form.custom4_sonuc.id_for_label}}">{{form.custom4_ad.value}}</label> 
+            {{form.custom4_sonuc}}
+            {% endif %}
+            {% if form.custom5.value is True %}
+            <label for="{{form.custom5_sonuc.id_for_label}}">{{form.custom5_ad.value}}</label> 
+            {{form.custom5_sonuc}}
+            {% endif %}
+            <br />
+            <br />
+            <input type="submit" style="float:right" class="btn btn-primary" value="KAYDET">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

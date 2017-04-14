@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="page-header">
+    <h1>Muayene Arşiv</h1>
+    <ul class="nav nav-tabs">
+        <li role="presentation"><a href="{% url 'muayene:archive-week' cyear cweek %}">Bu hafta</a></li>
+        <li role="presentation"><a href="{% url 'muayene:archive-month' cyear cmonth %}">Bu ay</a></li> 
+        <li role="presentation"><a href="{% url 'muayene:archive-year' cyear %}">Bu yıl</a></li>
+        <li role="presentation" class="active"><a href="{% url 'muayene:archive-custom' %}">Özel aralık</a></li>
+    </ul>
+</div>
+
+<div class="row" style="padding:20px">
+
+    <div class="col-md-8">
+
+        {% if form.errors %}
+            {% for key, value in form.errors.items %}
+            <div class="alert alert-danger" role="alert">
+                <p> <strong> {{ key }} </strong> {{ value }} </p>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+        <form class="form-inline" id="datepicker" method="POST">
+            {% csrf_token %}
+            {{ form.start_date }}
+            {{ form.end_date }}
+            <input type="submit" class="btn btn-default" value="OK">
+        </form>
+
+    </div>
+
+</div>
+
+<div class="row" style="padding:20px">
+        {% if start and end %}
+        <h3> {{ start }} - {{ end }} <small>Muayene sayısı: {{range_list | length}} | <a href="#" id="TTF">Çoklu TTF</a> | <a href="#" id="muayene-list-pdf">Liste</a></small> </h3>
+
+        <form method="POST" action="{% url 'muayene:multi-ttf-print' %}" id="TTFform" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" value="{{start|date:'Y-m-j'}}" name="start">
+            <input type="hidden" value="{{end|date:'Y-m-j'}}" name="end">
+        </form>
+
+        <form method="POST" action="{% url 'muayene:list-print' %}" id="MuayeneListForm" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" value="{{start|date:'Y-m-j'}}" name="start">
+            <input type="hidden" value="{{end|date:'Y-m-j'}}" name="end">
+        </form>
+        {% endif %}
+
+        {% if range_list %}
+        <table class="table table-condensed table-hover">
+        <tr>
+            <th>#</th>
+            <th>TARİH</th>
+            <th>HASTA</th>
+            <th>YAKINMA</th>
+            <th>TANI</th>
+        </tr>
+        {% for muayene in range_list %}
+        <tr>
+            <td>{{muayene.id}}</td>
+            <td>{{muayene.tarih}}</td>
+            <td><a href="{% url 'muayene:detail' muayene.id %}">{{ muayene.hasta }}</a></td>
+            <td>{{muayene.yakinma}}</td>
+            <td>{{muayene.ontani_tani}}</td>
+            <td><a href="{% url 'muayene:detail' muayene.id %}">Detay</a></td>
+        </tr>
+        {% endfor %}
+        </table>
+        {% endif %}
+</div>
+
+{% endblock %}
