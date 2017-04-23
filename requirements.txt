@@ -2,9 +2,11 @@ appdirs==1.4.3
 Django==1.11
 django-autocomplete-light==3.2.2
 django-extensions==1.7.8
+gunicorn
 olefile==0.44
 packaging==16.8
 Pillow==4.1.0
+psycopg2
 pyparsing==2.2.0
 PyPDF2==1.26.0
 python-memcached==1.58
