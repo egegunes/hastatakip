@@ -61,7 +61,7 @@ class PrintMixin(object):
         return obj
 
     def register_font(self):
-        font = "../fonts/pfs.ttf"
+        font = os.path.join(settings.STATIC_ROOT, "fonts/pfs.ttf")
 
         pdfmetrics.registerFont(TTFont("PFS", font))
 
@@ -586,8 +586,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         ttf_filled = PdfFileReader(buff)
    
-        BASE_DIR = settings.BASE_DIR
-        FILE = os.path.join(BASE_DIR, 'static/TTF.pdf')
+        FILE = os.path.join(settings.STATIC_ROOT, 'TTF.pdf')
         ttf_empty = PdfFileReader(open(FILE, "rb"))
 
         output = PdfFileWriter()
@@ -797,7 +796,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             can.save()
 
             ttf_filled = PdfFileReader(buff)
-            ttf_empty = PdfFileReader(open(os.path.join(settings.BASE_DIR, 'static/TTF.pdf'), "rb"))
+            ttf_empty = PdfFileReader(open(os.path.join(settings.STATIC_ROOT, 'TTF.pdf'), "rb"))
 
             output = PdfFileWriter()
 
@@ -942,8 +941,7 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
 
         ah_filled = PdfFileReader(buff)
 
-        BASE_DIR = settings.BASE_DIR
-        FILE = os.path.join(BASE_DIR, 'static/AH_ISTEK.pdf')
+        FILE = os.path.join(settings.STATIC_ROOT, 'AH_ISTEK.pdf')
         ah_empty = PdfFileReader(open(FILE, "rb"))
 
         output = PdfFileWriter()
