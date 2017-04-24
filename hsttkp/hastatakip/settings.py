@@ -8,15 +8,12 @@ PROJECT_PATH = os.path.realpath(os.path.dirname(__file__))
 with open('/etc/secret') as f:
     SECRET_KEY = f.read().strip()
 
-# DEBUG = False
-DEBUG = True
+DEBUG = False
 
-# ALLOWED_HOSTS = ['hsttkp.zygns.com']
-ALLOWED_HOSTS = []
-
-INTERNAL_IPS = ['127.0.0.1']
-
-# Application definition
+ALLOWED_HOSTS = [
+    'hsttkp.zygns.com', 
+    'hastatakip.zygns.com'
+]
 
 INSTALLED_APPS = [
     'dal',
@@ -121,7 +118,7 @@ DATE_INPUT_FORMATS = [
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
 STATIC_URL = '/staticfiles/' 
-# STATIC_ROOT = '/home/egegunes/Programs/hastatakip/staticfiles'
+STATIC_ROOT = '/home/hastatakip/static'
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
@@ -132,50 +129,33 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'staticfiles/'),
 )
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
+MEDIA_ROOT = '/home/hastatakip/media'
 
-# CACHES = {
-    # 'default': {
-        # 'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        # 'LOCATION': 'hsttkp.zygns.com:11511'
-    # }
-# }
-
-CACHES = {
+caches = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11511'
+        'backend': 'django.core.cache.backends.memcached.memcachedcache',
+        'location': 'hastatakip.zygns.com:11511'
     }
 }
 
 SESSION_ENGINE = 'django.contrib.sessions.backends.db'
-# SESSION_COOKIE_DOMAIN = 'hsttkp.zygns.com'
-# SESSION_COOKIE_SECURE = True
 
-# SECURE_CONTENT_TYPE_NOSNIFF = True
-# SECURE_BROWSER_XSS_FILTER = True
-
-# CSRF_COOKIE_SECURE = True
-# CSRF_COOKIE_HTTPONLY = True
-
-# X_FRAME_OPTIONS = 'DENY'
-
-# LOGGING = {
-    # 'version': 1,
-    # 'disable_existing_loggers': False,
-    # 'handlers': {
-        # 'file': {
-            # 'level': 'DEBUG',
-            # 'class': 'logging.FileHandler',
-            # 'filename': '/webapps/hastatakip/logs/django.log',
-        # },
-    # },
-    # 'loggers': {
-        # 'django': {
-            # 'handlers': ['file'],
-            # 'level': 'WARNING',
-            # 'propagate': True
-        # },
-    # },
-# }
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': '/home/hastatakip/logs/django.log',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'WARNING',
+            'propagate': True
+        },
+    },
+}
