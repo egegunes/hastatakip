@@ -1,5 +1,4 @@
-*.pyc
-__pycache__/
 .vagrant
-
-
+__pycache__/
+*.py[cod]
+hsttkp/local_settings.py
