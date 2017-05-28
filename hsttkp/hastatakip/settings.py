@@ -11,7 +11,7 @@ with open('/etc/secret') as f:
 DEBUG = False
 
 ALLOWED_HOSTS = [
-    'hsttkp.zygns.com', 
+    'hsttkp.zygns.com',
     'hastatakip.zygns.com'
 ]
 
@@ -23,7 +23,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions', 
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django_extensions',
@@ -35,7 +35,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
-    'django.contrib.messages.middleware.MessageMiddleware', 
+    'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
@@ -46,7 +46,7 @@ TEMPLATES = [
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [
             BASE_DIR + '/templates/',
-            PROJECT_PATH + '/templates/',    
+            PROJECT_PATH + '/templates/',
         ],
         'APP_DIRS': True,
         'OPTIONS': {
@@ -104,21 +104,21 @@ USE_L10N = True
 USE_TZ = True
 
 DATE_INPUT_FORMATS = [
-    '%d/%m/%Y',    
-    '%d/%m/%y',    
-    '%d-%m-%Y',    
-    '%d-%m-%y',    
+    '%d/%m/%Y',
+    '%d/%m/%y',
+    '%d-%m-%Y',
+    '%d-%m-%y',
 ]
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/dev/howto/static-files/
 
-STATIC_URL = '/staticfiles/' 
+STATIC_URL = '/static/'
 STATIC_ROOT = '/home/hastatakip/static'
 
 STATICFILES_FINDERS = [
     'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder'        
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder'
 ]
 
 STATICFILES_DIRS = (
