@@ -7,7 +7,7 @@ TIME=$(date +%H:%M)
 BACKUP=$(sqlite3 $DATABASE ".backup $BACKUPDIR/$BACKUPDB")
 
 if [ $? -ne 0 ]; then
-	python3.5 /home/egegunes/bin/push "DB backup error (local)"
+	python /home/egegunes/bin/push "DB backup error (local)"
 fi
 	
 cd $BACKUPDIR
@@ -15,5 +15,5 @@ cd $BACKUPDIR
 UPLOAD=$(python ~/bin/dropbox_upload.py $BACKUPDB)
 
 if [ $? -ne 0 ]; then
-	python3.5 /home/egegunes/bin/push "DB backup error (cloud)"
+	python /home/egegunes/bin/push "DB backup error (cloud)"
 fi
