@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+
+import http.client, urllib, sys
+
+TOKEN = "aa2ndkqpqo5um7omk44gsx7tuyz8ob"
+USER_KEY = "MqzIRt6ICGMlOHVxHUUTPW7sbikEyb"
+MESSAGE = str(sys.argv[1])
+
+connection = http.client.HTTPSConnection("api.pushover.net:443")
+
+data = urllib.parse.urlencode({"token": TOKEN, "user": USER_KEY, "message": MESSAGE})
+content_type = {"Content-type": "application/x-www-form-urlencoded"}
+
+connection.request("POST", "/1/messages.json", data, content_type)
+
+response = connection.getresponse()
+
+if response.status == 200:
+    print("Success. Message: " + MESSAGE)
+else:
+    status = str(response.status)
+    print("Status code: " + status)
