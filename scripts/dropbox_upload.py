@@ -6,6 +6,5 @@ dropbox = dropbox.Dropbox("EHv0uS6gWRMAAAAAAAA-4kIp0Q_xOMEnyC2w4TpvSL0EU-e9RU71v
 
 filename = str(sys.argv[1])
 
-db = open(filename, 'rb')
-
-dropbox.files_upload(db, "/backups/db/hourly/%s" % filename)
+with open(filename, "rb") as db:
+    dropbox.files_upload(db.read(), "/backups/db/hourly/%s" % filename)
