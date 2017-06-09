@@ -1,7 +1,9 @@
 #!/usr/bin/env python3.5
 
-import dropbox, sys
+import sys
+import dropbox
 from dropbox_token import ACCESS_TOKEN
+
 
 dropbox = dropbox.Dropbox(ACCESS_TOKEN)
 

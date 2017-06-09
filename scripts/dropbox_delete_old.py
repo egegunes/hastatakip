@@ -1,7 +1,10 @@
 #!/usr/bin/env python3.5
 
-import dropbox, datetime, sys
+import dropbox
+import datetime
+import sys
 from dropbox_token import ACCESS_TOKEN
+
 
 dbx = dropbox.Dropbox(ACCESS_TOKEN)
 
