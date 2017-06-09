@@ -2,3 +2,4 @@
 __pycache__/
 *.py[cod]
 hsttkp/local_settings.py
+scripts/dropbox_token.py
