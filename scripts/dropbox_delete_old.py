@@ -1,8 +1,9 @@
 #!/usr/bin/env python3.5
 
 import dropbox, datetime, sys
+from dropbox_token import ACCESS_TOKEN
 
-dbx = dropbox.Dropbox("EHv0uS6gWRMAAAAAAAA-4kIp0Q_xOMEnyC2w4TpvSL0EU-e9RU71ve0wf4rKUMIq")
+dbx = dropbox.Dropbox(ACCESS_TOKEN)
 
 today = str(datetime.date.today())
 
