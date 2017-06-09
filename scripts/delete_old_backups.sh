@@ -31,4 +31,4 @@ mv $BACKUPDIR/$LASTBACKUP $MOVEDIR/$NEWFILE
 
 rm $BACKUPDIR/*
 
-python /home/hastatakip/bin/dropbox_delete_old.py $PERIOD
+/home/hastatakip/bin/dropbox_delete_old.py $PERIOD

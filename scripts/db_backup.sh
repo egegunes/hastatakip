@@ -10,4 +10,4 @@ sqlite3 $DATABASE ".backup $BACKUPDIR/$BACKUPDB"
 
 cd $BACKUPDIR
 
-python ~/bin/dropbox_upload.py $BACKUPDB
+/home/hastatakip/bin/dropbox_upload.py $BACKUPDB
