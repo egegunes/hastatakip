@@ -980,7 +980,9 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
 
         buff = BytesIO()
 
-        pdfmetrics.registerFont(TTFont('ListFont', '../fonts/listfont.ttf'))
+        font = os.path.join(settings.STATIC_ROOT, "fonts/listfont.ttf")
+
+        pdfmetrics.registerFont(TTFont('ListFont', font))
 
         doc = SimpleDocTemplate(buff, 
                                 pagesize=landscape(letter), 
