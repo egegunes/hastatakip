@@ -8,6 +8,5 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./", "/home/vagrant/hastatakip/"
 
   config.vm.provision "shell", path: "provision/dependencies.sh"
-  config.vm.provision "shell", path: "provision/database.sh"
   config.vm.provision "shell", path: "provision/application.sh"
 end
