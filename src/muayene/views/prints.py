@@ -61,7 +61,7 @@ class PrintMixin(object):
         return obj
 
     def register_font(self):
-        font = os.path.join(settings.STATIC_ROOT, "fonts/pfs.ttf")
+        font = os.path.join(settings.BASE_DIR, "staticfiles/fonts/pfs.ttf")
 
         pdfmetrics.registerFont(TTFont("PFS", font))
 
