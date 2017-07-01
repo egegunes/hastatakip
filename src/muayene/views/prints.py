@@ -586,7 +586,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         ttf_filled = PdfFileReader(buff)
    
-        FILE = os.path.join(settings.STATIC_ROOT, 'TTF.pdf')
+        FILE = os.path.join(settings.BASE_DIR, 'staticfiles/TTF.pdf')
         ttf_empty = PdfFileReader(open(FILE, "rb"))
 
         output = PdfFileWriter()
@@ -796,7 +796,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             can.save()
 
             ttf_filled = PdfFileReader(buff)
-            ttf_empty = PdfFileReader(open(os.path.join(settings.STATIC_ROOT, 'TTF.pdf'), "rb"))
+            ttf_empty = PdfFileReader(open(os.path.join(settings.BASE_DIR, 'staticfiles/TTF.pdf'), "rb"))
 
             output = PdfFileWriter()
 
@@ -941,7 +941,7 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
 
         ah_filled = PdfFileReader(buff)
 
-        FILE = os.path.join(settings.STATIC_ROOT, 'AH_ISTEK.pdf')
+        FILE = os.path.join(settings.BASE_DIR, 'staticfiles/AH_ISTEK.pdf')
         ah_empty = PdfFileReader(open(FILE, "rb"))
 
         output = PdfFileWriter()
@@ -980,7 +980,7 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
 
         buff = BytesIO()
 
-        font = os.path.join(settings.STATIC_ROOT, "fonts/listfont.ttf")
+        font = os.path.join(settings.BASE_DIR, "staticfiles/fonts/listfont.ttf")
 
         pdfmetrics.registerFont(TTFont('ListFont', font))
 
