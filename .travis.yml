@@ -1,6 +1,7 @@
 language: python
 python:
     - "3.5"
+env:
+    - DJANGO_SECRET_KEY=k5UPYhsKgzMc5eNg0Jg0Z9DquC5yc9EzDdprqukqe0noVTr9K365rNTnvXskgmmRy7AEszwsi8O
 install: "pip install -r requirements.txt"
-before_script: "cat /dev/urandom | tr -cd 'a-zA-Z0-9' | fold -w 128 | head -n 1 | sudo tee /etc/secret"
 script: "python src/manage.py test"
