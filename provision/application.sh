@@ -1,3 +1,5 @@
+#!/bin/bash
+
 [ -d "environment" ] && rm -rf environment
 
 pyvenv-3.5 environment
