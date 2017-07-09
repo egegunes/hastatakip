@@ -7,4 +7,5 @@ yum install -y git \
                python35u-pip \
                python35u-devel \
                python35u-virtualenv \
-               wget
+               wget \
+               tmux
