@@ -1,0 +1,21 @@
+[Unit]
+Description="Gunicorn WSGI server for hastatakip"
+After=network.target
+
+[Service]
+User=hastatakip
+Group=nginx
+WorkingDirectory=/home/hastatakip/hastatakip/src
+EnvironmentFile=/home/hastatakip/systemd/django-environment
+ExecStart=/home/hastatakip/environment/bin/gunicorn \
+            --workers 3 \
+            --threads 3 \
+            --timeout 120 \
+            --max-requests 30 \
+            --access-logfile /home/hastatakip/logs/gunicorn-access.log \
+            --error-logfile /home/hastatakip/logs/gunicorn-error.log \
+            --bind unix:/home/hastatakip/hastatakip/hastatakip.sock \
+            hastatakip.wsgi:application
+
+[Install]
+WantedBy=multi-user.target

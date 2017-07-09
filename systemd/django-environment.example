@@ -1,0 +1,6 @@
+DJANGO_SECRET_KEY="Put your secret key here"
+DJANGO_DB_PATH="/home/hastatakip/db/db.sqlite3"
+DJANGO_LOG_FILE="/home/hastatakip/logs/django.log"
+DJANGO_LOG_LEVEL="INFO"
+DJANGO_STATIC_ROOT="/home/hastatakip/static/"
+DJANGO_MEDIA_ROOT="/home/hastatakip/media/"
