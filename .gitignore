@@ -1,5 +1,5 @@
 .vagrant
 __pycache__/
 *.py[cod]
-scripts/dropbox_token.py
+utils/dropbox_token.py
 src/hastatakip/settings/11-development.conf
