@@ -8,5 +8,6 @@ Vagrant.configure("2") do |config|
   config.vm.synced_folder "./", "/home/vagrant/hastatakip/"
 
   config.vm.provision "shell", path: "provision/dependencies.sh"
-  config.vm.provision "shell", path: "provision/application.sh"
+  config.vm.provision "shell", path: "provision/environment.sh", privileged: false, run: "always"
+  config.vm.provision "shell", path: "provision/application.sh", privileged: false
 end
