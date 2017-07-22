@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+import itertools
 
 from django.core.urlresolvers import reverse
 from django.utils import timezone
+from django.utils.text import slugify
 from django.db import models
 
 
@@ -56,6 +58,19 @@ class Hasta(models.Model):
 
     def get_absolute_url(self):
         return reverse('hasta:detail', kwargs={'slug': self.slug})
+
+    def save(self):
+        self.slug = orig = slugify(self.ad + " " + self.soyad)
+
+        for x in itertools.count(1):
+            if not Hasta.objects.filter(slug=self.slug).exists():
+                break
+            self.slug = '%s-%d' % (orig, x)
+
+        self.ad = self.ad.upper()
+        self.soyad = self.soyad.upper()
+
+        return super().save()
 
     def age(self):
         today = datetime.date.today()

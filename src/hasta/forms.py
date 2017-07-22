@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import itertools
-
 from django.utils.translation import ugettext_lazy as _
-from django.utils.text import slugify
 from django import forms
 
 from hasta.models import Hasta
@@ -159,28 +156,3 @@ class HastaCreateForm(forms.ModelForm):
     class Meta:
         model = Hasta
         fields = '__all__'
-
-    def save(self):
-        if self.instance.pk:
-            hasta = Hasta.objects.get(pk=self.instance.pk)
-
-        instance = super(HastaCreateForm, self).save(commit=False)
-
-        if self.instance.pk and hasta.ad == instance.ad and hasta.soyad == instance.soyad:
-            if hasta.ahsevk_done:
-                instance.ahsevk_done = True
-            return super(HastaCreateForm, self).save()
-
-        instance.slug = orig = slugify(instance.ad + " " + instance.soyad)
-
-        for x in itertools.count(1):
-            if not Hasta.objects.filter(slug=instance.slug).exists():
-                break
-            instance.slug = '%s-%d' % (orig, x)
-
-        instance.ad = instance.ad.upper()
-        instance.soyad = instance.soyad.upper()
-
-        instance.save()
-
-        return instance
