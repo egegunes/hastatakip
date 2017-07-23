@@ -59,7 +59,7 @@ class Hasta(models.Model):
     def get_absolute_url(self):
         return reverse('hasta:detail', kwargs={'slug': self.slug})
 
-    def save(self):
+    def save(self, **kwargs):
         self.slug = orig = slugify(self.ad + " " + self.soyad)
 
         for x in itertools.count(1):
