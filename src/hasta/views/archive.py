@@ -2,12 +2,13 @@
 
 import datetime
 
-from django.contrib.auth.mixins     import LoginRequiredMixin
-from django.views.generic.dates     import View
-from django.template.response       import TemplateResponse
-from django.http                    import HttpResponseNotAllowed
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.dates import View
+from django.template.response import TemplateResponse
+from django.http import HttpResponseNotAllowed
 
-from hasta.models                   import Hasta
+from hasta.models import Hasta
+
 
 class HastaLastCreatedView(LoginRequiredMixin, View):
     login_url = '/login/'

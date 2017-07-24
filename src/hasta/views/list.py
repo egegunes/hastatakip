@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-from django.contrib.auth.mixins         import LoginRequiredMixin
-from django.views.generic               import ListView
-from django.http                        import HttpResponseNotAllowed
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
+from django.http import HttpResponseNotAllowed
 
-from hasta.models                       import Hasta, Sozlesme
+from hasta.models import Hasta, Sozlesme
 
-from muayene.models                     import Muayene, Recete, Rapor, LaboratuvarIstek, MuayeneRelatedFile
+from muayene.models import Muayene, Recete, Rapor, LaboratuvarIstek, MuayeneRelatedFile
 
-class HastaListView(LoginRequiredMixin, ListView): 
+
+class HastaListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
     context_object_name = 'hasta_list'
     queryset = Hasta.objects.order_by('soyad')
@@ -23,6 +24,7 @@ class HastaListView(LoginRequiredMixin, ListView):
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
 
 class SozlesmeListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -40,16 +42,18 @@ class SozlesmeListView(LoginRequiredMixin, ListView):
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
 
+
 class MuayeneListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
     context_object_name = 'muayene_list'
 
     def get_queryset(self):
         hasta_slug = self.kwargs['slug']
-        return Muayene.objects.filter(hasta__slug = hasta_slug).order_by('-id')
+        return Muayene.objects.filter(hasta__slug=hasta_slug).order_by('-id')
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
 
 class ReceteListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -57,10 +61,11 @@ class ReceteListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         hasta_slug = self.kwargs['slug']
-        return Recete.objects.filter(hasta__slug = hasta_slug).order_by('-id')
+        return Recete.objects.filter(hasta__slug=hasta_slug).order_by('-id')
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
 
 class RaporListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -68,10 +73,11 @@ class RaporListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         hasta_slug = self.kwargs['slug']
-        return Rapor.objects.filter(hasta__slug = hasta_slug).order_by('-id')
+        return Rapor.objects.filter(hasta__slug=hasta_slug).order_by('-id')
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
 
 class LabIstekListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -79,10 +85,11 @@ class LabIstekListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         hasta_slug = self.kwargs['slug']
-        return LaboratuvarIstek.objects.filter(hasta__slug = hasta_slug).order_by('-id')
+        return LaboratuvarIstek.objects.filter(hasta__slug=hasta_slug).order_by('-id')
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
 
 class DosyaListView(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -90,10 +97,11 @@ class DosyaListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         hasta_slug = self.kwargs['slug']
-        return MuayeneRelatedFile.objects.filter(hasta__slug = hasta_slug).order_by('-id')
+        return MuayeneRelatedFile.objects.filter(hasta__slug=hasta_slug).order_by('-id')
 
     def post(self, request, *args, **kwargs):
         return HttpResponseNotAllowed(['POST'])
+
 
 class HastaEpikrizView(LoginRequiredMixin, ListView):
     login_url = '/login/'
@@ -103,12 +111,12 @@ class HastaEpikrizView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         hasta_slug = self.kwargs['slug']
-        return Muayene.objects.filter(hasta__slug = hasta_slug).order_by('-id')
+        return Muayene.objects.filter(hasta__slug=hasta_slug).order_by('-id')
 
     def get_context_data(self, **kwargs):
         context = super(HastaEpikrizView, self).get_context_data(**kwargs)
         hasta_slug = self.kwargs['slug']
-        context['hasta'] = Hasta.objects.get(slug=hasta_slug) 
+        context['hasta'] = Hasta.objects.get(slug=hasta_slug)
 
         return context
 

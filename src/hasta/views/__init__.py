@@ -1,10 +1,10 @@
 __all__ = ["base", "archive", "create", "detail", "list", "update", "search"]
 
 from hasta.views.base import (
-    HastaDetailBaseView        
+    HastaDetailBaseView
 )
 from hasta.views.archive import (
-    HastaLastCreatedView        
+    HastaLastCreatedView
 )
 from hasta.views.create import (
     HastaCreateView,
@@ -27,5 +27,5 @@ from hasta.views.update import (
     HastaUpdateView,
 )
 from hasta.views.search import (
-    HastaSearchView        
+    HastaSearchView
 )
