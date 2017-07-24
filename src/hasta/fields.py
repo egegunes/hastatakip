@@ -1,5 +1,6 @@
 from django import forms
 
+
 class ListTextWidget(forms.TextInput):
     def __init__(self, choices, name, *args, **kwargs):
         super(ListTextWidget, self).__init__(*args, **kwargs)
