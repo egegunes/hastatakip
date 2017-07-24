@@ -1,21 +1,21 @@
 # -*- coding: utf-8 -*-
 
-from django.views.decorators.cache  import cache_page
-from django.conf.urls               import url
+from django.views.decorators.cache import cache_page
+from django.conf.urls import url
 
-from hasta              import views
-from muayene.views      import create
+from hasta import views
+from muayene.views import create
 
 app_name = 'hasta'
 urlpatterns = [
     url(
-        r'^list/$', 
-        cache_page(60 * 5)(views.HastaListView.as_view()), 
+        r'^list/$',
+        cache_page(60 * 5)(views.HastaListView.as_view()),
         name='list'
     ),
     url(
-        r'^ara/$', 
-        views.HastaSearchView.as_view(), 
+        r'^ara/$',
+        views.HastaSearchView.as_view(),
         name='search'
     ),
     url(
@@ -29,23 +29,23 @@ urlpatterns = [
         name='sozlesme-list'
     ),
     url(
-        r'^ekle/$', 
-        views.HastaCreateView.as_view(), 
+        r'^ekle/$',
+        views.HastaCreateView.as_view(),
         name='create'
     ),
     url(
-        r'^(?P<slug>[\w-]+)/duzenle/$', 
-        views.HastaUpdateView.as_view(), 
+        r'^(?P<slug>[\w-]+)/duzenle/$',
+        views.HastaUpdateView.as_view(),
         name='update'
     ),
     url(
-        r'^(?P<slug>[\w-]+)/$', 
-        views.HastaDetailBaseView.as_view(), 
+        r'^(?P<slug>[\w-]+)/$',
+        views.HastaDetailBaseView.as_view(),
         name='detail'
     ),
     url(
-        r'^(?P<slug>[\w-]+)/muayene/$', 
-        create.MuayeneCreateView.as_view(), 
+        r'^(?P<slug>[\w-]+)/muayene/$',
+        create.MuayeneCreateView.as_view(),
         name='muayene-create'
     ),
     url(
