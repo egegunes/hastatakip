@@ -6,7 +6,7 @@ After=network.target
 User=hastatakip
 Group=nginx
 WorkingDirectory=/home/hastatakip/hastatakip/src
-EnvironmentFile=/home/hastatakip/systemd/django-environment
+EnvironmentFile=/home/hastatakip/hastatakip/systemd/django-environment
 ExecStart=/home/hastatakip/environment/bin/gunicorn \
             --workers 3 \
             --threads 3 \
