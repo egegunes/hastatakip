@@ -137,13 +137,13 @@ class LabIstekFormView(SingleObjectMixin, FormView):
         else:
             yas = request.POST['yas']
             yas = int(yas)
-            if yas < 19:
+            if yas < 18:
                 data = {
                     'hemogram': True,
                     'sedim': True,
                     'tam_idrar': True
                 }
-            elif yas >= 19 and yas < 41:
+            elif yas >= 18 and yas < 40:
                 data = {
                     'hemogram': True,
                     'sedim': True,
@@ -157,7 +157,7 @@ class LabIstekFormView(SingleObjectMixin, FormView):
                     'ekg': True,
                     'pa_akciger': True
                 }
-            elif yas >= 41:
+            elif yas >= 40:
                 data = {
                     'hemogram': True,
                     'sedim': True,
