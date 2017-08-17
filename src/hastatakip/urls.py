@@ -53,6 +53,10 @@ urlpatterns = [
         include('muayene.urls')
     ),
     url(
+        r'^randevu/',
+        include('randevu.urls')
+    ),
+    url(
         r'^api/autocomplete/hasta/',
         views.HastaAutocomplete.as_view(),
         name="hastaAutocomplete"
