@@ -20,17 +20,35 @@
             <ul class="nav navbar-nav">
                 <li><a href="{% url 'hasta:create' %}">Yeni hasta</a></li>
                 <li><a href="{% url 'muayene:create' %}">Yeni muayene</a></li>
+                <li><a href="{% url 'randevu:create' %}">Yeni randevu</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Listeler <span class="caret"></span></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Randevular <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="{% url 'randevu:today-archive' %}">Bugün</a></li>
+                        {% now "Y" as current_year %}
+                        {% now "W" as current_week %}
+                        <li><a href="{% url 'randevu:week-archive' current_year current_week %}">Bu hafta</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Hastalar <span class="caret"></span></a>
                     <ul class="dropdown-menu">
                         <li><a href="{% url 'hasta:list' %}">Tüm hastalar</a></li>
                         <li><a href="{% url 'hasta:sozlesme-list' %}">Sözleşmeli hastalar</a></li>
                         <li><a href="{% url 'hasta:created-last' %}">Son eklenen hastalar</a></li>
-                        <li role="separator" class="divider"></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Muayeneler <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
                         <li><a href="{% url 'muayene:archive-custom' %}">Geçmiş Muayeneler</a></li>
                         <li><a href="{% url 'muayene:archive-last' %}">Son eklenen muayeneler</a></li>
                         <li><a href="{% url 'muayene:lab-last' %}">Son istenen tetkikler</a></li>
-                        <li role="separator" class="divider"></li>
+                    </ul>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Diğer <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
                         <li><a href="{% url 'muayene:ilac-list' %}">İlaçlar</a></li>
                         <li><a href="{% url 'muayene:alias-list' %}">Kısaltmalar</a></li>
                     </ul>
