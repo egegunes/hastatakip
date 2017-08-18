@@ -12,12 +12,12 @@ class MuayeneCreateForm(forms.ModelForm):
         fields = '__all__'
         widgets = {
             'hasta': forms.widgets.TextInput(attrs={'class': 'form-control'}),
-            'yakinma': forms.widgets.TextInput(attrs={'class': 'form-control'}),
-            'kullandigi_ilaclar': forms.widgets.TextInput(attrs={'class': 'form-control'}),
-            'baki': forms.widgets.TextInput(attrs={'class': 'form-control'}),
-            'ontani_tani': forms.widgets.TextInput(attrs={'class': 'form-control'}),
-            'oneri_gorusler': forms.widgets.TextInput(attrs={'class': 'form-control'}),
-            'ozel_notlar': forms.widgets.TextInput(attrs={'class': 'form-control'})
+            'yakinma': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
+            'kullandigi_ilaclar': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
+            'baki': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
+            'ontani_tani': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
+            'oneri_gorusler': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
+            'ozel_notlar': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'})
         }
         labels = {
             'hasta': _('Hasta'),
