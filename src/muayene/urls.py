@@ -96,29 +96,4 @@ urlpatterns = [
         views.LabSonucFormView.as_view(),
         name='lab-sonuc'
     ),
-    url(
-        r'^ilac/ekle/$',
-        views.IlacCreateView.as_view(),
-        name='ilac-create'
-    ),
-    url(
-        r'^ilac/list/$',
-        views.IlacListView.as_view(),
-        name='ilac-list'
-    ),
-    url(
-        r'^ilac/ara/$',
-        views.IlacSearchView.as_view(),
-        name='ilac-ara'
-    ),
-    url(
-        r'^alias/list/$',
-        views.MuayeneAliasListView.as_view(),
-        name='alias-list'
-    ),
-    url(
-        r'^alias/ekle/$',
-        views.MuayeneAliasCreateView.as_view(),
-        name="alias-create"
-    )
 ]
