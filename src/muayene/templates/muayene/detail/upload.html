@@ -1,0 +1,60 @@
+<!-- Upload List -->
+<div class="col-md-3">
+
+  <h4>Ek dosyalar</h4>
+  <ol>
+  {% if file_list %}
+  {% for file in file_list %}
+  <li> <a href="#" data-toggle="modal" data-target="#fileDetail{{file.id}}">Dosya {{ file.id }}</a></li>
+  <div class="modal fade" id="fileDetail{{file.id}}" tabindex="-1" role="dialog" arialabelledby="fileDetailLabel">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="fileDetailLabel"> Dosya {{ file.id }} </h4>
+          <h3> Hasta: {{ file.hasta }} </h3>
+          <h5> Yaratım tarihi: {{ file.yaratim_tarihi }} </h5>
+        </div>
+        <div class="modal-body">
+          <iframe src="{{file.dosya.url}}" frameborder="0" width="800" height="600"></iframe>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+  {% else %}
+  <p> Eklenmiş dosya yok. </p>
+  {% endif %}
+  </ol>
+
+</div>
+<!-- End of Upload List -->
+
+<!-- Upload Form -->
+<div class="modal fade" id="fileForm" tabindex="-1" role="dialog" arialabelledby="fileFormLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="fileFormLabel"> Yeni istek </h4>
+        <h3> Hasta: {{ muayene.hasta }} </h3>
+      </div>
+      <form method="POST" enctype="multipart/form-data" class="form-inline">
+      {% csrf_token %}
+        <div class="modal-body">
+          {% if file_form %}
+            {{ file_form.dosya.errors }}
+            <label for="{{ file_form.dosya.id_for_label }}">Dosya:</label>
+            {{ file_form.dosya }}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+          <button type="submit" name="file_form" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End of Upload Form -->

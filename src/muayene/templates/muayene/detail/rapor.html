@@ -1,0 +1,62 @@
+<!-- Rapor List -->
+<div class="col-md-3">
+
+  <h4>Rapor</h4>
+  <ol>
+  {% for rapor in rapor_list %}
+  <li> <a href="#" data-toggle="modal" data-target="#raporDetail{{rapor.id}}">Rapor {{ rapor.id }} - {{rapor.tarih}}</a></li>
+  <div class="modal fade" id="raporDetail{{rapor.id}}" tabindex="-1" role="dialog" arialabelledby="raporDetailLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="raporDetailLabel"> Rapor {{ rapor.id }}  <small> {{rapor.tarih}}</small></h4>
+          <h3> Hasta: {{ rapor.hasta }} </h3>
+        </div>
+        <div class="modal-body">
+          <p><b>Tanı:</b>{{rapor.tani}}</p>
+          <p><b>Gün:</b>{{rapor.gun}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+          <a class="btn btn-primary print" href="{% url 'muayene:rapor-print' rapor.id %}" target="_blank">YAZDIR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p> Yazılı rapor yok. </p>
+  {% endfor %}
+  </ol>
+
+</div>
+<!-- End of Rapor List -->
+
+<!-- Rapor Form -->
+<div class="modal fade" id="raporForm" tabindex="-1" role="dialog" arialabelledby="raporFormLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="raporFormLabel"> Yeni rapor </h4>
+        <h3> Hasta: {{ muayene.hasta }} </h3>
+      </div>
+      <form method="POST" class="form-group">
+        <div class="modal-body">
+          {% if rapor_form %}
+            {% csrf_token %}
+            {{ rapor_form.tani.errors }}
+            <label for="{{ rapor_form.tani.id_for_label }}">Tanı:</label> 
+            {{ rapor_form.tani }}
+            {{ rapor_form.gun.errors }}
+            <label for="{{ rapor_form.gun.id_for_label }}">Gün:</label>
+            {{ rapor_form.gun }}
+          {% endif %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+          <button type="submit" name="rapor_form" class="btn btn-primary">Kaydet</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!-- End of Rapor Form -->

@@ -1,0 +1,75 @@
+<!-- Recete List -->
+<div class="col-md-3">
+
+  <h4>Reçete</h4>
+
+  <ol>
+  {% for recete in recete_list %}
+  <li> <a href="#" data-toggle="modal" data-target="#receteDetail{{recete.id}}">Reçete {{ recete.id }} - {{recete.tarih}}</a></li>
+  <div class="modal fade" id="receteDetail{{recete.id}}" tabindex="-1" role="dialog" arialabelledby="receteDetailLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="receteDetailLabel"> Reçete {{ recete.id }} <small> {{recete.tarih}}</small> </h4>
+          <h3> Hasta: {{ recete.hasta }} </h3>
+        </div>
+        <div class="modal-body">
+          <h3> İlaçlar </h3>
+          <ol>
+          {% for ilac in recete.ilaclar.all %}
+          <li>{{ ilac.ilac }}
+            <ul>
+              <li>{{ ilac.kullanim }}</li>
+              <li>{{ ilac.kutu }} kutu</li>
+            </ul>
+          </li>
+          {% endfor %}
+          </ol>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+          <a class="btn btn-primary print" href="{% url 'muayene:recete-print' recete.id %}" target="_blank">YAZDIR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p> Yazılı reçete yok. </p>
+  {% endfor %}
+  </ol>
+
+</div>
+<!--End of Recete List -->
+
+<!-- Recete Form -->
+<div class="modal fade" id="receteForm" role="dialog" arialabelledby="receteFormLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="receteFormLabel"> Yeni reçete </h4>
+        <h3> Hasta: {{ muayene.hasta }} </h3>
+      </div>
+      <form method="POST" class="form-group">
+        <div class="modal-body">
+          {% if recete_form %}
+          {% csrf_token %}
+          {% if recete_form.errors %}
+          <div class="alert alert-danger" role="alert">
+          {% for key, value in form.errors.items %}
+            <p> <strong> {{ key }} </strong> {{ value }} </p>
+          {% endfor %}
+          </div>
+          {% endif %}
+          {{ recete_form.as_p }}
+          {{ recete_form.media }}
+          {% endif %}
+          <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+              <button type="submit" name="recete_form" class="btn btn-primary">Kaydet</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<!--End of Recete Form -->

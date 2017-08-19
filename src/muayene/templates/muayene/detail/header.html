@@ -1,0 +1,48 @@
+<div class="page-header"> 
+  <h1> <a href="{% url 'hasta:detail' muayene.hasta.slug %}">{{ muayene.hasta }}</a></h1>
+  <h3><small> {{ muayene.tarih }} </small></h3>
+  <a class="btn btn-default" href="{% url 'muayene:update' muayene.id %}">Düzenle</a> 
+  <div class="btn-group">
+    <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" ariahaspopup="true" aria-expanded="false">
+      YENİ <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="{% url 'muayene:ttf-print' muayene.id %}" target="_blank">TTF</a></li> 
+      <li><a href="#" data-toggle="modal" data-target="#ahsevk">AH Sevk</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#receteForm">Reçete yaz</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#raporForm">Rapor yaz</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#istekForm">Laboratuvar İstek</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#fileForm">Dosya yükle</a></li>
+    </ul>
+  </div>
+  <div class="btn-group">
+    <button type="button" class="btn btn-info dropdown-toggle" data-toggle="dropdown" ariahaspopup="true" aria-expanded="false">
+      Hesaplamalar <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+      <li><a href="#" data-toggle="modal" data-target="#homa">HOMA</a></li>
+      <li><a href="#" data-toggle="modal" data-target="#hba1c">HbA1c</a></li>
+    </ul>
+  </div>
+  {% if muayene.hasta.sozlesme_set.latest.is_active %}
+  <a class="btn btn-success" href="#" data-toggle="modal" data-target="#sozlesme">Sözleşme aktif</a>
+  {% else %}
+  <a class="btn btn-danger">Sözleşme aktif değil</a>
+  {% endif %}
+  <div class="modal fade" id="sozlesme" tabindex="-1" role="dialog" arialabelledby="sozlesmeLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="sozlesmeLabel"> Sözleşme </h4>
+        </div>
+        <div class="modal-body">
+          <p> <b>Başlangıç:</b> {{ muayene.hasta.sozlesme_set.latest.baslangic_tarihi }} </p> 
+          <p> <b>Bitiş:</b> {{ muayene.hasta.sozlesme_set.latest.bitis_tarihi }} </p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

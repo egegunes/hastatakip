@@ -1,0 +1,94 @@
+<!-- Istek List -->
+<div class="col-md-3">
+
+  <h4>Laboratuvar istek</h4>
+  <ol>
+  {% for istek in lab_list %}
+  <li> <a href="#" data-toggle="modal" data-target="#istekDetail{{istek.id}}">İstek {{ istek.id }} - {{istek.tarih}}</a></li>
+  <div class="modal fade" id="istekDetail{{istek.id}}" tabindex="-1" role="dialog" arialabelledby="istekDetailLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 id="istekDetailLabel"> İstek {{ istek.id }} <small> {{istek.tarih}}</small> </h4>
+          <h3> Hasta: {{ istek.hasta }} </h3>
+        </div>
+        <div class="modal-body">
+          <h5> Tetkikler </h5>
+          <table class="table table-hover table-codensed">
+            <thead>
+              <tr>
+                <th>İSTEK</th>
+                <th>SONUÇ</th>
+              </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+      </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+          <a class="btn btn-success" href="{% url 'muayene:lab-sonuc' istek.id %}">SONUÇ GİR</a>
+          <a class="btn btn-primary print" href="{% url 'muayene:lab-print' istek.id %}" target="_blank">YAZDIR</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% empty %}
+  <p> İstenmiş tetkik yok. </p>
+  {% endfor %}
+  </ol>
+
+</div>
+<!-- End of Istek List -->
+
+<!-- AH Sevk -->
+<div class="modal fade" id="ahsevk" role="dialog" arialabelledby="ahsevkLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="ahsevkLabel"> AH Sevk Formu </h4>
+        <h3> Hasta: {{ muayene.hasta }} <small>Yaş: {{ muayene.hasta.age }}</small> </h3>
+        {% if muayene.hasta.ahsevk_done is True %}
+        <div class="alert alert-warning"><p>Bu hasta için AH sevk {{muayene.hasta.ahsevk_done_tarih}} tarihinde yapıldı!</p></div>
+        {% endif %}
+      </div>
+      <div class="modal-body">
+        <h4>İstenecek Tetkikler</h4>
+        <ol>
+        </ol>
+      </div>
+      <div class="modal-footer">
+        <form method="post" target="_blank" id="ahsevkForm">
+          {% csrf_token %}
+          <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+          <input type="hidden" name="ahsevk">
+          <input type="hidden" name="yas" value="{{ muayene.hasta.age }}">
+          <button type="submit" name="lab_form" class="btn btn-primary print">Kaydet</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End of AH Sevk -->
+
+<!-- Istek Form -->
+<div class="modal fade" id="istekForm" tabindex="-1" role="dialog" arialabelledby="istekFormLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <form method="POST" class="form-group">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="istekFormLabel"> Yeni istek </h4>
+                <h3> Hasta: {{ muayene.hasta }} </h3>
+            </div>
+                <div class="modal-body">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#customLab">Ek İstek</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                    <button type="submit" name="lab_form" class="btn btn-primary">Kaydet</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<!-- End of Istek Form -->

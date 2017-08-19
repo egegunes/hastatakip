@@ -1,0 +1,24 @@
+<div class="col-md-3">
+  <p> <b>Provizyon No:</b> {{muayene.hasta.id}}/{{muayene.hasta.kayit_tarihi.year}}</p>
+  <p> <b>TC Kimlik No:</b> {{muayene.hasta.tc_kimlik_no}}</p>
+  <p> <b>Sigorta:</b> {{ muayene.hasta.sigorta }} </p>
+  <p> <b>AH Sevk:</b> {% if muayene.hasta.ahsevk_done is True %} Yapıldı ({{muayene.hasta.ahsevk_done_tarih}}) {% else %} Yapılmadı {% endif %} </p>
+</div>
+
+<div class="col-md-3">
+  <p> <b>Cinsiyet:</b> {{ muayene.hasta.get_cinsiyet_display }} </p>
+  <p> <b>Doğum tarihi:</b> {{ muayene.hasta.dogum_tarihi }} </p>
+  <p> <b>Yaş:</b> {{ muayene.hasta.age }} </p>
+</div>
+
+<div class="col-md-3">
+  <p> <b>Boy:</b> {{ muayene.hasta.boy }} </p>
+  <p> <b>Kilo:</b> {{ muayene.hasta.kilo }} </p>
+  <p> <b>VKI:</b> {{ muayene.hasta.vki }} <p>
+</div>
+
+<div class="col-md-3">
+  <p> <b>Sigara:</b> {{ muayene.hasta.sigara }} </p>
+  <p> <b>Alkol:</b> {{ muayene.hasta.alkol }} </p>
+  <p> <b>YKS Özel notlar:</b> {{muayene.hasta.legacy_ozel_notlar}} </p>
+</div>
