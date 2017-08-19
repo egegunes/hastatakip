@@ -3,7 +3,7 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
-from muayene.models import Muayene
+from muayene.models import Muayene, ReceteIlac
 
 
 class MuayeneCreateForm(forms.ModelForm):
@@ -73,3 +73,19 @@ class MuayeneRelatedFileForm(forms.Form):
         widget=forms.widgets.FileInput(attrs={'class': 'form-control'}),
         label=_('Dosya'),
     )
+
+
+class ReceteIlacForm(forms.ModelForm):
+    class Meta:
+        model = ReceteIlac
+        fields = '__all__'
+        widgets = {
+            'ilac': forms.widgets.TextInput(attrs={'class': 'form-control'}),
+            'kullanim': forms.widgets.TextInput(attrs={'class': 'form-control'}),
+            'kutu': forms.widgets.NumberInput(attrs={'class': 'form-control'}),
+        }
+        labels = {
+            'ilac': _('İlaç'),
+            'kullanim': _('Kullanım'),
+            'kutu': _('Kutu'),
+        }
