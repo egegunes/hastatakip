@@ -1,4 +1,4 @@
-__all__ = ["archive", "create", "detail", "list", "prints", "update", "form", "base", "search"]
+__all__ = ["archive", "create", "detail", "list", "prints", "update", "form", "base", "search", "autocomplete"]
 
 from muayene.views.archive  import (
     MuayeneArchiveView, 
@@ -46,3 +46,4 @@ from muayene.views.base     import (
 from muayene.views.search   import (
     IlacSearchView
 )
+from muayene.views.autocomplete import IlacAutocomplete

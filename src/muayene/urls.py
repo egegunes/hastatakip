@@ -25,4 +25,5 @@ urlpatterns = [
     url(r'^rapor/(?P<pk>[0-9]+)/print/$', views.RaporPrintView.as_view(), name='rapor-print'),
     url(r'^lab/(?P<pk>[0-9]+)/print/$', views.LabIstekPrintView.as_view(), name='lab-print'),
     url(r'^lab/(?P<pk>[0-9]+)/sonuc/$', views.LabSonucFormView.as_view(), name='lab-sonuc'),
+    url(r'^ilac/autocomplete/$', views.IlacAutocomplete.as_view(), name='ilac-autocomplete'),
 ]
