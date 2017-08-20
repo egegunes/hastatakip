@@ -33,6 +33,7 @@ urlpatterns = [
         views.HastaCreateView.as_view(),
         name='create'
     ),
+    url(r'^autocomplete/$', views.HastaAutocompleteView.as_view(), name='autocomplete'),
     url(
         r'^(?P<slug>[\w-]+)/duzenle/$',
         views.HastaUpdateView.as_view(),

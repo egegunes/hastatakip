@@ -3,6 +3,8 @@
 from django import forms
 from django.utils.translation import ugettext_lazy as _
 
+from dal import autocomplete
+
 from muayene.models import Muayene, ReceteIlac
 
 
@@ -11,7 +13,7 @@ class MuayeneCreateForm(forms.ModelForm):
         model = Muayene
         fields = '__all__'
         widgets = {
-            'hasta': forms.widgets.TextInput(attrs={'class': 'form-control'}),
+            'hasta': autocomplete.ModelSelect2(url='hasta:autocomplete', attrs={'style': 'width: 100%'}),
             'yakinma': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
             'kullandigi_ilaclar': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),
             'baki': forms.widgets.Textarea(attrs={'class': 'form-control', 'rows': '2'}),

@@ -1,4 +1,4 @@
-__all__ = ["base", "archive", "create", "detail", "list", "update", "search"]
+__all__ = ["base", "archive", "create", "detail", "list", "update", "search", "autocomplete"]
 
 from hasta.views.base import (
     HastaDetailBaseView
@@ -29,3 +29,4 @@ from hasta.views.update import (
 from hasta.views.search import (
     HastaSearchView
 )
+from hasta.views.autocomplete import HastaAutocompleteView
