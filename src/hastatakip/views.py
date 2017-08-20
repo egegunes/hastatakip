@@ -1,12 +1,18 @@
 # -*- coding: utf-8 -*-
 
-from django.views.generic.base          import View
-from django.template.response           import TemplateResponse
-from django.contrib.auth                import authenticate, login, logout
-from django.http                        import HttpResponseRedirect
-from django.urls                        import reverse
+from django.views.generic.base import View, TemplateView
+from django.template.response import TemplateResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import authenticate, login, logout
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
-from hastatakip.forms                   import LoginForm
+from hastatakip.forms import LoginForm
+
+
+class MainIndexView(LoginRequiredMixin, TemplateView):
+    template_name = 'hastatakip/index.html'
+
 
 class LoginView(View):
     form_class = LoginForm
@@ -27,6 +33,7 @@ class LoginView(View):
         else:
             form = self.form_class()
             return TemplateResponse(request, 'login.html', context={'form': form, 'login_failed': True})
+
 
 class LogoutView(View):
 
