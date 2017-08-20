@@ -2,82 +2,82 @@
 
 {% block content %}
 
-{% if form.errors %}
-{% for key, value in form.errors.items %}
-<div class="alert alert-danger" role="alert">
-<p> <strong> {{ key }} </strong> {{ value }} </p>
-</div>
-{% endfor %}
-{% endif %}
+<div class="container-fluid mt-4">
+  {% if form.errors %}
+  {% for key, value in form.errors.items %}
+  <div class="alert alert-danger" role="alert">
+    <p> <strong> {{ key }} </strong> {{ value }} </p>
+  </div>
+  {% endfor %}
+  {% endif %}
 
-<form method="post" class="form-group">
+  <form method="post" class="form-group">
     {% csrf_token %}
     <div class="row">
-        <div class="col-md-2">
-            <h4> Kişisel Bilgiler </h4>
-            <hr>
-            <label for="{{ form.ad.id_for_label }}">Ad:</label> 
-            {{ form.ad }}
-            <label for="{{ form.soyad.id_for_label }}">Soyad:</label>
-            {{ form.soyad }}
-            <label for="{{ form.tc_kimlik_no.id_for_label }}">TC Kimlik No:</label> 
-            {{ form.tc_kimlik_no }}
-            <label for="{{ form.cinsiyet.id_for_label }}">Cinsiyet:</label>
-            {{ form.cinsiyet }}
-            <label for="{{ form.dogum_tarihi.id_for_label }}">Doğum tarihi:</label>
-            {{ form.dogum_tarihi }}
-            <label for="{{ form.meslek.id_for_label }}">Meslek:</label>
-            {{ form.meslek }}
-            <label for="{{ form.sigorta.id_for_label }}">Sigorta:</label>
-            {{ form.sigorta }}
-        </div>
-        <div class="col-md-2">
-            <h4> Aile Bilgileri </h4>
-            <hr>
-            <label for="{{ form.es_ad.id_for_label }}">Eş ad:</label>
-            {{ form.es_ad }}
-            <label for="{{ form.es_meslek.id_for_label }}">Eş meslek:</label>
-            {{ form.es_meslek }}
-            <label for="{{ form.cocuklar.id_for_label }}">Çocuklar:</label>
-            {{ form.cocuklar }}
-        </div>
-        <div class="col-md-3">
-            <h4> İletişim Bilgileri </h4>
-            <hr>
-            <label for="{{ form.cep_telefon.id_for_label }}">Cep Telefon:</label>
-            {{ form.cep_telefon }}
-            <label for="{{ form.ev_telefon.id_for_label }}">Ev Telefon:</label>
-            {{ form.ev_telefon }}
-            <label for="{{ form.is_telefon.id_for_label }}">İş Telefon:</label>
-            {{ form.is_telefon }}
-            <label for="{{ form.eposta.id_for_label }}">Eposta:</label>
-            {{ form.eposta }}
-            <label for="{{ form.adres.id_for_label }}">Adres:</label>
-            {{ form.adres }}
-            <label for="{{ form.semt.id_for_label }}">Semt:</label>
-            {{ form.semt }}
-        </div>
-        <div class="col-md-5">
-            <h4> Sağlık Bilgileri </h4>
-            <hr>
-            <label for="{{ form.sigara.id_for_label }}">Sigara:</label>
-            {{ form.sigara }}
-            <label for="{{ form.alkol.id_for_label }}">Alkol:</label>
-            {{ form.alkol }}
-            <label for="{{ form.kilo.id_for_label }}">Kilo:</label>
-            {{ form.kilo }}
-            <label for="{{ form.boy.id_for_label }}">Boy:</label>
-            {{ form.boy }}
-            <label for="{{ form.soygecmis.id_for_label }}">Soygeçmiş:</label>
-            {{ form.soygecmis }}
-            <label for="{{ form.ozgecmis.id_for_label }}">Özgeçmiş:</label>
-            {{ form.ozgecmis }}
-            <br>
-            <input class="btn btn-primary btn-lg" type="submit" value="Kaydet" style="float:right"/>
-        </div>
+      <div class="col-md-2 mt-2">
+        <h4> Kişisel Bilgiler </h4>
+        <hr>
+        <label for="{{ form.ad.id_for_label }}">Ad:</label> 
+        {{ form.ad }}
+        <label for="{{ form.soyad.id_for_label }}">Soyad:</label>
+        {{ form.soyad }}
+        <label for="{{ form.tc_kimlik_no.id_for_label }}">TC Kimlik No:</label> 
+        {{ form.tc_kimlik_no }}
+        <label for="{{ form.cinsiyet.id_for_label }}">Cinsiyet:</label>
+        {{ form.cinsiyet }}
+        <label for="{{ form.dogum_tarihi.id_for_label }}">Doğum tarihi:</label>
+        {{ form.dogum_tarihi }}
+        <label for="{{ form.meslek.id_for_label }}">Meslek:</label>
+        {{ form.meslek }}
+        <label for="{{ form.sigorta.id_for_label }}">Sigorta:</label>
+        {{ form.sigorta }}
+      </div>
+      <div class="col-md-2 mt-2">
+        <h4> Aile Bilgileri </h4>
+        <hr>
+        <label for="{{ form.es_ad.id_for_label }}">Eş ad:</label>
+        {{ form.es_ad }}
+        <label for="{{ form.es_meslek.id_for_label }}">Eş meslek:</label>
+        {{ form.es_meslek }}
+        <label for="{{ form.cocuklar.id_for_label }}">Çocuklar:</label>
+        {{ form.cocuklar }}
+      </div>
+      <div class="col-md-4 mt-2">
+        <h4> İletişim Bilgileri </h4>
+        <hr>
+        <label for="{{ form.cep_telefon.id_for_label }}">Cep Telefon:</label>
+        {{ form.cep_telefon }}
+        <label for="{{ form.ev_telefon.id_for_label }}">Ev Telefon:</label>
+        {{ form.ev_telefon }}
+        <label for="{{ form.is_telefon.id_for_label }}">İş Telefon:</label>
+        {{ form.is_telefon }}
+        <label for="{{ form.eposta.id_for_label }}">Eposta:</label>
+        {{ form.eposta }}
+        <label for="{{ form.adres.id_for_label }}">Adres:</label>
+        {{ form.adres }}
+        <label for="{{ form.semt.id_for_label }}">Semt:</label>
+        {{ form.semt }}
+      </div>
+      <div class="col-md-4 mt-2">
+        <h4> Sağlık Bilgileri </h4>
+        <hr>
+        <label for="{{ form.sigara.id_for_label }}">Sigara:</label>
+        {{ form.sigara }}
+        <label for="{{ form.alkol.id_for_label }}">Alkol:</label>
+        {{ form.alkol }}
+        <label for="{{ form.kilo.id_for_label }}">Kilo:</label>
+        {{ form.kilo }}
+        <label for="{{ form.boy.id_for_label }}">Boy:</label>
+        {{ form.boy }}
+        <label for="{{ form.soygecmis.id_for_label }}">Soygeçmiş:</label>
+        {{ form.soygecmis }}
+        <label for="{{ form.ozgecmis.id_for_label }}">Özgeçmiş:</label>
+        {{ form.ozgecmis }}
+        <br>
+        <input class="btn btn-primary btn-lg float-right" type="submit" value="Kaydet"/>
+      </div>
     </div>
     <br>
-</form>
-
-{{form.media}}
+  </form>
+</div>
 {% endblock %}

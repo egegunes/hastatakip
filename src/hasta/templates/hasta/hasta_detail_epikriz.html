@@ -1,0 +1,95 @@
+<div class="modal fade" id="epikriz" tabindex="-1" role="dialog" arialabelledby="epikrizLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Kapat"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="epikrizLabel">{{ hasta }} - Epikriz </h4>
+      </div>
+
+      <div class="modal-body">
+
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+          {% for muayene in muayene_list %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="heading{{muayene.id}}">
+              <h4>
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{muayene.id}}" aria-expanded="false" aria-controls="collapse{{muayene.id}}">
+                  MUAYENE: {{muayene.tarih}}
+                </a>
+              </h4>
+            </div>
+
+            <div id="collapse{{muayene.id}}" class="panel-collapse collapse" role="tabpanel" arialabelledby="heading{{muayene.id}}">
+              <div class="panel-body">
+                {% if muayene.yakinma %}
+                <p><b>Yakınma:</b>{{muayene.yakinma}}</p>
+                {% endif %}
+                {% if muayene.baki %}
+                <p><b>Bakı:</b>{{muayene.baki}}</p>
+                {% endif %}
+                {% if muayene.ontani_tani %}
+                <p><b>Öntanı/tanı:</b>{{muayene.ontani_tani}}</p>
+                {% endif %}
+                {% if muayene.kullandigi_ilaclar.exists %}
+                <p><b>Kullandığı ilaçlar:</b></p>
+                <ul>
+                  {% for ilac in muayene.kullandigi_ilaclar.all %}
+                  <li> {{ilac.ad}} - {{ilac.kullanim}} </li>
+                  {% endfor %}
+                </ul>
+                {% endif %}
+                {% if muayene.oneri_gorusler %}
+                <p><b>Öneri/Görüşler:</b>{{muayene.oneri_gorusler}}</p>
+                {% endif %}
+                {% if muayene.ozel_notlar %}
+                <p><b>Özel notlar:</b>{{muayene.ozel_notlar}}</p>
+                {% endif %}
+
+                {% if muayene.recete_set.exists %}
+                <p><b>Reçeteler:</b></p>
+                {% for recete in muayene.recete_set.all %}
+                {% endfor %}
+                {% endif %}
+                {% if muayene.rapor_set.exists %}
+                <p><b>Raporlar:</b></p>
+                {% for rapor in muayene.rapor_set.all %}
+                {% endfor %}
+                {% endif %}
+                {% if muayene.laboratuvaristek_set.exists %}
+                <p><b>Tetkikler:</b></p>
+                {% for istek in muayene.laboratuvaristek_set.all %}
+                {% endfor %}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          {% empty %}
+          <p> {{ hasta }} adına kayıtlı muayene yok. </p>
+          {% endfor %}
+
+          {% if hasta.legacy_epikriz %}
+          <div class="panel panel-default">
+            <div class="panel-heading" role="tab" id="headingLegacyEpikriz">
+              <h4>
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegacyEpikriz" aria-expanded="false" aria-controls="collapseLegacyEpikriz">
+                  YKS EPİKRİZ
+                </a>
+              </h4>
+            </div>
+            <div id="collapseLegacyEpikriz" class="panel-collapse collapse" role="tabpanel" arialabelledby="headingLegacyEpikriz">
+              <div class="panel-body">
+                <p id="legacy-epikriz">{{hasta.legacy_epikriz}}</p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+      </div>
+    </div>
+  </div>
+</div>

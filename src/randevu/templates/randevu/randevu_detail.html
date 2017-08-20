@@ -2,40 +2,40 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="col-lg-8 col-lg-offset-2">
-        <h1>Randevu {{ randevu.pk }}</h2>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Tarih</th>
-                    <th>Saat</th>
-                    <th>Hasta</th>
-                    <th>Kişi sayısı</th>
-                    <th>İrtibat No</th>
-                    <th>Durum</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>{{ randevu.date }}</td>
-                    <td>{{ randevu.time }}</td>
-                    <td>{{ randevu.hasta }}</td>
-                    <td>{{ randevu.person_number }}</td>
-                    <td>{{ randevu.contact_phone }}</td>
-                    <td>{{ randevu.get_state_display }}</td>
-                </tr>
-            </tbody>
-        </table>
-        {% if randevu.state == 1 %}
-        <a class="btn btn-lg btn-primary pull-right" href="{% url 'randevu:update' randevu.pk %}">Değiştir</a>
-        <form method="POST" action="{% url 'randevu:cancel' randevu.pk %}">
-            {% csrf_token %}
-            <input type="hidden" name="randevu_id" value="{{ randevu.pk }}">
-            <input type="submit" class="btn btn-lg btn-danger" name="cancel" value="İptal et">
-        </form>
-        {% endif %}
-    </div>
+<div class="container mt-4">
+  <div class="col-auto">
+    <h1>Randevu {{ randevu.pk }}</h2>
+    <table class="table table-responsive">
+      <thead>
+        <tr>
+          <th>Tarih</th>
+          <th>Saat</th>
+          <th>Hasta</th>
+          <th>Kişi sayısı</th>
+          <th>İrtibat No</th>
+          <th>Durum</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>{{ randevu.date }}</td>
+          <td>{{ randevu.time }}</td>
+          <td>{{ randevu.hasta }}</td>
+          <td>{{ randevu.person_number }}</td>
+          <td>{{ randevu.contact_phone }}</td>
+          <td>{{ randevu.get_state_display }}</td>
+        </tr>
+      </tbody>
+    </table>
+    {% if randevu.state == 1 %}
+    <a class="btn btn-lg btn-primary float-right" href="{% url 'randevu:update' randevu.pk %}">Değiştir</a>
+    <form method="POST" action="{% url 'randevu:cancel' randevu.pk %}">
+      {% csrf_token %}
+      <input type="hidden" name="randevu_id" value="{{ randevu.pk }}">
+      <input type="submit" class="btn btn-lg btn-danger" name="cancel" value="İptal et">
+    </form>
+    {% endif %}
+  </div>
 </div>
 
 {% endblock %}

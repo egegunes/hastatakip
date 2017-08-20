@@ -2,29 +2,13 @@
 
 {% block content %}
 
-<div class="jumbotron">
-    <h1> HastaTakip ana sayfa </h1>
+<div class="container-fluid mt-4">
+  <div class="jumbotron">
+    <h1> Ana sayfa </h1>
+    <hr>
     <p> Merhaba, {{ user }} </p>
     <p> Bugün {% now "j F Y l" %}, saat {% now "H:i" %} </p>
-    <p>
-        <h3>Hasta</h3>
-        <hr>
-        <form class="form-inline" method="POST" action="{% url 'hasta:search' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <input type="text" class="form-control" placeholder="Hasta ara" name="term">
-            </div>
-            <button type="submit" class="btn btn-default">Ara</button>
-        </form>
-        <br>
-        <a class="btn btn-primary btn-lg" href="{% url 'hasta:create' %}" role="button">YENİ HASTA</a> 
-    </p>
-    <p>
-        <h3>Muayene</h3>
-        <hr>
-        <a class="btn btn-primary btn-lg" href="{% url 'muayene:create' %}" role="button">YENİ MUAYENE</a>
-
-    </p>
+  </div>
 </div>
 
 {% endblock %}

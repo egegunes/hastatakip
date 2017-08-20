@@ -2,38 +2,34 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="col-lg-8 col-lg-offset-2">
-        <div class="row">
-            <div class="page-header">
-                <h1>{{ day }} - Randevu Listesi</h1>
-            </div>
-        </div>
+<div class="container mt-4">
+  <div class="col-8 mx-auto">
+    <h1>{{ day }} - Randevu Listesi</h1>
 
-        <div class="row">
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Saat</th>
-                        <th>Hasta</th>
-                        <th>Kişi sayısı</th>
-                        <th>İrtibat No</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for randevu in object_list %}
-                    <tr>
-                        <td>{{ randevu.time }}</td>
-                        <td>{{ randevu.hasta }}</td>
-                        <td>{{ randevu.person_number }}</td>
-                        <td>{{ randevu.contact_phone }}</td>
-                        <td><a href="{% url 'randevu:detail' randevu.pk %}">Detay</a></td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+    <div class="row">
+      <table class="table table-responsive">
+        <thead>
+          <tr>
+            <th>Saat</th>
+            <th>Hasta</th>
+            <th>Kişi sayısı</th>
+            <th>İrtibat No</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for randevu in object_list %}
+          <tr>
+            <td>{{ randevu.time }}</td>
+            <td>{{ randevu.hasta }}</td>
+            <td>{{ randevu.person_number }}</td>
+            <td>{{ randevu.contact_phone }}</td>
+            <td><a href="{% url 'randevu:detail' randevu.pk %}">Detay</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </div>
+  </div>
 </div>
 
 {% endblock %}

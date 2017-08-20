@@ -2,61 +2,78 @@
 
 {% block content %}
 
-<div class="page-header">
-    <h1>Muayene Arşiv</h1>
+<div class="container-fluid mt-4">
+
+  <div class="row" style="padding:20px">
     <ul class="nav nav-tabs">
-        <li role="presentation"><a href="{% url 'muayene:archive-week' cyear cweek %}">Bu hafta</a></li>
-        <li role="presentation" class="active"><a href="{% url 'muayene:archive-month' cyear cmonth %}">Bu ay</a></li> 
-        <li role="presentation"><a href="{% url 'muayene:archive-year' cyear %}">Bu yıl</a></li>
-        <li role="presentation"><a href="{% url 'muayene:archive-custom' %}">Özel aralık</a></li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'muayene:archive-week' cyear cweek %}">Bu hafta</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link active" href="{% url 'muayene:archive-month' cyear cmonth %}">Bu ay</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'muayene:archive-custom' %}">Özel aralık</a>
+      </li>
     </ul>
+  </div>
+
+  <div class="row" style="padding:20px">
+    <div class="container-fluid">
+      <div class="row">
+        <h3> {{ month|date:'F' }} <small>Muayene sayısı: {{object_list | length}} | <a href="#" id="TTF">Çoklu TTF</a> | <a href="#" id="muayene-list-pdf">Liste</a></small> </h3>
+
+        <form method="POST" action="{% url 'muayene:multi-ttf-print' %}" id="TTFform" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" value="{{month|date:'Y-m-j'}}" name="start">
+            <input type="hidden" value="{{next_month|date:'Y-m-j'}}" name="end">
+        </form>
+
+        <form method="POST" action="{% url 'muayene:list-print' %}" id="MuayeneListForm" target="_blank">
+            {% csrf_token %}
+            <input type="hidden" value="{{month|date:'Y-m-j'}}" name="start">
+            <input type="hidden" value="{{next_month|date:'Y-m-j'}}" name="end">
+        </form>
+      </div>
+
+      <div class="row my-3">
+        <div class="col-6">
+          {% if previous_month %}
+          <a href="/muayene/arsiv/{{previous_month|date:"Y"}}/{{previous_month|date:"m"}}"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{previous_month|date:'F'}}</a>
+          {% endif %}
+        </div>
+        <div class="col-6">
+          {% if next_month %}
+          <a class="float-right" href="/muayene/arsiv/{{next_month|date:"Y"}}/{{next_month|date:"m"}}">{{next_month|date:'F'}} <i class="fa fa-arrow-right" aria-hidden="true"></i></span></a>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="row">
+        <table class="table table-hover table-striped table-condensed table-sm">
+        <thead>
+            <th>#</th>
+            <th>TARİH</th>
+            <th>HASTA</th>
+            <th>YAKINMA</th>
+            <th>TANI</th>
+            <th></th>
+        </thead>
+        <tbody>
+        {% for muayene in object_list %}
+          <tr>
+            <td>{{muayene.id}}</td>
+            <td>{{muayene.tarih}}</td>
+            <td><a href="{% url 'muayene:detail' muayene.id %}">{{ muayene.hasta }}</a></td>
+            <td>{{muayene.yakinma}}</td>
+            <td>{{muayene.ontani_tani}}</td>
+            <td><a href="{% url 'muayene:detail' muayene.id %}">Detay</a></td>
+          </tr>
+        {% endfor %}
+        </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
-
-<div class="row" style="padding:20px">
-
-    <h3> {{ month|date:'F' }} <small>Muayene sayısı: {{object_list | length}} | <a href="#" id="TTF">Çoklu TTF</a> | <a href="#" id="muayene-list-pdf">Liste</a></small> </h3>
-
-    <form method="POST" action="{% url 'muayene:multi-ttf-print' %}" id="TTFform" target="_blank">
-        {% csrf_token %}
-        <input type="hidden" value="{{month|date:'Y-m-j'}}" name="start">
-        <input type="hidden" value="{{next_month|date:'Y-m-j'}}" name="end">
-    </form>
-
-    <form method="POST" action="{% url 'muayene:list-print' %}" id="MuayeneListForm" target="_blank">
-        {% csrf_token %}
-        <input type="hidden" value="{{month|date:'Y-m-j'}}" name="start">
-        <input type="hidden" value="{{next_month|date:'Y-m-j'}}" name="end">
-    </form>
-
-    <p>
-        {% if previous_month %}
-        <a href="/muayene/arsiv/{{previous_month|date:"Y"}}/{{previous_month|date:"m"}}"><span class="glyphicon glyphicon-arrow-left"></span> {{previous_month|date:'F'}}</a>
-        {% endif %}
-        {% if next_month %}
-        <a style="float:right" href="/muayene/arsiv/{{next_month|date:"Y"}}/{{next_month|date:"m"}}">{{next_month|date:'F'}} <span class="glyphicon glyphicon-arrow-right"></span></a>
-        {% endif %}
-    </p>
-
-    <table class="table table-hover table-condensed">
-    <tr>
-        <th>#</th>
-        <th>TARİH</th>
-        <th>HASTA</th>
-        <th>YAKINMA</th>
-        <th>TANI</th>
-    </tr>    
-    {% for muayene in object_list %}
-    <tr>
-        <td>{{muayene.id}}</td>
-        <td>{{muayene.tarih}}</td>
-        <td><a href="{% url 'muayene:detail' muayene.id %}">{{ muayene.hasta }}</a></td>
-        <td>{{muayene.yakinma}}</td>
-        <td>{{muayene.ontani_tani}}</td>
-        <td><a href="{% url 'muayene:detail' muayene.id %}">Detay</a></td>
-    </tr>
-    {% endfor %}
-    </table>
-
-</div>
-
 {% endblock %}

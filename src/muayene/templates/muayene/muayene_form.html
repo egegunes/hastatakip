@@ -2,25 +2,22 @@
 
 {% block content %}
 
-<div class="container">
-    <div class="col-lg-8 col-lg-offset-2">
-
-        {% if form.errors %}
-        {% for key, value in form.errors.items %}
-        <div class="alert alert-danger" role="alert">
-            <p> <strong> {{ key }} </strong> {{ value }} </p>
-        </div>
-        {% endfor %}
-        {% endif %}
-
-        <form method="post" class="form-group">
-            {% csrf_token %}
-            {{ form.as_p }}
-            {{ form.media }}
-            <input type="submit" class="btn btn-lg btn-default pull-right" value="Kaydet">
-        </form>
-
+<div class="container mt-4">
+  <div class="col-8 mx-auto">
+    {% if form.errors %}
+    {% for key, value in form.errors.items %}
+    <div class="alert alert-danger" role="alert">
+        <p> <strong> {{ key }} </strong> {{ value }} </p>
     </div>
+    {% endfor %}
+    {% endif %}
+
+    <form method="post" class="form-group">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <input type="submit" class="btn btn-lg btn-primary float-right" value="Kaydet">
+    </form>
+  </div>
 </div>
 
 {% endblock %}

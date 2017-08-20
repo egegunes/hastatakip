@@ -2,38 +2,34 @@
 
 {% block content %}
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="page-header">
-            <h1>{{ week|date:'W' }}. hafta - Randevu Listesi</h1>
-        </div>
+<div class="container-fluid my-4 p-4">
+    <h1>{{ week|date:'W' }}. hafta - Randevu Listesi</h1>
+
+    <div class="row my-3">
+      <div class="col-6">
+        {% if previous_week %}
+        <a href="{% url 'randevu:week-archive' previous_week|date:"Y" previous_week|date:"W" %}">Önceki hafta</a>
+        {% endif %}
+      </div>
+      <div class="col-6">
+        {% if next_week %}
+        <a class="float-right" href="{% url 'randevu:week-archive' next_week|date:"Y" next_week|date:"W" %}">Sonraki hafta</a>
+        {% endif %}
+      </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-6">
-            {% if previous_week %}
-            <a href="{% url 'randevu:week-archive' previous_week|date:"Y" previous_week|date:"W" %}">Önceki hafta</a>
-            {% endif %}
-        </div>
-        <div class="col-lg-6">
-            {% if next_week %}
-            <a class="pull-right" href="{% url 'randevu:week-archive' next_week|date:"Y" next_week|date:"W" %}">Sonraki hafta</a>
-            {% endif %}
-        </div>
-    </div>
-
-    <div class="row">
-        {% for date, randevu_list in randevu_list_by_date %}
-        <div class="col-lg-2">
-            <h3> {{ date }} </h3>
-            <hr>
-            <ol>
-            {% for randevu in randevu_list %}
-            <li><a href="{% url 'randevu:detail' randevu.pk %}">{{ randevu.time }} - {{ randevu.hasta }} ({{ randevu.person_number }} kişi)</a></li>
-            {% endfor %}
-            </ol>
-        </div>
+    <div class="row mt-3">
+      {% for date, randevu_list in randevu_list_by_date %}
+      <div class="col-xl-2">
+        <h3> {{ date }} </h3>
+        <hr>
+        <ol>
+        {% for randevu in randevu_list %}
+        <li><a href="{% url 'randevu:detail' randevu.pk %}">{{ randevu.time }} - {{ randevu.hasta }} ({{ randevu.person_number }} kişi)</a></li>
         {% endfor %}
+        </ol>
+      </div>
+      {% endfor %}
     </div>
 </div>
 

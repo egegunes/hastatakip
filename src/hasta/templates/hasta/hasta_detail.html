@@ -2,1133 +2,264 @@
 
 {% block content %}
 
-<div class="page-header">
-    <h1>{{ hasta.ad }} {{ hasta.soyad }} <small>{{hasta.id}}/{{hasta.kayit_tarihi.year}}</small> </h1>
-    <p>
-        <a class="btn btn-default" href="{% url 'hasta:update' hasta.slug %}">Düzenle</a> 
-        <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#epikriz">EPİKRİZ</a>
-        <a class="btn btn-success" href="{% url 'hasta:muayene-create' hasta.slug %}">YENİ MUAYENE</a> 
-    </p>
-</div>
+<div class="container-fluid mt-4">
+  <h1>{{ hasta.ad }} {{ hasta.soyad }} <small>{{hasta.id}}/{{hasta.kayit_tarihi.year}}</small> </h1>
+  <a class="btn btn-warning" href="{% url 'hasta:update' hasta.slug %}">Düzenle</a>
+  <a class="btn btn-primary" href="#" data-toggle="modal" data-target="#epikriz">EPİKRİZ</a>
+  <a class="btn btn-success" href="{% url 'hasta:muayene-create' hasta.slug %}">YENİ MUAYENE</a>
 
-<!-- Epikriz Modal -->
-<div class="modal fade" id="epikriz" tabindex="-1" role="dialog" arialabelledby="epikrizLabel">
+  {% include "hasta/hasta_detail_epikriz.html" %}
 
-    <div class="modal-dialog" role="document">
-
-        <div class="modal-content">
-
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Kapat"><span aria-hidden="true">&times;</span></button>
-                <h4 id="epikrizLabel"> Epikriz </h4>
-                <h3> Hasta: {{ hasta }} </h3>
-
-            </div>
-
-            <div class="modal-body">
-
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">  
-
-                {% for muayene in muayene_list %}
-                    <div class="panel panel-default">
-
-                        <div class="panel-heading" role="tab" id="heading{{muayene.id}}">
-
-                            <h4>
-                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapse{{muayene.id}}" aria-expanded="false" aria-controls="collapse{{muayene.id}}">
-                                    MUAYENE: {{muayene.tarih}}
-                                </a>
-                            </h4>
-
-                        </div> 
-
-                        <div id="collapse{{muayene.id}}" class="panel-collapse collapse" role="tabpanel" arialabelledby="heading{{muayene.id}}">
-
-                            <div class="panel-body">    
-
-                                {% if muayene.yakinma %}
-                                <p><b>Yakınma:</b>{{muayene.yakinma}}</p>
-                                {% endif %}
-                                {% if muayene.baki %}
-                                <p><b>Bakı:</b>{{muayene.baki}}</p>
-                                {% endif %}
-                                {% if muayene.ontani_tani %}
-                                <p><b>Öntanı/tanı:</b>{{muayene.ontani_tani}}</p>
-                                {% endif %}
-                                {% if muayene.kullandigi_ilaclar.exists %}
-                                <p><b>Kullandığı ilaçlar:</b></p>
-                                <ul>
-                                {% for ilac in muayene.kullandigi_ilaclar.all %}
-                                <li> {{ilac.ad}} - {{ilac.kullanim}} </li>
-                                {% endfor %}
-                                </ul>
-                                {% endif %}
-                                {% if muayene.oneri_gorusler %}
-                                <p><b>Öneri/Görüşler:</b>{{muayene.oneri_gorusler}}</p>
-                                {% endif %}
-                                {% if muayene.ozel_notlar %}
-                                <p><b>Özel notlar:</b>{{muayene.ozel_notlar}}</p>
-                                {% endif %}
-
-                                {% if muayene.recete_set.exists %}
-                                <p><b>Reçeteler:</b></p>
-                                {% for recete in muayene.recete_set.all %}
-                                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" tabindex="0" data-html="true"
-                                        data-content="1. {{recete.ilac1}} <br>S: {{recete.ilac1_kullanim}} / {{recete.ilac1_kutu}} kutu <br>
-                                        {% if recete.ilac2 %}2. {{recete.ilac2}} <br>S: {{recete.ilac2_kullanim}} / {{recete.ilac2_kutu}} kutu <br>{% endif %}
-                                        {% if recete.ilac3 %}3. {{recete.ilac3}} <br>S: {{recete.ilac3_kullanim}} / {{recete.ilac3_kutu}} kutu <br>{% endif %}
-                                        {% if recete.ilac4 %}4. {{recete.ilac4}} <br>S: {{recete.ilac4_kullanim}} / {{recete.ilac4_kutu}} kutu <br>{% endif %}
-                                        {% if recete.ilac5 %}5. {{recete.ilac5}} <br>S: {{recete.ilac5_kullanim}} / {{recete.ilac5_kutu}} kutu <br>{% endif %}"
-                                        data-trigger="focus">Reçete {{recete.id}} 
-                                </button>
-                                {% endfor %}
-                                {% endif %}
-                                {% if muayene.rapor_set.exists %}
-                                <p><b>Raporlar:</b></p>
-                                {% for rapor in muayene.rapor_set.all %}
-                                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" tabindex="0"
-                                    data-content="Tanı: {{rapor.tani}} - {{rapor.gun}} gün" data-trigger="focus">Rapor {{rapor.id}} 
-                                </button>
-                                {% endfor %}
-                                {% endif %}
-                                {% if muayene.laboratuvaristek_set.exists %}
-                                <p><b>Tetkikler:</b></p>
-                                {% for istek in muayene.laboratuvaristek_set.all %}
-                                <button type="button" class="btn btn-default" data-container="body" data-toggle="popover" data-placement="top" tabindex="0" data-html="true"
-                                    data-content="{% for lab in istek.istekler.all %} <p>{{lab.ad}}</p> {% endfor %}" data-trigger="focus">İstek {{istek.id}} 
-                                </button>
-                                {% endfor %}
-                                {% endif %}
-
-                            </div>
-
-                        </div>
-
-                    </div>
-                {% empty %}
-                <p> {{ hasta }} adına kayıtlı muayene yok. </p>
-                {% endfor %}
-
-                {% if hasta.legacy_epikriz %}
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingLegacyEpikriz">
-                        <h4>
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseLegacyEpikriz" aria-expanded="false" aria-controls="collapseLegacyEpikriz">
-                                YKS EPİKRİZ    
-                            </a>
-                        </h4>
-                    </div> 
-                    <div id="collapseLegacyEpikriz" class="panel-collapse collapse" role="tabpanel" arialabelledby="headingLegacyEpikriz">
-                        <div class="panel-body">    
-                            <p id="legacy-epikriz">{{hasta.legacy_epikriz}}</p>
-                        </div>
-                    </div>
-                </div>
-                {% endif %}
-
-                </div>
-
-            </div>
-
-            <div class="modal-footer">
-
-                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</div>
-<!-- End of Epikriz -->
-
-<!-- Row 1 -->
-<div class="row" style="padding:20px"> 
+  <div class="row" style="padding:20px">
 
     <div class="col-md-2">
-
-        <h4> Kişisel Bilgiler </h4>
-        <hr>
-
-        <p><b>Kayıt tarihi:</b> {{ hasta.kayit_tarihi }}</p>
-        <p><b>Doğum tarihi:</b> {{ hasta.dogum_tarihi }}</p>
-        <p><b>Yaş:</b> {{ hasta.age }} </p>
-        <p><b>Tc Kimlik No:</b> {{ hasta.tc_kimlik_no }}</p>
-        <p><b>Cinsiyet:</b> {{ hasta.get_cinsiyet_display }}</p>
-        <p><b>Meslek:</b> {{ hasta.meslek }}</p>
-        <p><b>Sigorta:</b> {{ hasta.sigorta }}</p>
-
+      <h4> Kişisel Bilgiler </h4>
+      <hr>
+      <p><b>Kayıt tarihi:</b> {{ hasta.kayit_tarihi }}</p>
+      <p><b>Doğum tarihi:</b> {{ hasta.dogum_tarihi }}</p>
+      <p><b>Yaş:</b> {{ hasta.age }} </p>
+      <p><b>Tc Kimlik No:</b> {{ hasta.tc_kimlik_no }}</p>
+      <p><b>Cinsiyet:</b> {{ hasta.get_cinsiyet_display }}</p>
+      <p><b>Meslek:</b> {{ hasta.meslek }}</p>
+      <p><b>Sigorta:</b> {{ hasta.sigorta }}</p>
     </div>
 
     <div class="col-md-2">
-
-        <h4> Aile Bilgileri </h4>
-        <hr>
-
-        <p><b>Eş Ad:</b> {{ hasta.es_ad }}</p>
-        <p><b>Eş Meslek:</b> {{ hasta.es_meslek }}</p>
-        <p><b>Çocuklar:</b> {{hasta.get_cocuklar}}</p> 
-
+      <h4> Aile Bilgileri </h4>
+      <hr>
+      <p><b>Eş Ad:</b> {{ hasta.es_ad }}</p>
+      <p><b>Eş Meslek:</b> {{ hasta.es_meslek }}</p>
+      <p><b>Çocuklar:</b> {{hasta.get_cocuklar}}</p>
     </div>
 
     <div class="col-md-4">
-
-        <h4> İletişim Bilgileri </h4>
-        <hr>
-
-        <p><b>Cep Telefon:</b> {{ hasta.cep_telefon }}</p>
-        <p><b>Ev Telefon:</b> {{ hasta.ev_telefon }}</p>
-        <p><b>İş Telefon:</b> {{ hasta.is_telefon }}</p>
-        <p><b>Adres:</b> {{ hasta.adres }}</p>
-        <p><b>Semt:</b> {{ hasta.semt }}</p>
-        <p><b>Eposta:</b> {{ hasta.eposta }}</p>
-
+      <h4> İletişim Bilgileri </h4>
+      <hr>
+      <p><b>Cep Telefon:</b> {{ hasta.cep_telefon }}</p>
+      <p><b>Ev Telefon:</b> {{ hasta.ev_telefon }}</p>
+      <p><b>İş Telefon:</b> {{ hasta.is_telefon }}</p>
+      <p><b>Adres:</b> {{ hasta.adres }}</p>
+      <p><b>Semt:</b> {{ hasta.semt }}</p>
+      <p><b>Eposta:</b> {{ hasta.eposta }}</p>
     </div>
 
     <div class="col-md-4">
-
-        <h4> Sağlık Bilgileri </h4>
-        <hr>
-
-        <p><b>AH Sevk: </b> {% if hasta.ahsevk_done is True %} Yapıldı ({{hasta.ahsevk_done_tarih}}) {% else %} Yapılmadı {% endif %} </p>
-        <p><b>Soygecmiş:</b> {{ hasta.soygecmis }}</p>
-        <p><b>Özgeçmiş:</b> {{ hasta.ozgecmis }}</p>
-        <p><b>Sigara:</b> {{ hasta.sigara }}</p>
-        <p><b>Alkol:</b> {{ hasta.alkol }}</p>
-        <p><b>Kilo:</b> {{ hasta.kilo }}</p>
-        <p><b>Boy:</b> {{ hasta.boy }}</p>
-        <p><b>VKI:</b> {{ hasta.vki }}</p>
-
+      <h4> Sağlık Bilgileri </h4>
+      <hr>
+      <p><b>AH Sevk: </b> {% if hasta.ahsevk_done is True %} Yapıldı ({{hasta.ahsevk_done_tarih}}) {% else %} Yapılmadı {% endif %} </p>
+      <p><b>Soygecmiş:</b> {{ hasta.soygecmis }}</p>
+      <p><b>Özgeçmiş:</b> {{ hasta.ozgecmis }}</p>
+      <p><b>Sigara:</b> {{ hasta.sigara }}</p>
+      <p><b>Alkol:</b> {{ hasta.alkol }}</p>
+      <p><b>Kilo:</b> {{ hasta.kilo }}</p>
+      <p><b>Boy:</b> {{ hasta.boy }}</p>
+      <p><b>VKI:</b> {{ hasta.vki }}</p>
     </div>
 
-</div>
-<!-- End of Row 1 -->
+  </div>
 
-<!-- Row 2 -->
-<div class="row" style="padding:20px"> 
+  <div class="row" style="padding:20px">
 
     <div class="col-md-2">
-
-        <h4> <a href="{% url 'hasta:muayene-list' hasta.slug %}">Geçmiş muayeneler</a> </h4>
-        <hr>
-        {% if muayene_list %}
-        <ol>
-            {% for muayene in muayene_list %}
-            <li> 
-                <a href="{% url 'muayene:detail' muayene.id %}"> {{ muayene.tarih }} - {{ muayene.yakinma }}</a>
-            </li>
-            {% endfor %}
-        </ol>
-        {% else %}
-        <p> {{ hasta }} için muayene kaydı yok. </p>
-        {% endif %}
-
+      <h4>Geçmiş muayeneler</h4>
+      <hr>
+      {% if muayene_list %}
+      <ol>
+        {% for muayene in muayene_list %}
+        <li>
+          <a href="{% url 'muayene:detail' muayene.id %}"> {{ muayene.tarih }} - {{ muayene.yakinma }}</a>
+        </li>
+        {% endfor %}
+      </ol>
+      {% else %}
+      <p> {{ hasta }} için muayene kaydı yok. </p>
+      {% endif %}
     </div>
 
     <div class="col-md-2">
-
-        <h4> <a href="{% url 'hasta:recete-list' hasta.slug %}">Yazılmış reçeteler</a> </h4>
-        <hr>
-        <ol>
+      <h4>Yazılmış reçeteler</h4>
+      <hr>
+      <ol>
         {% for recete in recete_list %}
         <li> <a href="#" data-toggle="modal" data-target="#receteDetail{{recete.id}}">Reçete {{recete.id}} - {{ recete.tarih }}</a></li>
         <div class="modal fade" id="receteDetail{{recete.id}}" tabindex="-1" role="dialog" arialabelledby="receteDetailLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="receteDetailLabel"> Reçete {{ recete.id }} <small>{{recete.tarih}}</small> </h4>
-                        <h3> Hasta: {{ recete.hasta }} </h3>
-                    </div>
-                    <div class="modal-body">
-                        <h5> İlaçlar </h5>
-                        <ol>
-                            <li>{{recete.ilac1}}
-                                <ul>
-                                    <li>{{recete.ilac1_kullanim}}</li>
-                                </ul>
-                            </li>
-                            {% if recete.ilac2 %}
-                            <li>{{recete.ilac2}}
-                                <ul>
-                                    <li>{{recete.ilac2_kullanim}}</li>
-                                </ul>
-                            </li>
-                            {% endif %}
-                            {% if recete.ilac3 %}
-                            <li>{{recete.ilac3}}
-                                <ul>
-                                    <li>{{recete.ilac3_kullanim}}</li>
-                                </ul>
-                            </li>
-                            {% endif %}
-                            {% if recete.ilac4 %}
-                            <li>{{recete.ilac4}}
-                                <ul>
-                                    <li>{{recete.ilac4_kullanim}}</li>
-                                </ul>
-                            </li>
-                            {% endif %}
-                            {% if recete.ilac5 %}
-                            <li>{{recete.ilac5}}
-                                <ul>
-                                    <li>{{recete.ilac5_kullanim}}</li>
-                                </ul>
-                            </li>
-                            {% endif %}
-                        </ol>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                        <a class="btn btn-primary" href="{% url 'muayene:recete-print' recete.id %}" target="_blank">YAZDIR</a>
-                    </div>
-                </div>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="receteDetailLabel"> Reçete {{ recete.id }} <small>{{recete.tarih}}</small> </h4>
+              </div>
+              <div class="modal-body">
+                <h5> İlaçlar </h5>
+                <ol>
+                {% for ilac in recete.ilaclar.all %}
+                <li>{{ ilac.ilac }}
+                  <ul>
+                    <li>{{ ilac.kullanim }}</li>
+                    <li>{{ ilac.kutu }} kutu</li>
+                  </ul>
+                </li>
+                {% endfor %}
+                </ol>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <a class="btn btn-primary" href="{% url 'muayene:recete-print' recete.id %}" target="_blank">YAZDIR</a>
+              </div>
             </div>
+          </div>
         </div>
         {% empty %}
         <p> {{hasta}} için reçete kaydı yok. </p>
         {% endfor %}
-        </ol>
+      </ol>
 
     </div>
 
     <div class="col-md-2">
-
-        <h4> <a href="{% url 'hasta:rapor-list' hasta.slug %}">Yazılmış raporlar</a> </h4>
-        <hr>
-        <ol>
+      <h4>Yazılmış raporlar</h4>
+      <hr>
+      <ol>
         {% for rapor in rapor_list %}
         <li> <a href="#" data-toggle="modal" data-target="#raporDetail{{rapor.id}}">Rapor {{rapor.id}} - {{ rapor.tarih }}</a></li>
         <div class="modal fade" id="raporDetail{{rapor.id}}" tabindex="-1" role="dialog" arialabelledby="raporDetailLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="raporDetailLabel"> Rapor {{ rapor.id }} <small>{{rapor.tarih}}</small> </h4>
-                        <h5> Hasta: {{ rapor.hasta }} </h5>
-                    </div>
-                    <div class="modal-body">
-                        <h4>Tanı: {{rapor.tani}}</h4>
-                        <h4>Gün: {{rapor.gun}}</h4>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                        <a class="btn btn-primary" href="{% url 'muayene:rapor-print' rapor.id %}" target="_blank">YAZDIR</a>
-                    </div>
-                </div>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="raporDetailLabel"> Rapor {{ rapor.id }} <small>{{rapor.tarih}}</small> </h4>
+              </div>
+              <div class="modal-body">
+                <h4>Tanı: {{rapor.tani}}</h4>
+                <h4>Gün: {{rapor.gun}}</h4>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <a class="btn btn-primary" href="{% url 'muayene:rapor-print' rapor.id %}" target="_blank">YAZDIR</a>
+              </div>
             </div>
+          </div>
         </div>
         {% empty %}
         <p> {{ hasta }} için rapor kaydı yok. </p>
         {% endfor %}
-        </ol>
-
+      </ol>
     </div>
 
     <div class="col-md-2">
-
-        <h4> <a href="{% url 'hasta:istek-list' hasta.slug %}">İstenmiş tetkikler</a> </h4>
-        <hr>
-        <ol>
+      <h4>İstenmiş tetkikler</h4>
+      <hr>
+      <ol>
         {% for istek in lab_list %}
         <li> <a href="#" data-toggle="modal" data-target="#istekDetail{{istek.id}}">İstek {{istek.id}} - {{ istek.tarih }}</a></li>
         <div class="modal fade" id="istekDetail{{istek.id}}" tabindex="-1" role="dialog" arialabelledby="istekDetailLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="istekDetailLabel"> İstek {{ istek.id }} <small>{{istek.tarih}}</small> </h4>
-                        <h3> Hasta: {{ istek.hasta }} </h3>
-                    </div>
-                    <div class="modal-body">
-                        <h5> Tetkikler </h5>
-                        <table class="table table-hover table-codensed">
-                            <thead>
-                                <tr>
-                                    <th>İSTEK</th>
-                                    <th>SONUÇ</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% if istek.hemogram is True %}
-                                <tr>
-                                    <td> Hemogram </td>
-                                    <td>
-                                    {% if istek.hemogram_sonuc != ' ' and istek.hemogram_sonuc != '' %}
-                                    {{istek.hemogram_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.sedim is True %}
-                                <tr>
-                                    <td> Sedim </td>
-                                    <td>
-                                    {% if istek.sedim_sonuc != ' ' and istek.sedim_sonuc != '' %}
-                                    {{istek.sedim_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.serum_demir is True %}
-                                <tr>
-                                    <td> Serum Demir </td>
-                                    <td>
-                                    {% if istek.serum_demir_sonuc != ' ' and istek.serum_demir_sonuc != '' %}
-                                    {{istek.serum_demir_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tdbk is True %}
-                                <tr>
-                                    <td> TDBK </td>
-                                    <td>
-                                    {% if istek.tdbk_sonuc != ' ' and istek.tdbk_sonuc != '' %}
-                                    {{istek.tdbk_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ferritin is True %}
-                                <tr>
-                                    <td> Ferritin </td>
-                                    <td>
-                                    {% if istek.ferritin_sonuc != ' ' and istek.ferritin_sonuc != '' %}
-                                    {{istek.ferritin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.b12 is True %}
-                                <tr>
-                                    <td> B12 </td>
-                                    <td>
-                                    {% if istek.b12_sonuc != ' ' and istek.b12_sonuc != '' %}
-                                    {{istek.b12_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.folik_asit is True %}
-                                <tr>
-                                    <td> Folik asit </td>
-                                    <td>
-                                    {% if istek.folik_asit_sonuc != ' ' and istek.folik_asit_sonuc != '' %}
-                                    {{istek.folik_asit_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.hemoglobin is True %}
-                                <tr>
-                                    <td> Hemoglobin Elektroforezi </td>
-                                    <td>
-                                    {% if istek.hemoglobin_sonuc != ' ' and istek.hemoglobin_sonuc != '' %}
-                                    {{istek.hemoglobin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.aclik_kan is True %}
-                                <tr>
-                                    <td> Açlık Kan Şekeri </td>
-                                    <td>
-                                    {% if istek.aclik_kan_sonuc != ' ' and istek.aclik_kan_sonuc != '' %}
-                                    {{istek.aclik_kan_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tokluk_kan is True %}
-                                <tr>
-                                    <td> Tokluk Kan Şekeri </td>
-                                    <td>
-                                    {% if istek.tokluk_kan_sonuc != ' ' and istek.tokluk_kan_sonuc != '' %}
-                                    {{istek.tokluk_kan_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.hba1c is True %}
-                                <tr>
-                                    <td> HbA1c </td>
-                                    <td>
-                                    {% if istek.hba1c_sonuc != ' ' and istek.hba1c_sonuc != '' %}
-                                    {{istek.hba1c_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.og11 is True %}
-                                <tr>
-                                    <td> OGTT (75 gr Glikoz ile 0-60-120-180 dakikalarda) </td>
-                                    <td>
-                                    {% if istek.og11_sonuc != ' ' and istek.og11_sonuc != '' %}
-                                    {{istek.og11_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.sgot is True %}
-                                <tr>
-                                    <td> SGOT (AST) </td>
-                                    <td>
-                                    {% if istek.sgot_sonuc != ' ' and istek.sgot_sonuc != '' %}
-                                    {{istek.sgot_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.sgpt is True %}
-                                <tr>
-                                    <td> SGPT (ALT) </td>
-                                    <td>
-                                    {% if istek.sgpt_sonuc != ' ' and istek.sgpt_sonuc != '' %}
-                                    {{istek.sgpt_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ggt is True %}
-                                <tr>
-                                    <td> GGT </td>
-                                    <td>
-                                    {% if istek.ggt_sonuc != ' ' and istek.ggt_sonuc != '' %}
-                                    {{istek.ggt_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.alp is True %}
-                                <tr>
-                                    <td> ALP </td>
-                                    <td>
-                                    {% if istek.alp_sonuc != ' ' and istek.alp_sonuc != '' %}
-                                    {{istek.alp_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ure is True %}
-                                <tr>
-                                    <td> Üre </td>
-                                    <td>
-                                    {% if istek.ure_sonuc != ' ' and istek.ure_sonuc != '' %}
-                                    {{istek.ure_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.kreatinin is True %}
-                                <tr>
-                                    <td> Kreatinin </td>
-                                    <td>
-                                    {% if istek.kreatinin_sonuc != ' ' and istek.kreatinin_sonuc != '' %}
-                                    {{istek.kreatinin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.urik_asit is True %}
-                                <tr>
-                                    <td> Ürik asit </td>
-                                    <td>
-                                    {% if istek.urik_asit_sonuc != ' ' and istek.urik_asit_sonuc != '' %}
-                                    {{istek.urik_asit_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.total_kolesterol is True %}
-                                <tr>
-                                    <td> Total Kolesterol </td>
-                                    <td>
-                                    {% if istek.total_kolesterol_sonuc != ' ' and istek.total_kolesterol_sonuc != '' %}
-                                    {{istek.total_kolesterol_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.hdl is True %}
-                                <tr>
-                                    <td> HDL </td>
-                                    <td>
-                                    {% if istek.hdl_sonuc != ' ' and istek.hdl_sonuc != '' %}
-                                    {{istek.hdl_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.trigliserit is True %}
-                                <tr>
-                                    <td> Trigliserit </td>
-                                    <td>
-                                    {% if istek.trigliserit_sonuc != ' ' and istek.trigliserit_sonuc != '' %}
-                                    {{istek.trigliserit_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ldl is True %}
-                                <tr>
-                                    <td> LDL </td>
-                                    <td>
-                                    {% if istek.ldl_sonuc != ' ' and istek.ldl_sonuc != '' %}
-                                    {{istek.ldl_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.free_t3 is True %}
-                                <tr>
-                                    <td> Free T3 </td>
-                                    <td>
-                                    {% if istek.free_t3_sonuc != ' ' and istek.free_t3_sonuc != '' %}
-                                    {{istek.free_t3_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.free_t4 is True %}
-                                <tr>
-                                    <td> Free T4 </td>
-                                    <td>
-                                    {% if istek.free_t4_sonuc != ' ' and istek.free_t4_sonuc != '' %}
-                                    {{istek.free_t4_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tsh is True %}
-                                <tr>
-                                    <td> TSH </td>
-                                    <td>
-                                    {% if istek.tsh_sonuc != ' ' and istek.tsh_sonuc != '' %}
-                                    {{istek.tsh_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.anti_tpo is True %}
-                                <tr>
-                                    <td> anti-TPO </td>
-                                    <td>
-                                    {% if istek.anti_tpo_sonuc != ' ' and istek.anti_tpo_sonuc != '' %}
-                                    {{istek.anti_tpo_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.anti_tg is True %}
-                                <tr>
-                                    <td> anti-TG </td>
-                                    <td>
-                                    {% if istek.anti_tg_sonuc != ' ' and istek.anti_tg_sonuc != '' %}
-                                    {{istek.anti_tg_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.aso is True %}
-                                <tr>
-                                    <td> ASO </td>
-                                    <td>
-                                    {% if istek.aso_sonuc != ' ' and istek.aso_sonuc != '' %}
-                                    {{istek.aso_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.crp is True %}
-                                <tr>
-                                    <td> CRP </td>
-                                    <td>
-                                    {% if istek.crp_sonuc != ' ' and istek.crp_sonuc != '' %}
-                                    {{istek.crp_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.rf is True %}
-                                <tr>
-                                    <td> RF </td>
-                                    <td>
-                                    {% if istek.rf_sonuc != ' ' and istek.rf_sonuc != '' %}
-                                    {{istek.rf_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.psa is True %}
-                                <tr>
-                                    <td> PSA </td>
-                                    <td>
-                                    {% if istek.psa_sonuc != ' ' and istek.psa_sonuc != '' %}
-                                    {{istek.psa_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.free_psa is True %}
-                                <tr>
-                                    <td> Free PSA </td>
-                                    <td>
-                                    {% if istek.free_psa_sonuc != ' ' and istek.free_psa_sonuc != '' %}
-                                    {{istek.free_psa_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tam_idrar is True %}
-                                <tr>
-                                    <td> Tam İdrar </td>
-                                    <td>
-                                    {% if istek.tam_idrar_sonuc != ' ' and istek.tam_idrar_sonuc != '' %}
-                                    {{istek.tam_idrar_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.idrar_kab is True %}
-                                <tr>
-                                    <td> İdrar KAB </td>
-                                    <td>
-                                    {% if istek.idrar_kab_sonuc != ' ' and istek.idrar_kab_sonuc != '' %}
-                                    {{istek.idrar_kab_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.gaita is True %}
-                                <tr>
-                                    <td> Gaita Direkt Bakısı </td>
-                                    <td>
-                                    {% if istek.gaita_sonuc != ' ' and istek.gaita_sonuc != '' %}
-                                    {{istek.gaita_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.bogaz_kab is True %}
-                                <tr>
-                                    <td> Boğaz KAB </td>
-                                    <td>
-                                    {% if istek.bogaz_kab_sonuc != ' ' and istek.bogaz_kab_sonuc != '' %}
-                                    {{istek.bogaz_kab_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ejaculat_kab is True %}
-                                <tr>
-                                    <td> Ejaculat KAB </td>
-                                    <td>
-                                    {% if istek.ejaculat_kab_sonuc != ' ' and istek.ejaculat_kab_sonuc != '' %}
-                                    {{istek.ejaculat_kab_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ekg is True %}
-                                <tr>
-                                    <td> EKG </td>
-                                    <td>
-                                    {% if istek.ekg_sonuc != ' ' and istek.ekg_sonuc != '' %}
-                                    {{istek.ekg_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.eforlu_ekg is True %}
-                                <tr>
-                                    <td> eforlu_ekg </td>
-                                    <td>
-                                    {% if istek.eforlu_ekg_sonuc != ' ' and istek.eforlu_ekg_sonuc != '' %}
-                                    {{istek.eforlu_ekg_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ekokardiografi is True %}
-                                <tr>
-                                    <td> Ekokardiografi </td>
-                                    <td>
-                                    {% if istek.ekokardiografi_sonuc != ' ' and istek.ekokardiografi_sonuc != '' %}
-                                    {{istek.ekokardiografi_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tansiyon_holter is True %}
-                                <tr>
-                                    <td> Tansiyon Holter </td>
-                                    <td>
-                                    {% if istek.tansiyon_holter_sonuc != ' ' and istek.tansiyon_holter_sonuc != '' %}
-                                    {{istek.tansiyon_holter_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ekg_holter is True %}
-                                <tr>
-                                    <td> EKG holter </td>
-                                    <td>
-                                    {% if istek.ekg_holter_sonuc != ' ' and istek.ekg_holter_sonuc != '' %}
-                                    {{istek.ekg_holter_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.pa_akciger is True %}
-                                <tr>
-                                    <td> PA Akciğer Grafisi </td>
-                                    <td>
-                                    {% if istek.pa_akciger_sonuc != ' ' and istek.pa_akciger_sonuc != '' %}
-                                    {{istek.pa_akciger_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.waters is True %}
-                                <tr>
-                                    <td> Waters Grafisi </td>
-                                    <td>
-                                    {% if istek.waters_sonuc != ' ' and istek.waters_sonuc != '' %}
-                                    {{istek.waters_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ikiyonlu_servikal is True %}
-                                <tr>
-                                    <td> 2 Yönlü Servikal Grafisi </td>
-                                    <td>
-                                    {% if istek.ikiyonlu_servikal_sonuc != ' ' and istek.ikiyonlu_servikal_sonuc != '' %}
-                                    {{istek.ikiyonlu_servikal_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ikiyonlu_lsv is True %}
-                                <tr>
-                                    <td> 2 Yönlü LSV Grafisi </td>
-                                    <td>
-                                    {% if istek.ikiyonlu_lsv_sonuc != ' ' and istek.ikiyonlu_lsv_sonuc != '' %}
-                                    {{istek.ikiyonlu_lsv_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tum_batin is True %}
-                                <tr>
-                                    <td> Tüm Batın US </td>
-                                    <td>
-                                    {% if istek.tum_batin_sonuc != ' ' and istek.tum_batin_sonuc != '' %}
-                                    {{istek.tum_batin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.ust_batin is True %}
-                                <tr>
-                                    <td> Üst Batın US </td>
-                                    <td>
-                                    {% if istek.ust_batin_sonuc != ' ' and istek.ust_batin_sonuc != '' %}
-                                    {{istek.ust_batin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.alt_batin is True %}
-                                <tr>
-                                    <td> Alt Batın US </td>
-                                    <td>
-                                    {% if istek.alt_batin_sonuc != ' ' and istek.alt_batin_sonuc != '' %}
-                                    {{istek.alt_batin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.uriner is True %}
-                                <tr>
-                                    <td> Üriner US </td>
-                                    <td>
-                                    {% if istek.uriner_sonuc != ' ' and istek.uriner_sonuc != '' %}
-                                    {{istek.uriner_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tiroid is True %}
-                                <tr>
-                                    <td> Tiroid US </td>
-                                    <td>
-                                    {% if istek.tiroid_sonuc != ' ' and istek.tiroid_sonuc != '' %}
-                                    {{istek.tiroid_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.meme is True %}
-                                <tr>
-                                    <td> Meme US </td>
-                                    <td>
-                                    {% if istek.meme_sonuc != ' ' and istek.meme_sonuc != '' %}
-                                    {{istek.meme_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.tiroid_sintigrafi is True %}
-                                <tr>
-                                    <td> Tiroid Sintigrafisi </td>
-                                    <td>
-                                    {% if istek.tiroid_sintigrafi_sonuc != ' ' and istek.tiroid_sintigrafi_sonuc != '' %}
-                                    {{istek.tiroid_sintigrafi_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.aclik_insulin is True %}
-                                <tr>
-                                    <td> Açlık insülin </td>
-                                    <td>
-                                    {% if istek.aclik_insulin_sonuc != ' ' and istek.aclik_insulin_sonuc != '' %}
-                                    {{istek.aclik_insulin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.yuzyirmi_insulin is True %}
-                                <tr>
-                                    <td> 120 dk İnsülin </td>
-                                    <td>
-                                    {% if istek.yuzyirmi_insulin_sonuc != ' ' and istek.yuzyirmi_insulin_sonuc != '' %}
-                                    {{istek.yuzyirmi_insulin_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% if istek.yirmibesohd is True %}
-                                <tr>
-                                    <td> 25 OH D3 </td>
-                                    <td>
-                                    {% if istek.yirmibesohd_sonuc != ' ' and istek.yirmibesohd_sonuc != '' %}
-                                    {{istek.yirmibesohd_sonuc}}
-                                    {% else %}
-                                    Sonuç girilmemiş
-                                    {% endif %}
-                                    </td>
-                                </tr>
-                                {% endif %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                        <a class="btn btn-success" href="{% url 'muayene:lab-sonuc' istek.id %}">SONUÇ GİR</a>
-                        <a class="btn btn-primary" href="{% url 'muayene:lab-print' istek.id %}" target="_blank">YAZDIR</a>
-                    </div>
-                </div>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="istekDetailLabel"> İstek {{ istek.id }} <small>{{istek.tarih}}</small> </h4>
+              </div>
+              <div class="modal-body">
+                <h5> Tetkikler </h5>
+                <table class="table table-hover table-codensed">
+                  <thead>
+                    <tr>
+                      <th>İSTEK</th>
+                      <th>SONUÇ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  </tbody>
+                </table>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <a class="btn btn-success" href="{% url 'muayene:lab-sonuc' istek.id %}">SONUÇ GİR</a>
+                <a class="btn btn-primary" href="{% url 'muayene:lab-print' istek.id %}" target="_blank">YAZDIR</a>
+              </div>
             </div>
+          </div>
         </div>
         {% empty %}
         <p> {{hasta}} için tetkik kaydı yok. </p>
         {% endfor %}
-        </ol>
-
+      </ol>
     </div>
 
     <div class="col-md-2">
-
-        <h4> <a href="{% url 'hasta:dosya-list' hasta.slug %}">Eklenmiş dosyalar</a> </h4>
-        <hr>
-        {% if file_list %}
-        <ol>
+      <h4>Eklenmiş dosyalar</h4>
+      <hr>
+      {% if file_list %}
+      <ol>
         {% for file in file_list %}
         <li> <a href="#" data-toggle="modal" data-target="#fileDetail{{file.id}}">Dosya {{ file.id }} - {{file.yaratim_tarihi}}</a></li>
         <div class="modal fade" id="fileDetail{{file.id}}" tabindex="-1" role="dialog" arialabelledby="fileDetailLabel">
-            <div class="modal-dialog modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="fileDetailLabel"> Dosya {{ file.id }} </h4>
-                        <h3> Hasta: {{ file.hasta }} </h3>
-                        <h5> Yaratım tarihi: {{ file.yaratim_tarihi }} </h5>
-                    </div>
-                    <div class="modal-body">
-                        <iframe src="{{file.dosya.url}}" frameborder="0" width="800" height="600"></iframe>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
-                    </div>
-                </div>
+          <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h4 class="modal-title" id="fileDetailLabel"> Dosya {{ file.id }} <small>Yaratım tarihi: {{ file.yaratim_tarihi }}</small></h4>
+              </div>
+              <div class="modal-body">
+                <iframe src="{{file.dosya.url}}" frameborder="0" width="800" height="600"></iframe>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+              </div>
             </div>
+          </div>
         </div>
         {% endfor %}
-        </ol>
-        {% else %}
-        <p> {{ hasta }} için dosya kaydı yok. </p>
-        {% endif %}
+      </ol>
+      {% else %}
+      <p> {{ hasta }} için dosya kaydı yok. </p>
+      {% endif %}
 
     </div>
 
     <div class="col-md-2">
 
-        <div class="modal fade" id="sozlesmeDialog" tabindex="-1" role="dialog" arialabelledby="sozlesmeDialogLabel">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 id="sozlesmeDialogLabel"> Sözleşme oluştur </h4>
-                        <h3> Hasta: {{ hasta }} </h3>
-                    </div>
-                    <div class="modal-body">
-                        <p>Sözleşme süresi: 1 yıl</p>
-                        <p>Sözleşme başlangıç tarihi: {% now "j F Y l" %}</p>
-                    </div>
-                    <div class="modal-footer">
-                    <form method="POST">
-                        {% csrf_token %}
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                        <input type="submit" name="sozlesme" value="Onayla" class="btn btn-success">
-                    </form>
-                    </div>
-                </div>
+      <div class="modal fade" id="sozlesmeDialog" tabindex="-1" role="dialog" arialabelledby="sozlesmeDialogLabel">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h4 id="sozlesmeDialogLabel"> Sözleşme oluştur </h4>
+              <h3> Hasta: {{ hasta }} </h3>
             </div>
+            <div class="modal-body">
+              <p>Sözleşme süresi: 1 yıl</p>
+              <p>Sözleşme başlangıç tarihi: {% now "j F Y l" %}</p>
+            </div>
+            <div class="modal-footer">
+              <form method="POST">
+                {% csrf_token %}
+                <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+                <input type="submit" name="sozlesme" value="Onayla" class="btn btn-success">
+              </form>
+            </div>
+          </div>
         </div>
+      </div>
 
-        <h4> Sözleşme </h4>
-        <hr>
-        {% if hasta.sozlesme_set.latest.is_active %}
-        <h5>Güncel sözleşme</h5> 
-        <p><b>Başlangıç:</b> {{ hasta.sozlesme_set.latest.baslangic_tarihi }}</p>
-        <p><b>Bitiş:</b> {{ hasta.sozlesme_set.latest.bitis_tarihi }}</p>
-        <p><b>Kalan:</b> {{ hasta.sozlesme_set.latest.days_left }} gün</p>
-        {% else %}
-            {% if hasta.sozlesme_set.exists %}
-                <h5> Geçmiş sözleşmeler </h5>
-                <ol>
-                {% for sozlesme in hasta.sozlesme_set.all %}
-                    <li> {{ sozlesme.baslangic_tarihi }} - {{ sozlesme.bitis_tarihi }} </li>
-                {% endfor %}
-                </ol>
-            {% endif %}
-            <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#sozlesmeDialog">Sözleşme Oluştur</button> 
-        {% endif %}
+      <h4> Sözleşme </h4>
+      <hr>
+      {% if hasta.sozlesme_set.latest.is_active %}
+      <h5>Güncel sözleşme</h5>
+      <p><b>Başlangıç:</b> {{ hasta.sozlesme_set.latest.baslangic_tarihi }}</p>
+      <p><b>Bitiş:</b> {{ hasta.sozlesme_set.latest.bitis_tarihi }}</p>
+      <p><b>Kalan:</b> {{ hasta.sozlesme_set.latest.days_left }} gün</p>
+      {% else %}
+      {% if hasta.sozlesme_set.exists %}
+      <h5> Geçmiş sözleşmeler </h5>
+      <ol>
+        {% for sozlesme in hasta.sozlesme_set.all %}
+        <li> {{ sozlesme.baslangic_tarihi }} - {{ sozlesme.bitis_tarihi }} </li>
+        {% endfor %}
+      </ol>
+      {% endif %}
+      <button type="button" class="btn btn-default btn-lg" data-toggle="modal" data-target="#sozlesmeDialog">Sözleşme Oluştur</button>
+      {% endif %}
 
     </div>
 
+  </div>
+  <!-- End of Row 2 -->
 </div>
-<!-- End of Row 2 -->
 
 {% endblock %}

@@ -39,3 +39,20 @@
     </div>
   </div>
 </div>
+
+<div class="modal fade" id="sozlesme" tabindex="-1" role="dialog" arialabelledby="sozlesmeLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 id="sozlesmeLabel"> Sözleşme </h4>
+      </div>
+      <div class="modal-body">
+        <p> <b>Başlangıç:</b> {{ muayene.hasta.sozlesme_set.latest.baslangic_tarihi }} </p>
+        <p> <b>Bitiş:</b> {{ muayene.hasta.sozlesme_set.latest.bitis_tarihi }} </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">KAPAT</button>
+      </div>
+    </div>
+  </div>
+</div>

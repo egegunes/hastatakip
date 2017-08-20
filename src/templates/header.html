@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="{% url 'index' %}">HastaTakip</a>
+  <a class="navbar-brand" href="{% url 'index' %}"><i class="fa fa-user-md" aria-hidden="true"></i> HastaTakip</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
@@ -9,35 +9,15 @@
       <li class="nav-item active"><a class="nav-link" href="{% url 'hasta:create' %}">Yeni hasta</a></li>
       <li class="nav-item active"><a class="nav-link" href="{% url 'muayene:create' %}">Yeni muayene</a></li>
       <li class="nav-item active"><a class="nav-link" href="{% url 'randevu:create' %}">Yeni randevu</a></li>
-      <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" id="muayeneDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Randevular</a>
-        <div class="dropdown-menu" aria-labelledby="muayeneDropdown">
-          <a class="dropdown-item" href="{% url 'randevu:today-archive' %}">Bugün</a>
-          {% now "Y" as current_year %}
-          {% now "W" as current_week %}
-          <a class="dropdown-item" href="{% url 'randevu:week-archive' current_year current_week %}">Bu hafta</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" id="hastaDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Hastalar</a>
-        <div class="dropdown-menu" aria-labelledby="hastaDropdown">
-          <a class="dropdown-item" href="{% url 'hasta:list' %}">Tüm hastalar</a>
-          <a class="dropdown-item" href="{% url 'hasta:sozlesme-list' %}">Sözleşmeli hastalar</a>
-          <a class="dropdown-item" href="{% url 'hasta:created-last' %}">Son eklenen hastalar</a>
-        </div>
-      </li>
-      <li class="nav-item dropdown active">
-        <a class="nav-link dropdown-toggle" id="muayeneDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Muayeneler</a>
-        <div class="dropdown-menu" aria-labelledby="muayeneDropdown">
-          <a class="dropdown-item" href="{% url 'muayene:archive-custom' %}">Geçmiş Muayeneler</a>
-          <a class="dropdown-item" href="{% url 'muayene:archive-last' %}">Son eklenen muayeneler</a>
-          <a class="dropdown-item" href="{% url 'muayene:lab-last' %}">Son istenen tetkikler</a>
-        </div>
-      </li>
+      {% now "Y" as current_year %}
+      {% now "W" as current_week %}
+      <li class="nav-item active"><a class="nav-link" href="{% url 'randevu:week-archive' current_year current_week %}">Randevular</a></li>
+      <li class="nav-item active"><a class="nav-link" href="{% url 'muayene:archive-custom' %}">Muayene Arşiv</a></li>
+      <li class="nav-item active"><a class="nav-link" href="{% url 'hasta:sozlesme-list' %}">Sözleşmeler</a></li>
     </ul>
     <form class="form-inline">
-      <input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <button class="btn btn-primary" type="submit">Search</button>
+      <input class="form-control mr-sm-2" type="text" placeholder="Hasta" aria-label="Search">
+      <button class="btn btn-primary" type="submit">Ara</button>
     </form>
   </div>
 </nav>
