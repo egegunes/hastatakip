@@ -2,6 +2,7 @@
 
 import datetime
 import json
+import logging
 
 from django.contrib.auth.mixins     import LoginRequiredMixin
 from django.views.generic.edit      import CreateView, View
@@ -16,19 +17,24 @@ from muayene.models import (
     Rapor, 
     LaboratuvarIstek, 
     MuayeneRelatedFile,
-    MuayeneAlias
+    MuayeneAlias,
+    ReceteIlac
 )
 from muayene.forms import (
     MuayeneCreateForm, 
     RaporCreateForm, 
     DateRangeForm, 
     MuayeneRelatedFileForm,
+    ReceteIlacForm
 )
 from muayene.views.prints import (
     AHSevkPrintView        
 )
 
 from hasta.models                   import Hasta
+
+logger = logging.getLogger(__name__)
+
 
 class MuayeneCreateView(LoginRequiredMixin, CreateView):
     """
@@ -109,3 +115,28 @@ class MuayeneCreateView(LoginRequiredMixin, CreateView):
             return {'hasta': hasta.pk}
         else:
             return {}
+
+
+class ReceteCreateView(CreateView):
+    model = Recete
+    form_class = ReceteIlacForm
+
+    def post(self, request, *args, **kwargs):
+       muayene = Muayene.objects.get(pk=kwargs.get('pk'))
+       ilaclar = json.loads(request.POST.get('ilaclar'))
+
+       recete = Recete.objects.create(hasta=muayene.hasta, muayene=muayene)
+
+       for ilac in ilaclar:
+            form = self.form_class(ilac)
+            if form.is_valid():
+                recete_ilac = ReceteIlac.objects.create(
+                    ilac=Ilac.objects.get(pk=ilac['ilac']),
+                    kullanim=ilac['kullanim'],
+                    kutu=ilac['kutu']
+                )
+                recete.ilaclar.add(recete_ilac)
+            else:
+                logger.error('{} is not valid'.format(ilac))
+
+        return HttpResponse(status=201)
