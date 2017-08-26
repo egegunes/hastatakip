@@ -1,37 +1,16 @@
-# -*- coding: utf-8 -*-
-
 import datetime
 import json
 import logging
 
-from django.contrib.auth.mixins     import LoginRequiredMixin
-from django.views.generic.edit      import CreateView, View
-from django.core.urlresolvers       import reverse
-from django.shortcuts               import redirect
-from django.http                    import HttpResponse, HttpResponseRedirect, Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView
+from django.core.urlresolvers import reverse
+from django.http import HttpResponse, HttpResponseRedirect
 
-from muayene.models import (
-    Muayene, 
-    Ilac, 
-    Recete, 
-    Rapor, 
-    LaboratuvarIstek, 
-    MuayeneRelatedFile,
-    MuayeneAlias,
-    ReceteIlac
-)
-from muayene.forms import (
-    MuayeneCreateForm, 
-    RaporCreateForm, 
-    DateRangeForm, 
-    MuayeneRelatedFileForm,
-    ReceteIlacForm
-)
-from muayene.views.prints import (
-    AHSevkPrintView        
-)
+from muayene.models import Muayene, Ilac, Recete, MuayeneAlias, ReceteIlac
+from muayene.forms import MuayeneCreateForm, ReceteIlacForm
 
-from hasta.models                   import Hasta
+from hasta.models import Hasta
 
 logger = logging.getLogger(__name__)
 
@@ -94,7 +73,7 @@ class MuayeneCreateView(LoginRequiredMixin, CreateView):
         }
 
         data = request.POST.get('shorthand', '')
-        terms = data.split() 
+        terms = data.split()
         response = []
 
         for term in terms:
@@ -103,7 +82,7 @@ class MuayeneCreateView(LoginRequiredMixin, CreateView):
         response_str = ' '.join(response)
 
         response_dict = {
-            'longhand': response_str 
+            'longhand': response_str
         }
 
         return HttpResponse(json.dumps(response_dict))
@@ -122,12 +101,12 @@ class ReceteCreateView(CreateView):
     form_class = ReceteIlacForm
 
     def post(self, request, *args, **kwargs):
-       muayene = Muayene.objects.get(pk=kwargs.get('pk'))
-       ilaclar = json.loads(request.POST.get('ilaclar'))
+        muayene = Muayene.objects.get(pk=kwargs.get('pk'))
+        ilaclar = json.loads(request.POST.get('ilaclar'))
 
-       recete = Recete.objects.create(hasta=muayene.hasta, muayene=muayene)
+        recete = Recete.objects.create(hasta=muayene.hasta, muayene=muayene)
 
-       for ilac in ilaclar:
+        for ilac in ilaclar:
             form = self.form_class(ilac)
             if form.is_valid():
                 recete_ilac = ReceteIlac.objects.create(
