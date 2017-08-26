@@ -20,13 +20,9 @@ from muayene.models import (
 )
 from muayene.forms import (
     MuayeneCreateForm, 
-    ReceteCreateForm, 
-    IlacCreateForm, 
     RaporCreateForm, 
-    LaboratuvarIstekForm, 
     DateRangeForm, 
     MuayeneRelatedFileForm,
-    MuayeneAliasCreateForm
 )
 from muayene.views.prints import (
     AHSevkPrintView        
@@ -113,20 +109,3 @@ class MuayeneCreateView(LoginRequiredMixin, CreateView):
             return {'hasta': hasta.pk}
         else:
             return {}
-
-class IlacCreateView(LoginRequiredMixin, CreateView):
-    """
-    CreateView for ilac object.
-
-    URL: /muayene/ilac/ekle
-    """
-
-    login_url = '/login/'
-    model = Ilac
-    form_class = IlacCreateForm
-
-class MuayeneAliasCreateView(LoginRequiredMixin, CreateView):
-    login_url = '/login/'
-    model = MuayeneAlias
-    form_class = MuayeneAliasCreateForm
-
