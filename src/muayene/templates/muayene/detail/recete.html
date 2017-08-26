@@ -49,26 +49,22 @@
         <h4 id="receteFormLabel"> Yeni reçete </h4>
         <h3> Hasta: {{ muayene.hasta }} </h3>
       </div>
-      <form method="POST" class="form-group">
-        <div class="modal-body">
-          {% if recete_form %}
+      <div class="modal-body">
+        <div id="request-status"></div>
+        <div id="recete-ilac"><ul></ul></div>
+        {% if recete_form %}
+        <form method="POST" class="form-group" id="ilac-form">
           {% csrf_token %}
-          {% if recete_form.errors %}
-          <div class="alert alert-danger" role="alert">
-          {% for key, value in form.errors.items %}
-            <p> <strong> {{ key }} </strong> {{ value }} </p>
-          {% endfor %}
-          </div>
-          {% endif %}
           {{ recete_form.as_p }}
           {{ recete_form.media }}
-          {% endif %}
-          <div class="modal-footer">
-              <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-              <button type="submit" name="recete_form" class="btn btn-primary">Kaydet</button>
-          </div>
+          <input type="submit" class="btn btn-success btn-block" value="Ekle">
+        </form>
+        {% endif %}
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Kapat</button>
+          <button type="button" class="btn btn-primary" onclick="save_recete()">Kaydet</button>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>

@@ -1,6 +1,14 @@
 {% extends "base.html" %}
+{% load staticfiles %}
+
+{% block js %}
+{{ block.super }}
+<script src="{% static "js/recete.js" %}"></script>
+{% endblock %}
 
 {% block content %}
+
+<input type="hidden" id="muayene-id" value="{{ muayene.id }}">
 
 <div class="container-fluid mt-4">
   <div class="row" style="padding:20px">

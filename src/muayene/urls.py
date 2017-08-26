@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^$', views.MuayeneCreateView.as_view(), name='index'),
     url(r'^(?P<pk>[0-9]+)/$', views.MuayeneBaseView.as_view(), name='detail'),
     url(r'^(?P<pk>[0-9]+)/duzenle/$', views.MuayeneUpdateView.as_view(), name='update'),
+    url(r'^(?P<pk>[0-9]+)/recete/$', views.ReceteCreateView.as_view(), name='recete-create'),
     url(r'^(?P<pk>[0-9]+)/ttf/$', views.TTFPrintView.as_view(), name='ttf-print'),
     url(r'^ttf/multi$', views.MultiTTFPrintView.as_view(), name='multi-ttf-print'),
     url(r'^list-print/$', views.ListPrintView.as_view(), name='list-print'),
