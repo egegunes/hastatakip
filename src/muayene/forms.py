@@ -82,7 +82,7 @@ class ReceteIlacForm(forms.ModelForm):
         model = ReceteIlac
         fields = '__all__'
         widgets = {
-            'ilac': forms.widgets.TextInput(attrs={'class': 'form-control'}),
+            'ilac': autocomplete.ModelSelect2(url='muayene:ilac-autocomplete', attrs={'style': 'width: 100%'}),
             'kullanim': forms.widgets.TextInput(attrs={'class': 'form-control'}),
             'kutu': forms.widgets.NumberInput(attrs={'class': 'form-control'}),
         }
