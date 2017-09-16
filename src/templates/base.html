@@ -12,19 +12,18 @@
 
     <!-- CSS -->
     {% block css %}
-    <link rel="stylesheet" type="text/css" href="{% static "font-awesome/css/font-awesome.min.css" %}">
-    <link rel="stylesheet" type="text/css" href="{% static "bootstrap/dist/css/bootstrap.min.css" %}" />
-    <link rel="stylesheet" type="text/css" href="{% static "bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/font-awesome/css/font-awesome.min.css" %}">
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap/dist/css/bootstrap.min.css" %}" />
+    <link rel="stylesheet" type="text/css" href="{% static "node_modules/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css" %}">
     {% endblock %}
 
     <!-- JS -->
     {% block js %}
-    <script src="{% static "jquery/jquery-3.2.1.min.js" %}"></script>
-    <script src="{% static "jquery-ui/jquery-ui.min.js" %}"></script>
-    <script src="{% static "popper.js/dist/umd/popper.min.js" %}"></script>
-    <script src="{% static "bootstrap/dist/js/bootstrap.min.js" %}"></script>
-    <script src="{% static "bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" %}"></script>
-    <script src="{% static "bootstrap-datepicker/dist/locales/bootstrap-datepicker.tr.min.js" %}"></script>
+    <script src="{% static "node_modules/jquery/dist/jquery.min.js" %}"></script>
+    <script src="{% static "node_modules/popper.js/dist/umd/popper.min.js" %}"></script>
+    <script src="{% static "node_modules/bootstrap/dist/js/bootstrap.min.js" %}"></script>
+    <script src="{% static "node_modules/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js" %}"></script>
+    <script src="{% static "node_modules/bootstrap-datepicker/dist/locales/bootstrap-datepicker.tr.min.js" %}"></script>
     <script src="{% static "js/script.js" %}"></script>
     {% endblock %}
 
