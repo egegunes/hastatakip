@@ -7,7 +7,7 @@ from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
 
-from muayene.models import Muayene, Ilac, Recete, MuayeneAlias, ReceteIlac
+from muayene.models import Muayene, Ilac, Recete, MuayeneAlias, ReceteIlac, Tetkik, LaboratuvarIstek, Laboratuvar
 from muayene.forms import MuayeneCreateForm, ReceteIlacForm
 
 from hasta.models import Hasta
@@ -117,5 +117,23 @@ class ReceteCreateView(CreateView):
                 recete.ilaclar.add(recete_ilac)
             else:
                 logger.error('{} is not valid'.format(ilac))
+
+        return HttpResponse(status=201)
+
+
+class TetkikCreateView(CreateView):
+    model = Tetkik
+
+    def post(self, request, *args, **kwargs):
+        muayene = Muayene.objects.get(pk=kwargs.get('pk'))
+        labs = request.POST.getlist('labs[]')
+
+        if labs is None:
+            logger.error("{} Empty POST request".format(self.__class__))
+            return HttpResponse(status=400)
+
+        lab_istek = LaboratuvarIstek.objects.create(hasta=muayene.hasta, muayene=muayene, tarih=datetime.date.today())
+        tetkikler = [Tetkik.objects.create(laboratuvar=Laboratuvar.objects.get(pk=lab)) for lab in labs]
+        [lab_istek.tetkikler.add(tetkik) for tetkik in tetkikler]
 
         return HttpResponse(status=201)

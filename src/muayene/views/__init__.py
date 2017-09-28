@@ -9,7 +9,8 @@ from muayene.views.archive  import (
 )
 from muayene.views.create   import (
     MuayeneCreateView, 
-    ReceteCreateView
+    ReceteCreateView,
+    TetkikCreateView
 )
 from muayene.views.detail   import (
     MuayeneDetailView, 
@@ -45,4 +46,4 @@ from muayene.views.base     import (
 from muayene.views.search   import (
     IlacSearchView
 )
-from muayene.views.autocomplete import IlacAutocomplete
+from muayene.views.autocomplete import IlacAutocomplete, LabAutocomplete

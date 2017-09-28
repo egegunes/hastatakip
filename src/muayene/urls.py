@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/$', views.MuayeneBaseView.as_view(), name='detail'),
     url(r'^(?P<pk>[0-9]+)/duzenle/$', views.MuayeneUpdateView.as_view(), name='update'),
     url(r'^(?P<pk>[0-9]+)/recete/$', views.ReceteCreateView.as_view(), name='recete-create'),
+    url(r'^(?P<pk>[0-9]+)/tetkik/$', views.TetkikCreateView.as_view(), name='tetkik-create'),
     url(r'^(?P<pk>[0-9]+)/ttf/$', views.TTFPrintView.as_view(), name='ttf-print'),
     url(r'^ttf/multi$', views.MultiTTFPrintView.as_view(), name='multi-ttf-print'),
     url(r'^list-print/$', views.ListPrintView.as_view(), name='list-print'),
@@ -27,4 +28,5 @@ urlpatterns = [
     url(r'^lab/(?P<pk>[0-9]+)/print/$', views.LabIstekPrintView.as_view(), name='lab-print'),
     url(r'^lab/(?P<pk>[0-9]+)/sonuc/$', views.LabSonucFormView.as_view(), name='lab-sonuc'),
     url(r'^ilac/autocomplete/$', views.IlacAutocomplete.as_view(), name='ilac-autocomplete'),
+    url(r'^lab/autocomplete/$', views.LabAutocomplete.as_view(create_field='ad'), name='lab-autocomplete'),
 ]

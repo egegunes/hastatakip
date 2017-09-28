@@ -10,11 +10,9 @@
       <div class="modal-content">
         <div class="modal-header">
           <h4 id="istekDetailLabel"> İstek {{ istek.id }} <small> {{istek.tarih}}</small> </h4>
-          <h3> Hasta: {{ istek.hasta }} </h3>
         </div>
         <div class="modal-body">
-          <h5> Tetkikler </h5>
-          <table class="table table-hover table-codensed">
+          <table class="table table-hover table-sm">
             <thead>
               <tr>
                 <th>İSTEK</th>
@@ -22,12 +20,24 @@
               </tr>
             </thead>
             <tbody>
+            {% for tetkik in istek.tetkikler.all %}
+              <tr>
+                <td>{{ tetkik.laboratuvar }}</td>
+                <td>
+                  {% if tetkik.sonuc is None %}
+                  Sonuç girilmemiş.
+                  {% else %}
+                  {{ tetkik.sonuc }}
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
             </tbody>
-        </table>
-      </div>
+          </table>
+        </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-          <a class="btn btn-success" href="{% url 'muayene:lab-sonuc' istek.id %}">SONUÇ GİR</a>
+          <button type="button" class="btn btn-success">Sonuç gir</button>
           <a class="btn btn-primary print" href="{% url 'muayene:lab-print' istek.id %}" target="_blank">YAZDIR</a>
         </div>
       </div>
@@ -74,21 +84,359 @@
 <!-- Istek Form -->
 <div class="modal fade" id="istekForm" tabindex="-1" role="dialog" arialabelledby="istekFormLabel">
     <div class="modal-dialog modal-lg" role="document">
-        <form method="POST" class="form-group">
+      <form method="POST" class="form-group" action="{% url 'muayene:tetkik-create' muayene.pk %}" novalidate>
+        {% csrf_token %}
         <div class="modal-content">
-            <div class="modal-header">
-                <h4 id="istekFormLabel"> Yeni istek </h4>
-                <h3> Hasta: {{ muayene.hasta }} </h3>
+          <div class="modal-header">
+            <h4 id="istekFormLabel"> Yeni istek </h4>
+            <h3> Hasta: {{ muayene.hasta }} </h3>
+          </div>
+          <div class="modal-body">
+            <div class="row" id="lab-request-status">
             </div>
-                <div class="modal-body">
+            <div class="row">
+              <div class="col-4">
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="1">
+                  Hemogram
+                  </label>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#customLab">Ek İstek</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
-                    <button type="submit" name="lab_form" class="btn btn-primary">Kaydet</button>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="2">
+                  Sedim
+                  </label>
                 </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="18">
+                  Serum Demir
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="19">
+                  TDBK
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="20">
+                  Ferritin
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="21">
+                  B-12
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="74">
+                  Folik Asit
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="122">
+                  Hemoglobin Elektroforezi
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="3">
+                  Açlık Kan Şekeri
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="44">
+                  Tokluk Kan Şekeri
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="22">
+                  HbA1c
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="29">
+                  OGTT (75 gr Glikoz ile 0-60-120-180 dakikalarda)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="4">
+                  SGOT (AST)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="5">
+                  SGPT (ALT)
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="41">
+                  GGT
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="75">
+                  ALP
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="30">
+                  Üre
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="6">
+                  Kreatinin
+                  </label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="8">
+                  Total Kolesterol
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="9">
+                  HDL
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="42">
+                  Trigliserit
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="10">
+                  LDL
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="37">
+                  Free T3
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="34">
+                  Free T4
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="35">
+                  TSH
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="38">
+                  Anti-TPO
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="39">
+                  Anti-TG
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="76">
+                  ASO
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="31">
+                  CRP
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="84">
+                  RF
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="16">
+                  PSA
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="17">
+                  Free PSA
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="11">
+                  Tam İdrar
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="86">
+                  İdrar KAB
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="68">
+                  Gaita Direkt Bakısı
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="57">
+                  Boğaz KAB
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="7">
+                  Ürik Asit
+                  </label>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="12">
+                  EKG
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="101">
+                  Eforlu EKG
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="83">
+                  Ekokardiografi
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="26">
+                  Tansiyon Holter
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="166">
+                  EKG Holter
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="13">
+                  PA Akciğer Grafisi
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="14">
+                  Waters Grafisi
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="15">
+                  2 Yönlü Servikal Grafisi
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="67">
+                  2 Yönlü LSV Grafisi
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="23">
+                  Tüm Batın US
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="72">
+                  Üst Batın US
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="52">
+                  Alt Batın US
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="48">
+                  Üriner US
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="36">
+                  Tiroid US
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="46">
+                  Meme US
+                  </label>
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                  <input class="form-check-input" type="checkbox" value="40">
+                  25 OH D3
+                  </label>
+                </div>
+              </div>
             </div>
-        </form>
+            <div class="row">
+              <div class="col-12 collapse" id="customLab">
+                <hr />
+                {% if lab_form %}
+                {{ lab_form.as_p }}
+                {% endif %}
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-toggle="collapse" data-target="#customLab">Ek İstek</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal">Kapat</button>
+            <input type="submit" id="lab_form_submit" class="btn btn-primary" value="Kaydet">
+          </div>
+        </div>
+        <input type="hidden" id="labs" name="labs">
+      </form>
     </div>
 </div>
 <!-- End of Istek Form -->
