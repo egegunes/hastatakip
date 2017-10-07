@@ -111,6 +111,7 @@ class RandevuWeekArchiveView(generic.WeekArchiveView):
     date_field = 'date'
     week_format = '%W'
     allow_future = True
+    allow_empty = True
 
     def _get_first_day(self, year, week):
         return datetime.strptime('{}-W{}-1'.format(year, week), '%Y-W%W-%w').date()
