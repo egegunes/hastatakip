@@ -29,15 +29,10 @@ from muayene.views.prints   import (
     AHSevkPrintView,
     ListPrintView
 )
-from muayene.views.update   import (
-    MuayeneUpdateView, 
-)
+from muayene.views.update   import MuayeneUpdateView, LaboratuvarIstekUpdateView
 from muayene.views.form     import (
-    ReceteFormView,        
     RaporFormView,
-    LabIstekFormView,
     FileUploadFormView,
-    LabSonucFormView,
     GetIlacKullanimView
 )
 from muayene.views.base     import (

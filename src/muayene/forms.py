@@ -5,7 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 from dal import autocomplete
 
-from muayene.models import Muayene, ReceteIlac, Laboratuvar
+from muayene.models import Muayene, ReceteIlac, Laboratuvar, Tetkik
 
 
 class MuayeneCreateForm(forms.ModelForm):
@@ -99,3 +99,13 @@ class CustomLabForm(forms.Form):
         widget=autocomplete.ModelSelect2Multiple(url='muayene:lab-autocomplete', attrs={'style': 'width: 100%'}),
         label=_('Ek istekler')
     )
+
+
+class TetkikForm(forms.ModelForm):
+    class Meta:
+        model = Tetkik
+        fields = '__all__'
+        widgets = {
+            'laboratuvar': forms.widgets.Select(attrs={'class': 'form-control w-25', 'disabled': 'disabled'}),
+            'sonuc': forms.widgets.TextInput(attrs={'class': 'form-control w-50 ml-2'}),
+        }
