@@ -39,12 +39,12 @@
       <div class="row my-3">
         <div class="col-6">
           {% if previous_week %}
-            <a href="/muayene/arsiv/{{previous_week|date:"Y"}}/hafta/{{previous_week|date:"W"}}"<i class="fa fa-arrow-left" aria-hidden="true"></i> Önceki Hafta</a>
+            <a href="/muayene/{{previous_week|date:"Y"}}/hafta/{{previous_week|date:"W"}}"<i class="fa fa-arrow-left" aria-hidden="true"></i> Önceki Hafta</a>
           {% endif %}
         </div>
         <div class="col-6">
           {% if next_week %}
-            <a style="float:right" href="/muayene/arsiv/{{next_week|date:"Y"}}/hafta/{{next_week|date:"W"}}">Sonraki Hafta <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
+            <a style="float:right" href="/muayene/{{next_week|date:"Y"}}/hafta/{{next_week|date:"W"}}">Sonraki Hafta <i class="fa fa-arrow-right" aria-hidden="true"></i></a>
           {% endif %}
         </div>
       </div>

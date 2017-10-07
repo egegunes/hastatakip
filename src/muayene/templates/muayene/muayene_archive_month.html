@@ -39,12 +39,12 @@
       <div class="row my-3">
         <div class="col-6">
           {% if previous_month %}
-          <a href="/muayene/arsiv/{{previous_month|date:"Y"}}/{{previous_month|date:"m"}}"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{previous_month|date:'F'}}</a>
+          <a href="/muayene/{{previous_month|date:"Y"}}/{{previous_month|date:"m"}}"><i class="fa fa-arrow-left" aria-hidden="true"></i> {{previous_month|date:'F'}}</a>
           {% endif %}
         </div>
         <div class="col-6">
           {% if next_month %}
-          <a class="float-right" href="/muayene/arsiv/{{next_month|date:"Y"}}/{{next_month|date:"m"}}">{{next_month|date:'F'}} <i class="fa fa-arrow-right" aria-hidden="true"></i></span></a>
+          <a class="float-right" href="/muayene/{{next_month|date:"Y"}}/{{next_month|date:"m"}}">{{next_month|date:'F'}} <i class="fa fa-arrow-right" aria-hidden="true"></i></span></a>
           {% endif %}
         </div>
       </div>
