@@ -21,6 +21,8 @@ class Muayene(models.Model):
 
     class Meta:
         get_latest_by = "tarih"
+        verbose_name = "Muayene"
+        verbose_name_plural = "Muayeneler"
 
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.hasta, self.tarih)
@@ -36,6 +38,10 @@ class Ilac(models.Model):
     ad = models.CharField(max_length=30)
     bilgi = models.CharField(max_length=30, blank=True, null=True)
     kullanim = models.CharField(max_length=30, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "İlaç"
+        verbose_name_plural = "İlaçlar"
 
     def __str__(self):
         return '{}'.format(self.ad)
@@ -56,6 +62,10 @@ class Recete(models.Model):
     tarih = models.DateField(default=timezone.now, editable=False)
     ilaclar = models.ManyToManyField(ReceteIlac)
 
+    class Meta:
+        verbose_name = "Reçete"
+        verbose_name_plural = "Reçeteler"
+
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.hasta, self.tarih)
 
@@ -67,12 +77,20 @@ class Rapor(models.Model):
     tani = models.CharField(max_length=255)
     gun = models.PositiveSmallIntegerField(default=1)
 
+    class Meta:
+        verbose_name = "Rapor"
+        verbose_name_plural = "Raporlar"
+
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.hasta, self.tarih)
 
 
 class Laboratuvar(models.Model):
     ad = models.CharField(max_length=30)
+
+    class Meta:
+        verbose_name = "Laboratuvar"
+        verbose_name_plural = "Laboratuvarlar"
 
     def __str__(self):
         return '{}'.format(self.ad)
@@ -81,6 +99,10 @@ class Laboratuvar(models.Model):
 class Tetkik(models.Model):
     laboratuvar = models.ForeignKey(Laboratuvar)
     sonuc = models.CharField(max_length=100, blank=True, null=True)
+
+    class Meta:
+        verbose_name = "Tetkik"
+        verbose_name_plural = "Tetkikler"
 
     def __str__(self):
         return '{}-{}'.format(self.laboratuvar, self.sonuc)
@@ -92,6 +114,10 @@ class LaboratuvarIstek(models.Model):
     tarih = models.DateField(default=timezone.now, editable=False)
     tetkikler = models.ManyToManyField(Tetkik)
 
+    class Meta:
+        verbose_name = "Laboratuvar Istek"
+        verbose_name_plural = "Laboratuvar Istekler"
+
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.hasta, self.tarih)
 
@@ -102,6 +128,10 @@ class MuayeneRelatedFile(models.Model):
     dosya = models.FileField(upload_to='uploads/%Y/%m/%d/')
     yaratim_tarihi = models.DateField(default=timezone.now, editable=False)
 
+    class Meta:
+        verbose_name = "Dosya"
+        verbose_name_plural = "Dosyalar"
+
     def __str__(self):
         return '{}-{}-{}'.format(self.pk, self.hasta, self.yaratim_tarihi)
 
@@ -109,6 +139,10 @@ class MuayeneRelatedFile(models.Model):
 class MuayeneAlias(models.Model):
     shorthand = models.CharField(max_length=30)
     longhand = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name = "Kısaltma"
+        verbose_name_plural = "Kısaltmalar"
 
     def __str__(self):
         return '{}: {}'.format(self.shorthand, self.longhand)

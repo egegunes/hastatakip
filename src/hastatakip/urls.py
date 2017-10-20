@@ -3,11 +3,13 @@
 from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
+from django.contrib import admin
 
 from hastatakip import views
 
 urlpatterns = [
     url(r'^$', views.MainIndexView.as_view(), name="index"),
+    url(r'^admin/', admin.site.urls),
     url(r'^login/', views.LoginView.as_view(), name='login'),
     url(r'^accounts/login/', views.LoginView.as_view(), name='accounts-login'),
     url(r'^logout/', views.LogoutView.as_view(), name='logout'),

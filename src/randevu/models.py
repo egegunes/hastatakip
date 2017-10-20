@@ -20,6 +20,8 @@ class Randevu(models.Model):
 
     class Meta:
         unique_together = ("date", "time")
+        verbose_name = 'Randevu'
+        verbose_name_plural = 'Randevular'
 
     def __str__(self):
         return '{} {} - {} - {} kişi'.format(self.date, self.time, self.hasta, self.person_number)

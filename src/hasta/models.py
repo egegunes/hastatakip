@@ -49,8 +49,12 @@ class Hasta(models.Model):
     boy = models.IntegerField(default=None, blank=True, null=True)
     legacy_epikriz = models.CharField(max_length=20000, default=' ', blank=True, null=True)
     legacy_ozel_notlar = models.CharField(max_length=1000, default=' ', blank=True, null=True)
-    ahsevk_done = models.BooleanField(default=False)
-    ahsevk_done_tarih = models.DateField(blank=True, null=True, default=timezone.now, editable=False)
+    ahsevk_done = models.BooleanField(default=False, verbose_name='AH Sevk Yapıldı')
+    ahsevk_done_tarih = models.DateField(blank=True, null=True, default=timezone.now, editable=False, verbose_name='AH Sevk Tarihi')
+
+    class Meta:
+        verbose_name = "Hasta"
+        verbose_name_plural = "Hastalar"
 
     def __str__(self):
         hasta = self.ad + " " + self.soyad
@@ -101,6 +105,12 @@ class Hasta(models.Model):
         cocuklar = "".join(self.cocuklar)
         return cocuklar
 
+    def son_muayene_tarihi(self):
+        try:
+            return self.muayene_set.last().tarih
+        except AttributeError:
+            return 'Yok'
+
 
 class Sozlesme(models.Model):
     hasta = models.ForeignKey('hasta.Hasta', on_delete=models.CASCADE)
@@ -109,6 +119,8 @@ class Sozlesme(models.Model):
 
     class Meta:
         get_latest_by = "baslangic_tarihi"
+        verbose_name = "Sözleşme"
+        verbose_name_plural = "Sözleşmeler"
 
     def __str__(self):
         hasta = str(self.hasta)
@@ -131,4 +143,5 @@ class Sozlesme(models.Model):
     def days_left(self):
         sozlesme_bitis = self.bitis_tarihi()
         today = datetime.date.today()
-        return (sozlesme_bitis - today).days
+        days_left = (sozlesme_bitis - today).days
+        return days_left if days_left > 0 else 0
