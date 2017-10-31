@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="container">
+
+  <div id="request-status"></div>
+
+  <div id="recete-ilac">
+    <ul></ul>
+  </div>
+
+  {% if recete_form %}
+  <form method="POST" class="form-group" id="ilac-form">
+    {% csrf_token %}
+    {{ recete_form.as_p }}
+    {{ recete_form.media }}
+    <input type="submit" class="btn btn-success btn-block" value="Ekle">
+  </form>
+  {% endif %}
+
+  <button type="button" class="btn btn-primary float-right" onclick="save()">Kaydet</button>
+
+</div>
+
+{% endblock %}

@@ -29,4 +29,5 @@ urlpatterns = [
     url(r'^lab/(?P<pk>[0-9]+)/print/$', views.LabIstekPrintView.as_view(), name='lab-print'),
     url(r'^ilac/autocomplete/$', views.IlacAutocomplete.as_view(), name='ilac-autocomplete'),
     url(r'^lab/autocomplete/$', views.LabAutocomplete.as_view(create_field='ad'), name='lab-autocomplete'),
+    url(r'^recete/$', views.StandaloneReceteCreateView.as_view(), name='standalone-recete-create'),
 ]

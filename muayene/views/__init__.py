@@ -10,7 +10,8 @@ from muayene.views.archive  import (
 from muayene.views.create   import (
     MuayeneCreateView, 
     ReceteCreateView,
-    TetkikCreateView
+    TetkikCreateView,
+    StandaloneReceteCreateView
 )
 from muayene.views.detail   import (
     MuayeneDetailView, 

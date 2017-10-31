@@ -6,6 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.edit import CreateView
 from django.core.urlresolvers import reverse
 from django.http import HttpResponse, HttpResponseRedirect
+from django.shortcuts import render
 
 from muayene.models import Muayene, Ilac, Recete, MuayeneAlias, ReceteIlac, Tetkik, LaboratuvarIstek, Laboratuvar
 from muayene.forms import MuayeneCreateForm, ReceteIlacForm
@@ -137,3 +138,11 @@ class TetkikCreateView(CreateView):
         [lab_istek.tetkikler.add(tetkik) for tetkik in tetkikler]
 
         return HttpResponse(status=201)
+
+
+class StandaloneReceteCreateView(CreateView):
+    model = Recete
+    form_class = ReceteIlacForm
+
+    def get(self, request, *args, **kwargs):
+        return render(request, 'muayene/recete_form.html', context={'recete_form': self.form_class})

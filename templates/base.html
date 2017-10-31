@@ -1,0 +1,34 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    {% load staticfiles %}
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <title>{% block title %} HastaTakip {% endblock %}</title>
+
+    <link rel="shortcut icon" href="{% static "favicon.ico" %}" type="image/png" />
+
+    <!-- CSS -->
+    {% block css %}
+    {% endblock %}
+
+    <!-- JS -->
+    {% block js %}
+    <script src="{% static "bundle.js" %}"></script>
+    {% endblock %}
+
+  </head>
+  <body>
+
+    {% include 'header.html' %}
+
+    <div id="content">
+      {% block content %}
+      {{ content }}
+      {% endblock %}
+    </div>
+
+  </body>
+</html>

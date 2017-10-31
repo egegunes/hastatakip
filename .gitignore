@@ -2,5 +2,6 @@
 __pycache__/
 *.py[cod]
 utils/dropbox_token.py
-src/hastatakip/settings/11-development.conf
-src/staticfiles/node_modules
+hastatakip/settings/11-development.conf
+node_modules
+staticfiles/bundle.js
