@@ -18,9 +18,6 @@ class Randevu(models.Model):
     contact_phone = models.CharField(_('İrtibat No'), max_length=13)
     state = models.SmallIntegerField(choices=STATES, default=STATE_OPEN)
 
-    class Meta:
-        unique_together = ("date", "time")
-
     def __str__(self):
         return '{} {} - {} - {} kişi'.format(self.date, self.time, self.hasta, self.person_number)
 
