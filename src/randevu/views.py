@@ -36,7 +36,7 @@ class RandevuListView(generic.ListView):
     def _get_randevu_list(self, date):
         data = {}
 
-        for randevu in Randevu.objects.filter(date=date, state=Randevu.STATE_OPEN):
+        for randevu in Randevu.objects.filter(date=date, state=Randevu.STATE_OPEN).order_by('time'):
             data[randevu.time.strftime("%H:%M")] = {
                 'name': randevu.hasta,
                 'person_number': str(randevu.person_number)
@@ -116,7 +116,7 @@ class RandevuWeekArchiveView(generic.WeekArchiveView):
         return datetime.strptime('{}-W{}-1'.format(year, week), '%Y-W%W-%w').date()
 
     def _get_randevu_list(self, date):
-        queryset = self.queryset.filter(date=date)
+        queryset = self.queryset.filter(date=date).order_by('time')
         return queryset if queryset.exists() else None
 
     def get_context_data(self, **kwargs):
