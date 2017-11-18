@@ -125,8 +125,9 @@ class Sozlesme(models.Model):
     def check_active(self):
         sozlesme_bitis = add_years(self.baslangic_tarihi, 1)
         today = datetime.date.today()
-        self.is_active = True if sozlesme_bitis > today else False
-        return super(Sozlesme, self).save()
+        self.is_active = sozlesme_bitis > today
+        super(Sozlesme, self).save()
+        return self.is_active
 
     def days_left(self):
         sozlesme_bitis = self.bitis_tarihi()

@@ -1109,7 +1109,7 @@
 
         <h4> Sözleşme </h4>
         <hr>
-        {% if hasta.sozlesme_set.latest.is_active %}
+        {% if hasta.sozlesme_set.latest.check_active %}
         <h5>Güncel sözleşme</h5> 
         <p><b>Başlangıç:</b> {{ hasta.sozlesme_set.latest.baslangic_tarihi }}</p>
         <p><b>Bitiş:</b> {{ hasta.sozlesme_set.latest.bitis_tarihi }}</p>
