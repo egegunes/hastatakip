@@ -24,6 +24,7 @@ from django.conf.urls.static import static
 from hastatakip     import views
 
 urlpatterns = [
+    url(r'^admin/', admin.site.urls),
     url(
         r'^$',
         views.MainIndexView.as_view(),

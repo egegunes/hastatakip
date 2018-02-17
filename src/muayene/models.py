@@ -22,6 +22,11 @@ class Ilac(models.Model):
         null = True,
         blank = True
     )
+
+    class Meta:
+        verbose_name = 'İlaç'
+        verbose_name_plural = 'İlaçlar'
+
     def __str__(self):
         return self.ad
 
@@ -132,8 +137,13 @@ class Recete(models.Model):
         blank = True,
     )
 
+    class Meta:
+        verbose_name = 'Reçete'
+        verbose_name_plural = 'Reçeteler'
+
     def __str__(self):
         return str(self.tarih)
+
     def get_absolute_url(self):
         return reverse('muayene:recete-detail', kwargs={'pk':self.pk})
 
@@ -161,10 +171,17 @@ class Rapor(models.Model):
         blank = False,
         null = False,
     )
+
+    class Meta:
+        verbose_name = 'Rapor'
+        verbose_name_plural = 'Raporlar'
+
     def __str__(self):
         return str(self.hasta)
+
     def get_absolute_url(self):
         return reverse('muayene:rapor-detail', kwargs={'pk':self.pk})
+
 
 class Laboratuvar(models.Model):
     ad = models.CharField(max_length=30)
@@ -831,6 +848,10 @@ class LaboratuvarIstek(models.Model):
         default = ''
     )
 
+    class Meta:
+        verbose_name = 'Laboratuvar Istek'
+        verbose_name_plural = 'Laboratuvar Istekleri'
+
     def __str__(self):
         return str(self.hasta)
 
@@ -920,6 +941,8 @@ class Muayene(models.Model):
 
     class Meta:
         get_latest_by = "tarih"
+        verbose_name = 'Muayene'
+        verbose_name_plural = 'Muayeneler'
 
     def __str__(self):
         return str(self.pk)
