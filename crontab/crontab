@@ -1,0 +1,7 @@
+0 6-15 * * 1-5 /home/hastatakip/bin/db_backup.sh
+0 6-15 * * 6   /home/hastatakip/bin/db_backup.sh
+0 23   * * 1-6 /home/hastatakip/bin/delete_old_backups.sh daily
+0 23   * * 7   /home/hastatakip/bin/delete_old_backups.sh weekly
+0 23   1 * *   /home/hastatakip/bin/delete_old_backups.sh monthly
+30 2 * * 1 /usr/bin/certbot renew >> /var/log/le-renew.log
+35 2 * * 1 /usr/bin/systemctl reload nginx
