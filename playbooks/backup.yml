@@ -1,0 +1,48 @@
+---
+- name: Backup DB and media files to S3
+  hosts: all
+  vars:
+    BACKUP_DIR: /home/hastatakip/backups
+    MEDIA_DIR: /home/hastatakip/media
+    DB_BACKUP_DIR: "{{ BACKUP_DIR }}/db"
+    DB_BACKUP_NAME: "db-{{ ansible_date_time.date }}.tar.gz"
+    DB_BACKUP: "{{ BACKUP_DIR }}/{{ DB_BACKUP_NAME }}"
+    MEDIA_BACKUP_DIR: "{{ BACKUP_DIR }}/media"
+    MEDIA_BACKUP_NAME: "media-{{ ansible_date_time.date }}.tar.gz"
+    MEDIA_BACKUP: "{{ BACKUP_DIR }}/{{ MEDIA_BACKUP_NAME }}"
+    BUCKET_NAME: hastatakip
+  tasks:
+    - name: Get old backups
+      find:
+        path: "{{ BACKUP_DIR }}"
+        age: 3d
+        recurse: yes
+      register: backups_to_delete
+    - name: Delete old backups
+      file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ backups_to_delete.files }}"
+    - name: Backup media files
+      archive:
+        path: "{{ MEDIA_DIR }}"
+        dest: "{{ MEDIA_BACKUP }}"
+    - name: Backup database
+      archive:
+        path: "{{ DB_BACKUP_DIR }}"
+        dest: "{{ DB_BACKUP }}"
+    - name: Encrypt backups
+      command: ccrypt --force -E CCRYPT_KEYWORD -e "{{ item }}"
+      with_items:
+        - "{{ DB_BACKUP }}"
+        - "{{ MEDIA_BACKUP }}"
+    - name: Upload to S3
+      aws_s3:
+        bucket: "{{ BUCKET_NAME }}"
+        mode: put
+        src: "{{ item.path }}.cpt"
+        object: "{{ item.name }}"
+      with_items:
+        - { path: "{{ MEDIA_BACKUP }}", name: "{{ MEDIA_BACKUP_NAME }}" }
+        - { path: "{{ DB_BACKUP }}", name: "{{ DB_BACKUP_NAME }}" }
+
