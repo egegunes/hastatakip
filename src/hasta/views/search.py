@@ -4,7 +4,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic.base import View
 from django.template.response import TemplateResponse
 from django.utils.text import slugify
-from django.http import HttpResponseNotAllowed
+from django.http import HttpResponseNotAllowed, HttpResponseBadRequest
+from django.shortcuts import redirect
 
 from hasta.models import Hasta
 
@@ -15,10 +16,23 @@ class HastaSearchView(LoginRequiredMixin, View):
         return HttpResponseNotAllowed(['GET'])
 
     def post(self, request, *args, **kwargs):
+        if 'term' not in request.POST:
+            return HttpResponseBadRequest()
 
-        if 'term' in request.POST:
-            slug = slugify(request.POST['term'])
+        term = request.POST['term']
 
-            qs = Hasta.objects.filter(slug__icontains=slug)
+        try:
+            term = int(term)
+            try:
+                hasta = Hasta.objects.get(tc_kimlik_no=term)
+                return redirect(hasta)
+            except (Hasta.MultipleObjectsReturned, Hasta.DoesNotExist) as e:
+                qs = Hasta.objects.filter(tc_kimlik_no=term)
+        except ValueError:
+            qs = Hasta.objects.filter(slug__icontains=slugify(term))
 
-            return TemplateResponse(request, 'hasta/hasta_list.html', {'hasta_list': qs})
+        return TemplateResponse(
+            request,
+            'hasta/hasta_list.html',
+            {'hasta_list': qs}
+        )
