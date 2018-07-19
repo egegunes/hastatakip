@@ -4,3 +4,4 @@ __pycache__/
 utils/dropbox_token.py
 playbooks/env/backup
 src/hastatakip/settings/11-development.conf
+systemd/django-environment
