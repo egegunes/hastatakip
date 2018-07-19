@@ -10,6 +10,7 @@ pyparsing==2.2.0
 PyPDF2==1.26.0
 python-memcached==1.58
 pytz==2017.2
+raven
 reportlab==3.4.0
 six==1.10.0
 Unidecode==0.4.20
