@@ -5,10 +5,10 @@
     BACKUP_DIR: /home/hastatakip/backups
     MEDIA_DIR: /home/hastatakip/media
     DB_BACKUP_DIR: "{{ BACKUP_DIR }}/db"
-    DB_BACKUP_NAME: "db-{{ ansible_date_time.date }}.tar.gz"
+    DB_BACKUP_NAME: "db.tar.gz"
     DB_BACKUP: "{{ BACKUP_DIR }}/{{ DB_BACKUP_NAME }}"
     MEDIA_BACKUP_DIR: "{{ BACKUP_DIR }}/media"
-    MEDIA_BACKUP_NAME: "media-{{ ansible_date_time.date }}.tar.gz"
+    MEDIA_BACKUP_NAME: "media.tar.gz"
     MEDIA_BACKUP: "{{ BACKUP_DIR }}/{{ MEDIA_BACKUP_NAME }}"
     BUCKET_NAME: hastatakip
   tasks:
