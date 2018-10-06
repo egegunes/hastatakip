@@ -6,3 +6,4 @@ playbooks/env/backup
 src/hastatakip/settings/11-development.conf
 systemd/django-environment
 src/staticfiles/*.pdf
+db.sqlite3

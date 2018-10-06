@@ -1,6 +1,14 @@
 HOME=/home/hastatakip
 CODEDIR=$(HOME)/hastatakip
 
+build:
+	sudo docker build -t hastatakip .
+run:
+	sudo docker run --rm --name hastatakip -p 8080:8000 -v $(shell pwd)/db.sqlite3:/app/db.sqlite3 hastatakip
+shell:
+	sudo docker exec -it hastatakip /bin/sh
+django-shell:
+	sudo docker exec -it hastatakip python manage.py shell
 requirements:
 	test -d $(HOME)/environment && source $(HOME)/environment/bin/activate || python3 -m venv $(HOME)/environment
 	pip install --upgrade pip setuptools wheel
