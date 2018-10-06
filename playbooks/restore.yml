@@ -1,0 +1,52 @@
+---
+- name: Restore DB and media backups from S3
+  hosts: all
+  vars:
+    HOME: /home/hastatakip
+    BACKUP_DIR: /home/hastatakip/backups
+    DB_DIR: /home/hastatakip/db
+    DB_BACKUP_DIR: "{{ BACKUP_DIR }}/db"
+    DB_BACKUP_NAME: "db.tar.gz"
+    DB_BACKUP_DEST: "{{ BACKUP_DIR }}/{{ DB_BACKUP_NAME }}"
+    MEDIA_BACKUP_NAME: "media.tar.gz"
+    MEDIA_BACKUP_DEST: "{{ BACKUP_DIR }}/{{ MEDIA_BACKUP_NAME }}"
+    BUCKET_NAME: hastatakip
+  tasks:
+    - name: Download from S3
+      aws_s3:
+        bucket: "{{ BUCKET_NAME }}"
+        mode: get
+        object: "{{ item.name }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { dest: "{{ MEDIA_BACKUP_DEST }}", name: "{{ MEDIA_BACKUP_NAME }}" }
+        - { dest: "{{ DB_BACKUP_DEST }}", name: "{{ DB_BACKUP_NAME }}" }
+    - name: Decrypt backups
+      command: ccrypt --force -E CCRYPT_KEYWORD -d "{{ item }}"
+      with_items:
+        - "{{ DB_BACKUP_DEST }}"
+        - "{{ MEDIA_BACKUP_DEST }}"
+    - name: Extract backups
+      unarchive:
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: "{{ MEDIA_BACKUP_DEST }}", dest: "{{ HOME }}" }
+        - { src: "{{ DB_BACKUP_DEST }}", dest: "{{ DB_BACKUP_DIR }}" }
+    - name: Get DB backups
+      find:
+        path: "{{ DB_BACKUP_DIR }}"
+        recurse: yes
+      register: db_backups
+    - name: Get latest DB backup
+      set_fact:
+        latest_db_backup: "{{ db_backups.files | sort(attribute='mtime',reverse=true) | first }}"
+    - name: Restore latest DB backup
+      copy:
+        src: "{{ latest_db_backup.path }}"
+        dest: "{{ DB_DIR }}/db.sqlite3"
+        owner: hastatakip
+        group: hastatakip
+        mode: 0644
+
+
