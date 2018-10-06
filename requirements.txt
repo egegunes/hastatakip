@@ -1,6 +1,6 @@
 appdirs==1.4.3
 boto3
-Django==1.11
+Django==1.11.15
 django-autocomplete-light==3.2.2
 django-factory_boy
 gunicorn
@@ -10,7 +10,7 @@ Pillow==4.1.0
 pyparsing==2.2.0
 PyPDF2==1.26.0
 python-memcached==1.58
-pytz==2017.2
+pytz
 raven
 reportlab==3.4.0
 six==1.10.0
