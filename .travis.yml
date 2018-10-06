@@ -4,5 +4,7 @@ python:
 env:
     - DJANGO_SECRET_KEY=k5UPYhsKgzMc5eNg0Jg0Z9DquC5yc9EzDdprqukqe0noVTr9K365rNTnvXskgmmRy7AEszwsi8O
 install: "pip install -r requirements.txt"
-before_script: "cd src/"
+before_script:
+  - "python bin/get_pdfs.py"
+  - "cd src/"
 script: "python manage.py test"
