@@ -10,7 +10,7 @@ from django.conf                    import settings
 
 from io                             import BytesIO
 from PyPDF2                         import PdfFileWriter, PdfFileReader, PdfFileMerger
-from reportlab.lib                  import colors
+from reportlab.lib.colors           import Color
 from reportlab.pdfgen               import canvas
 from reportlab.pdfbase              import pdfmetrics
 from reportlab.pdfbase.pdfmetrics   import stringWidth
@@ -32,6 +32,9 @@ class PrintMixin(object):
     model = None
     font = None
     queryset = None
+    base_style = ParagraphStyle(name="base",
+                                fontName="PFS",
+                                textColor=Color(0, 0.3984375, 0.69921875))
 
     def get_queryset(self):
         if self.queryset is None:
@@ -47,7 +50,7 @@ class PrintMixin(object):
 
         if queryset is None:
             queryset = self.get_queryset()
-        
+
         if pk is not None:
             queryset = queryset.filter(pk=pk)
         else:
@@ -56,8 +59,8 @@ class PrintMixin(object):
         try:
             obj = queryset.get()
         except queryset.model.DoesNotExist:
-            raise Http404(_("No %(verbose_name)s found matching the query") % {'verbose_name': queryset.model._meta.verbose_name}) 
-            
+            raise Http404(_("No %(verbose_name)s found matching the query") % {'verbose_name': queryset.model._meta.verbose_name})
+
         return obj
 
     def register_font(self):
@@ -85,9 +88,9 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
 
         buff = BytesIO()
 
-        doc = SimpleDocTemplate(buff, 
-                                pagesize=letter, 
-                                title=title, 
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                title=title,
                                 author="Dr. Ziya T. Güneş",
                                 rightMargin=inch/4,
                                 leftMargin=inch/4,
@@ -96,24 +99,24 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
                                 showBoundary=0)
 
         frame1 = Frame(doc.leftMargin,
-                       doc.bottomMargin, 
-                       doc.width, 
-                       doc.height / 8, 
+                       doc.bottomMargin,
+                       doc.width,
+                       doc.height / 8,
                        id="footer")
-        frame2 = Frame(doc.leftMargin, 
-                       doc.bottomMargin + doc.height / 8 + 6, 
-                       doc.width, 
-                       doc.height * 6 / 8, 
+        frame2 = Frame(doc.leftMargin,
+                       doc.bottomMargin + doc.height / 8 + 6,
+                       doc.width,
+                       doc.height * 6 / 8,
                        id="body")
-        frame3 = Frame(doc.leftMargin, 
-                       doc.bottomMargin + doc.height * 7 / 8 + 12, 
-                       doc.width * 3 / 4 - 6, 
-                       doc.height / 8, 
+        frame3 = Frame(doc.leftMargin,
+                       doc.bottomMargin + doc.height * 7 / 8 + 12,
+                       doc.width * 3 / 4 - 6,
+                       doc.height / 8,
                        id="header_right")
-        frame4 = Frame(doc.leftMargin + doc.width * 3 / 4 + 6, 
-                       doc.bottomMargin + doc.height * 7 / 8 + 12, 
-                       doc.width / 4 - 6, 
-                       doc.height / 8, 
+        frame4 = Frame(doc.leftMargin + doc.width * 3 / 4 + 6,
+                       doc.bottomMargin + doc.height * 7 / 8 + 12,
+                       doc.width / 4 - 6,
+                       doc.height / 8,
                        id="header_left")
 
         receteTemplate = PageTemplate(frames=[frame1, frame2, frame3, frame4])
@@ -121,12 +124,38 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
 
         self.register_font()
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="footer", fontName="PFS", fontSize=10, alignment=2, leading=20))
-        styles.add(ParagraphStyle(name="heading", fontName="PFS", fontSize=20, alignment=0, spaceAfter=40))
-        styles.add(ParagraphStyle(name="ilac_ad", fontName="PFS", fontSize=14, alignment=0, leftIndent=30, spaceAfter=10, leading=20))
-        styles.add(ParagraphStyle(name="ilac_kullanim", fontName="PFS", fontSize=12, alignment=0, leftIndent=50, spaceAfter=20, leading=20))
-        styles.add(ParagraphStyle(name="header_left", fontName="PFS", fontSize=12, alignment=0))
-        styles.add(ParagraphStyle(name="header_right", fontName="PFS", fontSize=12, alignment=2))
+        styles.add(ParagraphStyle(name="footer",
+                                  parent=self.base_style,
+                                  fontSize=10,
+                                  alignment=2,
+                                  leading=20))
+        styles.add(ParagraphStyle(name="heading",
+                                  parent=self.base_style,
+                                  fontSize=20,
+                                  alignment=0,
+                                  spaceAfter=40))
+        styles.add(ParagraphStyle(name="ilac_ad",
+                                  parent=self.base_style,
+                                  fontSize=14,
+                                  alignment=0,
+                                  leftIndent=30,
+                                  spaceAfter=10,
+                                  leading=20))
+        styles.add(ParagraphStyle(name="ilac_kullanim",
+                                  parent=self.base_style,
+                                  fontSize=12,
+                                  alignment=0,
+                                  leftIndent=50,
+                                  spaceAfter=20,
+                                  leading=20))
+        styles.add(ParagraphStyle(name="header_left",
+                                  parent=self.base_style,
+                                  fontSize=12,
+                                  alignment=0))
+        styles.add(ParagraphStyle(name="header_right",
+                                  parent=self.base_style,
+                                  fontSize=12,
+                                  alignment=2))
 
         story = []
 
@@ -162,7 +191,7 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
             ilac3_kullanim = Paragraph("S: %s" % (recete.ilac3_kullanim), styles['ilac_kullanim'])
             story.append(ilac3)
             story.append(ilac3_kullanim)
-        
+
         if recete.ilac4:
             ilac4 = Paragraph("4. %s (%d kutu)" % (recete.ilac4.ad, recete.ilac4_kutu), styles['ilac_ad'])
             ilac4_kullanim = Paragraph("S: %s" % (recete.ilac4_kullanim), styles['ilac_kullanim'])
@@ -218,24 +247,24 @@ class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
 
         buff = BytesIO()
 
-        doc = SimpleDocTemplate(buff, 
-                                pagesize=letter, 
-                                title=title, 
-                                author="Dr. Ziya T. Güneş", 
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                title=title,
+                                author="Dr. Ziya T. Güneş",
                                 topMargin=inch/2,
                                 bottomMargin=inch/4,
                                 leftMargin=inch/4,
                                 rightMargin=inch/4)
 
         frame1 = Frame(doc.leftMargin,
-                       doc.bottomMargin, 
-                       doc.width, 
-                       doc.height / 8, 
+                       doc.bottomMargin,
+                       doc.width,
+                       doc.height / 8,
                        id="footer")
-        frame2 = Frame(doc.leftMargin, 
-                       doc.bottomMargin + doc.height / 8 + 6, 
-                       doc.width, 
-                       doc.height * 6 / 8, 
+        frame2 = Frame(doc.leftMargin,
+                       doc.bottomMargin + doc.height / 8 + 6,
+                       doc.width,
+                       doc.height * 6 / 8,
                        id="body")
         frame3 = Frame(doc.leftMargin,
                        doc.bottomMargin + doc.height * 7 / 8 + 6,
@@ -249,10 +278,21 @@ class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
         self.register_font()
 
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="centered", alignment=1, fontName="PFS", fontSize=24, spaceAfter=30)) 
-        styles.add(ParagraphStyle(name="body", fontName="PFS", fontSize=12, leading=20))
-        styles.add(ParagraphStyle(name="footer", fontName="PFS", fontSize=10, leading=20, alignment=2))
-        styleH = styles['centered'] 
+        styles.add(ParagraphStyle(name="centered",
+                                  parent=self.base_style,
+                                  alignment=1,
+                                  fontSize=24,
+                                  spaceAfter=30))
+        styles.add(ParagraphStyle(name="body",
+                                  parent=self.base_style,
+                                  fontSize=12,
+                                  leading=20))
+        styles.add(ParagraphStyle(name="footer",
+                                  parent=self.base_style,
+                                  fontSize=10,
+                                  leading=20,
+                                  alignment=2))
+        styleH = styles['centered']
         styleB = styles['body']
         styleF = styles['footer']
 
@@ -308,9 +348,9 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
 
         buff = BytesIO()
 
-        doc = SimpleDocTemplate(buff, 
-                                pagesize=letter, 
-                                title=title, 
+        doc = SimpleDocTemplate(buff,
+                                pagesize=letter,
+                                title=title,
                                 author="Dr. Ziya T. Güneş",
                                 rightMargin=inch/4,
                                 leftMargin=inch/4,
@@ -319,24 +359,24 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
                                 showBoundary=0)
 
         frame1 = Frame(doc.leftMargin,
-                       doc.bottomMargin, 
-                       doc.width, 
-                       doc.height / 8, 
+                       doc.bottomMargin,
+                       doc.width,
+                       doc.height / 8,
                        id="footer")
-        frame2 = Frame(doc.leftMargin, 
-                       doc.bottomMargin + doc.height / 8 + 6, 
-                       doc.width, 
-                       doc.height * 6 / 8, 
+        frame2 = Frame(doc.leftMargin,
+                       doc.bottomMargin + doc.height / 8 + 6,
+                       doc.width,
+                       doc.height * 6 / 8,
                        id="body")
-        frame3 = Frame(doc.leftMargin, 
-                       doc.bottomMargin + doc.height * 7 / 8 + 12, 
-                       doc.width * 3 / 4 - 6, 
-                       doc.height / 8, 
+        frame3 = Frame(doc.leftMargin,
+                       doc.bottomMargin + doc.height * 7 / 8 + 12,
+                       doc.width * 3 / 4 - 6,
+                       doc.height / 8,
                        id="header_right")
-        frame4 = Frame(doc.leftMargin + doc.width * 3 / 4 + 6, 
-                       doc.bottomMargin + doc.height * 7 / 8 + 12, 
-                       doc.width / 4 - 6, 
-                       doc.height / 8, 
+        frame4 = Frame(doc.leftMargin + doc.width * 3 / 4 + 6,
+                       doc.bottomMargin + doc.height * 7 / 8 + 12,
+                       doc.width / 4 - 6,
+                       doc.height / 8,
                        id="header_left")
 
         receteTemplate = PageTemplate(frames=[frame1, frame2, frame3, frame4])
@@ -344,11 +384,31 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
 
         self.register_font()
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="footer", fontName="PFS", fontSize=10, alignment=2, leading=20))
-        styles.add(ParagraphStyle(name="heading", fontName="PFS", fontSize=16, alignment=1, spaceAfter=30))
-        styles.add(ParagraphStyle(name="body", fontName="PFS", fontSize=10, alignment=0, leftIndent=30, spaceAfter=0, leading=20))
-        styles.add(ParagraphStyle(name="header_left", fontName="PFS", fontSize=12, alignment=0))
-        styles.add(ParagraphStyle(name="header_right", fontName="PFS", fontSize=12, alignment=2))
+        styles.add(ParagraphStyle(name="footer",
+                                  parent=self.base_style,
+                                  fontSize=10,
+                                  alignment=2,
+                                  leading=20))
+        styles.add(ParagraphStyle(name="heading",
+                                  parent=self.base_style,
+                                  fontSize=16,
+                                  alignment=1,
+                                  spaceAfter=30))
+        styles.add(ParagraphStyle(name="body",
+                                  parent=self.base_style,
+                                  fontSize=10,
+                                  alignment=0,
+                                  leftIndent=30,
+                                  spaceAfter=0,
+                                  leading=20))
+        styles.add(ParagraphStyle(name="header_left",
+                                  parent=self.base_style,
+                                  fontSize=12,
+                                  alignment=0))
+        styles.add(ParagraphStyle(name="header_right",
+                                  parent=self.base_style,
+                                  fontSize=12,
+                                  alignment=2))
 
         story = []
 
@@ -371,7 +431,7 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
         for name in istek.get_true_fields():
             par1 = Paragraph("* %s" % (name), styles['body'])
             story.append(par1)
-        
+
         story.append(FrameBreak())
 
         hasta = str(istek.hasta)
@@ -428,6 +488,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         can = canvas.Canvas(buff, pagesize=letter)
         can.setFont("PFS", 8)
+        can.setFillColorRGB(0, 0.3984375, 0.69921875)
 
         can.drawString(180, 710, ad + " " + soyad)
         can.drawString(181, 691, dogum_tarihi)
@@ -572,7 +633,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         can.drawString(60, 265, ' '.join(tani_line2))
         can.drawString(60, 245, ' '.join(tani_line3))
 
-        yas = muayene.hasta.age() 
+        yas = muayene.hasta.age()
         if yas > 18:
             can.drawString(210, 47, ad + " " + soyad)
 
@@ -585,7 +646,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         buff.seek(0)
 
         ttf_filled = PdfFileReader(buff)
-   
+
         FILE = os.path.join(settings.BASE_DIR, 'staticfiles/TTF.pdf')
         ttf_empty = PdfFileReader(open(FILE, "rb"))
 
@@ -642,6 +703,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             tarih = str(datetime.date.today())
 
             can.setFont("PFS", 8)
+            can.setFillColorRGB(0, 0.3984375, 0.69921875)
 
             can.drawString(180, 710, ad + " " + soyad)
             can.drawString(181, 691, dogum_tarihi)
@@ -786,7 +848,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             can.drawString(60, 265, ' '.join(tani_line2))
             can.drawString(60, 245, ' '.join(tani_line3))
 
-            yas = muayene.hasta.age() 
+            yas = muayene.hasta.age()
             if yas > 18:
                 can.drawString(210, 47, ad + " " + soyad)
 
@@ -863,6 +925,7 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
 
         can = canvas.Canvas(buff, pagesize=letter)
 
+        can.setFillColorRGB(0, 0.3984375, 0.69921875)
         can.setFont("PFS", 7)
         can.drawString(110, 750, str(muayene.hasta))
 
@@ -984,9 +1047,9 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
 
         pdfmetrics.registerFont(TTFont('ListFont', font))
 
-        doc = SimpleDocTemplate(buff, 
-                                pagesize=landscape(letter), 
-                                title=title, 
+        doc = SimpleDocTemplate(buff,
+                                pagesize=landscape(letter),
+                                title=title,
                                 author="Dr. Ziya T. Güneş",
                                 rightMargin=inch/4,
                                 leftMargin=inch/4,
@@ -1001,10 +1064,10 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
 
         for muayene in qs:
             i += 1
-            hasta = str(muayene.hasta) 
+            hasta = str(muayene.hasta)
             tarih = str(muayene.tarih)
             tani = str(muayene.ontani_tani)
-            
+
             row = ['%s' % i, tarih, hasta, tani]
             data.append(row)
 
