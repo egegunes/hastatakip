@@ -67,6 +67,7 @@ class PrintMixin(object):
         font = os.path.join(settings.BASE_DIR, "staticfiles/fonts/pfs.ttf")
 
         pdfmetrics.registerFont(TTFont("PFS", font))
+        pdfmetrics.registerFont(TTFont("Vera", "Vera.ttf"))
 
 class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
     login_url = '/login/'
@@ -125,7 +126,7 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
         self.register_font()
         styles = getSampleStyleSheet()
         styles.add(ParagraphStyle(name="footer",
-                                  parent=self.base_style,
+                                  fontName="Vera",
                                   fontSize=10,
                                   alignment=2,
                                   leading=20))
@@ -288,7 +289,7 @@ class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
                                   fontSize=12,
                                   leading=20))
         styles.add(ParagraphStyle(name="footer",
-                                  parent=self.base_style,
+                                  fontName="Vera",
                                   fontSize=10,
                                   leading=20,
                                   alignment=2))
@@ -385,7 +386,7 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
         self.register_font()
         styles = getSampleStyleSheet()
         styles.add(ParagraphStyle(name="footer",
-                                  parent=self.base_style,
+                                  fontName="Vera",
                                   fontSize=10,
                                   alignment=2,
                                   leading=20))
