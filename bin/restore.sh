@@ -2,6 +2,7 @@
 
 set -eu
 
+source "$HOME/environment/bin/activate"
 source "$HOME/hastatakip/playbooks/env/backup"
 
 echo "Initiated restore at $(date)"
