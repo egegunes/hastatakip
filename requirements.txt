@@ -1,3 +1,4 @@
+ansible
 appdirs==1.4.3
 boto3
 Django==1.11.15
