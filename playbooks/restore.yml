@@ -21,12 +21,12 @@
         dest: "{{ item.dest }}"
       with_items:
         - { dest: "{{ MEDIA_BACKUP_DEST }}", name: "{{ MEDIA_BACKUP_NAME }}" }
-        - { dest: "{{ DB_BACKUP_DEST }}", name: "{{ DB_BACKUP_NAME }}" }
+        - { dest: "{{ DB_DIR }}/db.sqlite3", name: "latest.sqlite3" }
     - name: Decrypt backups
       command: ccrypt --force -E CCRYPT_KEYWORD -d "{{ item }}"
       with_items:
-        - "{{ DB_BACKUP_DEST }}"
         - "{{ MEDIA_BACKUP_DEST }}"
+        - "{{ DB_DIR }}/db.sqlite3"
     - name: Extract backups
       unarchive:
         src: "{{ item.src }}"
@@ -34,20 +34,3 @@
       with_items:
         - { src: "{{ MEDIA_BACKUP_DEST }}", dest: "{{ HOME }}" }
         - { src: "{{ DB_BACKUP_DEST }}", dest: "{{ DB_BACKUP_DIR }}" }
-    - name: Get DB backups
-      find:
-        path: "{{ DB_BACKUP_DIR }}"
-        recurse: yes
-      register: db_backups
-    - name: Get latest DB backup
-      set_fact:
-        latest_db_backup: "{{ db_backups.files | sort(attribute='mtime',reverse=true) | first }}"
-    - name: Restore latest DB backup
-      copy:
-        src: "{{ latest_db_backup.path }}"
-        dest: "{{ DB_DIR }}/db.sqlite3"
-        owner: hastatakip
-        group: hastatakip
-        mode: 0644
-
-

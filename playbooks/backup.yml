@@ -23,6 +23,14 @@
         path: "{{ item.path }}"
         state: absent
       with_items: "{{ backups_to_delete.files }}"
+    - name: Get all DB backups
+      find:
+        path: "{{ DB_BACKUP_DIR }}"
+        recurse: yes
+      register: db_backups
+    - name: Get latest DB backup
+      set_fact:
+        latest_db_backup: "{{ db_backups.files | sort(attribute='mtime',reverse=true) | first }}"
     - name: Backup media files
       archive:
         path: "{{ MEDIA_DIR }}"
@@ -36,6 +44,7 @@
       with_items:
         - "{{ DB_BACKUP }}"
         - "{{ MEDIA_BACKUP }}"
+        - "{{ latest_db_backup.path }}"
     - name: Upload to S3
       aws_s3:
         bucket: "{{ BUCKET_NAME }}"
@@ -45,4 +54,5 @@
       with_items:
         - { path: "{{ MEDIA_BACKUP }}", name: "{{ MEDIA_BACKUP_NAME }}" }
         - { path: "{{ DB_BACKUP }}", name: "{{ DB_BACKUP_NAME }}" }
+        - { path: "{{ latest_db_backup.path }}", name: "latest.sqlite3" }
 
