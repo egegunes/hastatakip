@@ -2,6 +2,7 @@
 - name: Backup DB and media files to S3
   hosts: all
   vars:
+    ansible_python_interpreter: "{{ ansible_playbook_python }}"
     BACKUP_DIR: /home/hastatakip/backups
     MEDIA_DIR: /home/hastatakip/media
     DB_BACKUP_DIR: "{{ BACKUP_DIR }}/db"
