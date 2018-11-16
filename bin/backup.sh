@@ -6,7 +6,7 @@ source "$HOME/hastatakip/playbooks/env/backup"
 
 echo "Initiated backup at $(date)"
 
-ansible-playbook \
+"$HOME"/environment/bin/ansible-playbook \
     -c local \
     -i "localhost," \
     "$HOME/hastatakip/playbooks/backup.yml"
