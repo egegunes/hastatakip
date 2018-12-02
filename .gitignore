@@ -7,3 +7,6 @@ src/hastatakip/settings/11-development.conf
 systemd/django-environment
 src/staticfiles/*.pdf
 db.sqlite3
+.terraform
+terraform.tfvars
+terraform.tfstate.backup
