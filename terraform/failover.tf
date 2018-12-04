@@ -13,10 +13,7 @@ resource "digitalocean_droplet" "hastatakip" {
     ssh_keys = [16992631]
 
     provisioner "remote-exec" {
-        inline = [
-            "sudo certbot renew",
-            "sudo su - hastatakip -c '/home/hastatakip/hastatakip/bin/restore.sh'",
-        ]
+        inline = ["sudo su - hastatakip -c '/home/hastatakip/hastatakip/bin/restore.sh'"]
 
         connection {
             type = "ssh"
@@ -32,4 +29,17 @@ resource "digitalocean_record" "hastatakip" {
     name   = "hastatakip"
     ttl    = 300
     value  = "${digitalocean_droplet.hastatakip.ipv4_address}"
+}
+
+resource "null_resource" "hastatakip" {
+    connection {
+        type = "ssh"
+        host = "${digitalocean_droplet.hastatakip.ipv4_address}"
+        user = "egegunes"
+        password = "${var.ssh_password}"
+    }
+
+    provisioner "remote-exec" {
+        inline = ["sudo certbot renew"]
+    }
 }
