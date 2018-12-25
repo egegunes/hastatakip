@@ -5,19 +5,19 @@
 <div class="container-fluid">
     <div class="row">
         <div class="page-header">
-            <h1>{{ week|date:'W' }}. hafta - Randevu Listesi</h1>
+            <h1>{{ week_number }}. hafta - Randevu Listesi</h1>
         </div>
     </div>
 
     <div class="row">
         <div class="col-lg-6">
             {% if previous_week %}
-            <a href="{% url 'randevu:week-archive' previous_week|date:"Y" previous_week|date:"W" %}">Önceki hafta</a>
+            <a href="{% url 'randevu:week-archive' previous_week.0 previous_week.1 %}">Önceki hafta</a>
             {% endif %}
         </div>
         <div class="col-lg-6">
             {% if next_week %}
-            <a class="pull-right" href="{% url 'randevu:week-archive' next_week|date:"Y" next_week|date:"W" %}">Sonraki hafta</a>
+            <a class="pull-right" href="{% url 'randevu:week-archive' next_week.0 next_week.1 %}">Sonraki hafta</a>
             {% endif %}
         </div>
     </div>

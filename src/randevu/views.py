@@ -1,4 +1,4 @@
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 
 from django.shortcuts import render
 from django.views import generic
@@ -111,6 +111,7 @@ class RandevuWeekArchiveView(generic.WeekArchiveView):
     date_field = 'date'
     week_format = '%W'
     allow_future = True
+    allow_empty = True
 
     def _get_first_day(self, year, week):
         return datetime.strptime('{}-W{}-1'.format(year, week), '%Y-W%W-%w').date()
@@ -119,6 +120,14 @@ class RandevuWeekArchiveView(generic.WeekArchiveView):
         queryset = self.queryset.filter(date=date).order_by('time')
         return queryset if queryset.exists() else None
 
+    def get_previous_week(self, date):
+        prev_week = super(RandevuWeekArchiveView, self).get_previous_week(date)
+        return prev_week.strftime("%Y"), prev_week.strftime("%W")
+
+    def get_next_week(self, date):
+        next_week = super(RandevuWeekArchiveView, self).get_next_week(date)
+        return next_week.strftime("%Y"), next_week.strftime("%W")
+
     def get_context_data(self, **kwargs):
         context = super(RandevuWeekArchiveView, self).get_context_data(**kwargs)
 
@@ -126,5 +135,7 @@ class RandevuWeekArchiveView(generic.WeekArchiveView):
         dates = [first_day + timedelta(days=i) for i in range(6)]
         randevu_list_by_date = {date: self._get_randevu_list(date) for date in dates}
         context.update({'randevu_list_by_date': sorted(randevu_list_by_date.items(), key=lambda t: t[0])})
+
+        context["week_number"] = self.get_week()
 
         return context
