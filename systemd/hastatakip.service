@@ -4,10 +4,10 @@ After=network.target
 
 [Service]
 User=hastatakip
-Group=nginx
+Group=www-data
 WorkingDirectory=/home/hastatakip/hastatakip/src
 EnvironmentFile=/home/hastatakip/hastatakip/systemd/django-environment
-ExecStart=/home/hastatakip/environment/bin/gunicorn \
+ExecStart=/home/hastatakip/venv/bin/gunicorn \
             --workers 3 \
             --threads 3 \
             --timeout 120 \
