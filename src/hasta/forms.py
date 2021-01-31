@@ -51,6 +51,19 @@ class HastaCreateForm(forms.ModelForm):
         widget=forms.widgets.DateInput(attrs={'class': 'form-control datepicker'}),
         label=_('Doğum tarihi')
     )
+    dogum_yeri = forms.CharField(
+        required=False,
+        max_length=255,
+        widget=forms.widgets.TextInput(attrs={'class': 'form-control'}),
+        label=_('Doğum yeri')
+    )
+    uyruk = forms.CharField(
+        required=False,
+        max_length=64,
+        widget=forms.widgets.TextInput(attrs={'class': 'form-control'}),
+        initial="Turkey (TR)",
+        label=_('Uyruk')
+    )
     meslek = forms.CharField(
         required=False,
         max_length=30,

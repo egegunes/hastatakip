@@ -17,6 +17,7 @@
             <li><a href="#" data-toggle="modal" data-target="#raporForm">Rapor yaz</a></li>
             <li><a href="#" data-toggle="modal" data-target="#istekForm">Laboratuvar İstek</a></li>
             <li><a href="#" data-toggle="modal" data-target="#fileForm">Dosya yükle</a></li>
+            <li><a href="{% url 'muayene:belgium' muayene.id %}" target="_blank">Belgium Medical Certificate</a></li>
         </ul>
     </div>
     <div class="btn-group">
@@ -1500,11 +1501,11 @@
     <!-- End of Upload List -->
 
     <!-- Upload Form -->
-    <div class="modal fade" id="fileForm" tabindex="-1" role="dialog" arialabelledby="fileFormLabel">
+    <div class="modal fade" id="medicalCertForm" tabindex="-1" role="dialog" arialabelledby="medicalCertFormLabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="fileFormLabel"> Yeni istek </h4>
+                    <h4 id="medicalCertFormLabel"> Yeni istek </h4>
                     <h3> Hasta: {{ muayene.hasta }} </h3>
                 </div>
                 <form method="POST" enctype="multipart/form-data" class="form-inline">

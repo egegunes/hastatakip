@@ -42,6 +42,11 @@ urlpatterns = [
         name='ahsevk'
     ),
     url(
+        r'^(?P<pk>[0-9]+)/belgium/$',
+        views.BelgiumMedicalCertPrintView.as_view(),
+        name='belgium'
+    ),
+    url(
         r'^yeni/$',
         views.MuayeneCreateView.as_view(),
         name='create'

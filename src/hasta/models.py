@@ -30,6 +30,8 @@ class Hasta(models.Model):
     tc_kimlik_no = models.CharField(max_length=11, default=' ', blank=True, null=True)
     cinsiyet = models.CharField(max_length=5, blank=True, choices=CINSIYET)
     dogum_tarihi = models.DateField(blank=False)
+    dogum_yeri = models.CharField(max_length=255, null=True, blank=True)
+    uyruk = models.CharField(max_length=64, null=True, blank=True)
     meslek = models.CharField(max_length=30, default=' ', blank=True)
     es_ad = models.CharField(max_length=30, default=' ', blank=True)
     es_meslek = models.CharField(max_length=30, default=' ', blank=True)

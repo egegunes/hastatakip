@@ -27,7 +27,8 @@ from muayene.views.prints   import (
     TTFPrintView,
     MultiTTFPrintView,
     AHSevkPrintView,
-    ListPrintView
+    ListPrintView,
+    BelgiumMedicalCertPrintView
 )
 from muayene.views.update   import (
     MuayeneUpdateView, 

@@ -2,6 +2,7 @@
 
 import os, datetime, random, string
 
+from django.core.exceptions         import ImproperlyConfigured
 from django.contrib.auth.mixins     import LoginRequiredMixin
 from django.utils.translation       import ugettext_lazy as _
 from django.views.generic           import View
@@ -1088,5 +1089,81 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
 
         response.write(buff.getvalue())
         buff.close()
+
+        return response
+
+
+class BelgiumMedicalCertPrintView(PrintMixin, LoginRequiredMixin, View):
+    login_url = '/login/'
+    queryset = Muayene.objects.all()
+
+    def get(self, request, *args, **kwargs):
+        muayene = self.get_object()
+
+        title = unidecode("{}-{}-medical-certificate-{}-{}".format(muayene.hasta.ad, muayene.hasta.soyad, muayene.pk, muayene.tarih))
+        filename = title + ".pdf"
+
+        temp_path = os.path.join(settings.BASE_DIR, 'staticfiles/medical_certificate.pdf')
+        if not os.path.exists(temp_path):
+            return HttpResponse("Medical certificate template not found in {}".format(temp_path))
+
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'filename=%s' % filename
+
+        output = PdfFileWriter()
+
+        buff = BytesIO()
+
+        self.register_font()
+
+        can = canvas.Canvas(buff, pagesize=letter)
+        can.setFillColorRGB(0, 0.3984375, 0.69921875)
+
+        can.setFont("Vera", 12)
+        prefix = "Mr."
+        if muayene.hasta.cinsiyet == "K":
+            prefix = "Miss"
+            if muayene.hasta.es_ad != "":
+                prefix = "Mrs."
+
+        try:
+            doctor = settings.MEDICAL_CERT_DOCTOR_NAME
+        except AttributeError:
+            doctor = ""
+
+        can.drawString(280, 635, doctor)
+        can.drawString(330, 615, "{} {}".format(prefix, muayene.hasta))
+        can.drawString(180, 545, "{} {}".format(
+            muayene.hasta.dogum_tarihi.strftime("%d %B %Y"),
+            muayene.hasta.dogum_yeri
+        ))
+        can.drawString(130, 565, muayene.hasta.uyruk)
+        can.drawString(130, 520, "{} {}".format(muayene.hasta.adres, muayene.hasta.semt))
+
+        try:
+            doctor_addr = settings.MEDICAL_CERT_DOCTOR_ADDRESS
+        except AttributeError:
+            doctor_addr = ""
+
+        can.drawString(120, 350, muayene.tarih.strftime("%d %B %Y"))
+        can.drawString(270, 350, doctor_addr)
+
+        can.showPage()
+        can.save()
+
+        buff.seek(0)
+
+        filled = PdfFileReader(buff)
+
+        t_fd = open(temp_path, "rb")
+        temp = PdfFileReader(t_fd)
+        page = temp.getPage(0)
+        page.mergePage(filled.getPage(0))
+        output.addPage(page)
+
+        output.write(buff)
+        response.write(buff.getvalue())
+        buff.close()
+        t_fd.close()
 
         return response
