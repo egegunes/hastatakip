@@ -1,7 +1,7 @@
 ansible
 appdirs==1.4.3
 boto3
-Django==1.11.15
+Django==2.2.24
 django-autocomplete-light==3.2.2
 django-factory_boy
 gunicorn
