@@ -3,7 +3,7 @@ import logging
 
 from unittest.mock              import patch, MagicMock
 
-from django.core.urlresolvers   import reverse
+from django.urls   import reverse
 from django.test                import TestCase, RequestFactory
 
 from .factory                   import *
@@ -68,8 +68,6 @@ class HastaCreateViewTestCase(TestCase):
 
         self.assertTrue('hasta/hasta_form.html' in response.template_name)
 
-    @patch('hasta.models.Hasta.get_absolute_url')
-    @patch('hasta.models.Hasta.save')
     def test_post(self, *args):
         request = self.factory.post(reverse('hasta:create'), self.data)
         request.user = self.user
@@ -77,12 +75,6 @@ class HastaCreateViewTestCase(TestCase):
         response = HastaCreateView.as_view()(request)
 
         self.assertEqual(response.status_code, 302)
-
-        self.assertTrue(Hasta.get_absolute_url.called)
-        self.assertEqual(Hasta.get_absolute_url.call_count, 1)
-
-        self.assertTrue(Hasta.save.called)
-        self.assertEqual(Hasta.save.call_count, 1)
 
 class HastaUpdateViewTestCase(TestCase):
     def setUp(self):
@@ -127,8 +119,6 @@ class HastaUpdateViewTestCase(TestCase):
 
         self.assertTrue('hasta/hasta_form.html' in response.template_name)
 
-    @patch('hasta.models.Hasta.get_absolute_url')
-    @patch('hasta.models.Hasta.save')
     def test_post(self, *args):
         request = self.factory.post(reverse('hasta:update', kwargs=self.kwargs), self.data)
         request.user = self.user
@@ -136,12 +126,6 @@ class HastaUpdateViewTestCase(TestCase):
         response = HastaUpdateView.as_view()(request, **self.kwargs)
 
         self.assertEqual(response.status_code, 302)
-
-        self.assertTrue(Hasta.get_absolute_url.called)
-        self.assertEqual(Hasta.get_absolute_url.call_count, 1)
-
-        self.assertTrue(Hasta.save.called)
-        self.assertEqual(Hasta.save.call_count, 1)
 
 class HastaDetailViewTestCase(TestCase):
     def setUp(self):

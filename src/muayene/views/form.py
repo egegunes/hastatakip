@@ -4,7 +4,7 @@ import json, datetime
 
 from django.views.generic.detail    import SingleObjectMixin
 from django.contrib.auth.mixins     import LoginRequiredMixin
-from django.core.urlresolvers       import reverse
+from django.urls       import reverse
 from django.template.response       import TemplateResponse
 from django.views.generic.base      import View
 from django.views.generic           import FormView

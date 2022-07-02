@@ -5,7 +5,7 @@ import json
 
 from django.contrib.auth.mixins     import LoginRequiredMixin
 from django.views.generic.edit      import CreateView, View
-from django.core.urlresolvers       import reverse
+from django.urls       import reverse
 from django.shortcuts               import redirect
 from django.http                    import HttpResponse, HttpResponseRedirect, Http404
 
