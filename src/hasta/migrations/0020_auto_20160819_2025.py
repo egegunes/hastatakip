@@ -9,23 +9,45 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0019_auto_20160819_2010'),
+        ("hasta", "0019_auto_20160819_2010"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hasta',
-            name='cinsiyet',
-            field=models.CharField(blank=True, choices=[(' ', ' '), ('K', 'Kadın'), ('E', 'Erkek')], default='K', max_length=5),
+            model_name="hasta",
+            name="cinsiyet",
+            field=models.CharField(
+                blank=True,
+                choices=[(" ", " "), ("K", "Kadın"), ("E", "Erkek")],
+                default="K",
+                max_length=5,
+            ),
         ),
         migrations.AlterField(
-            model_name='hasta',
-            name='kayit_tarihi',
-            field=models.DateField(blank=True, default=django.utils.timezone.now, null=True),
+            model_name="hasta",
+            name="kayit_tarihi",
+            field=models.DateField(
+                blank=True, default=django.utils.timezone.now, null=True
+            ),
         ),
         migrations.AlterField(
-            model_name='hasta',
-            name='sigorta',
-            field=models.CharField(blank=True, choices=[(' ', ' '), ('ALZ', 'Allianz'), ('ALZKUR', 'Allianz Kurumsal'), ('EU', 'Euroka'), ('GRP', 'Groupama'), ('MPF', 'Mappfre'), ('AK', 'Ak Sigorta'), ('ACB', 'Acıbadem'), ('CP', 'Check-up')], default='ALZ', max_length=30),
+            model_name="hasta",
+            name="sigorta",
+            field=models.CharField(
+                blank=True,
+                choices=[
+                    (" ", " "),
+                    ("ALZ", "Allianz"),
+                    ("ALZKUR", "Allianz Kurumsal"),
+                    ("EU", "Euroka"),
+                    ("GRP", "Groupama"),
+                    ("MPF", "Mappfre"),
+                    ("AK", "Ak Sigorta"),
+                    ("ACB", "Acıbadem"),
+                    ("CP", "Check-up"),
+                ],
+                default="ALZ",
+                max_length=30,
+            ),
         ),
     ]

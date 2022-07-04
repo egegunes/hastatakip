@@ -8,33 +8,33 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randevu', '0002_randevu_state'),
+        ("randevu", "0002_randevu_state"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='randevu',
-            name='contact_phone',
-            field=models.CharField(max_length=13, verbose_name='İletişim'),
+            model_name="randevu",
+            name="contact_phone",
+            field=models.CharField(max_length=13, verbose_name="İletişim"),
         ),
         migrations.AlterField(
-            model_name='randevu',
-            name='date',
-            field=models.DateField(verbose_name='Tarih'),
+            model_name="randevu",
+            name="date",
+            field=models.DateField(verbose_name="Tarih"),
         ),
         migrations.AlterField(
-            model_name='randevu',
-            name='hasta',
-            field=models.CharField(max_length=64, verbose_name='Hasta'),
+            model_name="randevu",
+            name="hasta",
+            field=models.CharField(max_length=64, verbose_name="Hasta"),
         ),
         migrations.AlterField(
-            model_name='randevu',
-            name='person_number',
-            field=models.IntegerField(verbose_name='Kişi sayısı'),
+            model_name="randevu",
+            name="person_number",
+            field=models.IntegerField(verbose_name="Kişi sayısı"),
         ),
         migrations.AlterField(
-            model_name='randevu',
-            name='time',
-            field=models.TimeField(verbose_name='Saat'),
+            model_name="randevu",
+            name="time",
+            field=models.TimeField(verbose_name="Saat"),
         ),
     ]

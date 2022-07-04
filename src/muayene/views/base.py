@@ -4,6 +4,7 @@ from django.views.generic import View
 
 from muayene.views import detail, form
 
+
 class MuayeneBaseView(View):
     """
     According to request return different views.
@@ -13,7 +14,7 @@ class MuayeneBaseView(View):
 
         URL: /muayene/<pk>
         <pk>: pk of muayene entry.
-       
+
     POST request:
         DetailView have 4 different forms (recete, rapor, lab, file).
         Returns specific FormView according to submit type input's name.
@@ -25,17 +26,17 @@ class MuayeneBaseView(View):
         view = detail.MuayeneDetailView.as_view()
 
         return view(request, *args, **kwargs)
-    
+
     def post(self, request, *args, **kwargs):
-        if 'recete_form' in request.POST:
+        if "recete_form" in request.POST:
             view = form.ReceteFormView.as_view()
-        elif 'rapor_form' in request.POST:
+        elif "rapor_form" in request.POST:
             view = form.RaporFormView.as_view()
-        elif 'lab_form' in request.POST:
+        elif "lab_form" in request.POST:
             view = form.LabIstekFormView.as_view()
-        elif 'file_form' in request.POST:
+        elif "file_form" in request.POST:
             view = form.FileUploadFormView.as_view()
-        elif 'get_kullanim' == request.POST.get('action', ''):
+        elif "get_kullanim" == request.POST.get("action", ""):
             view = form.GetIlacKullanimView.as_view()
 
         return view(request, *args, **kwargs)

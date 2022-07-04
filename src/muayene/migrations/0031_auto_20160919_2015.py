@@ -8,17 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0030_auto_20160831_2149'),
+        ("muayene", "0030_auto_20160831_2149"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='muayene',
-            name='kullandigi_ilaclar',
+            model_name="muayene",
+            name="kullandigi_ilaclar",
         ),
         migrations.AddField(
-            model_name='muayene',
-            name='kullandigi_ilaclar',
-            field=models.TextField(blank=True, default=' ', max_length=512),
+            model_name="muayene",
+            name="kullandigi_ilaclar",
+            field=models.TextField(blank=True, default=" ", max_length=512),
         ),
     ]

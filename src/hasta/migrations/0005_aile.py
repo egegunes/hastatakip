@@ -8,16 +8,24 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0004_hasta_dogum_tarihi'),
+        ("hasta", "0004_hasta_dogum_tarihi"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Aile',
+            name="Aile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('soyad', models.CharField(max_length=30)),
-                ('uyeler', models.ManyToManyField(to='hasta.Hasta')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("soyad", models.CharField(max_length=30)),
+                ("uyeler", models.ManyToManyField(to="hasta.Hasta")),
             ],
         ),
     ]

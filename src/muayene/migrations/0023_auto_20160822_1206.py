@@ -9,63 +9,63 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0022_auto_20160814_2028'),
+        ("muayene", "0022_auto_20160814_2028"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ilac',
-            name='bilgi',
-            field=models.CharField(blank=True, default=' ', max_length=30),
+            model_name="ilac",
+            name="bilgi",
+            field=models.CharField(blank=True, default=" ", max_length=30),
         ),
         migrations.AlterField(
-            model_name='ilac',
-            name='kullanim',
-            field=models.CharField(blank=True, default=' ', max_length=30),
+            model_name="ilac",
+            name="kullanim",
+            field=models.CharField(blank=True, default=" ", max_length=30),
         ),
         migrations.AlterField(
-            model_name='laboratuvaristek',
-            name='tarih',
+            model_name="laboratuvaristek",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now, editable=False),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='baki',
-            field=models.TextField(blank=True, default=' ', max_length=255),
+            model_name="muayene",
+            name="baki",
+            field=models.TextField(blank=True, default=" ", max_length=255),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='oneri_gorusler',
-            field=models.TextField(blank=True, default=' ', max_length=255),
+            model_name="muayene",
+            name="oneri_gorusler",
+            field=models.TextField(blank=True, default=" ", max_length=255),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='ontani_tani',
-            field=models.TextField(blank=True, default=' ', max_length=255),
+            model_name="muayene",
+            name="ontani_tani",
+            field=models.TextField(blank=True, default=" ", max_length=255),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='ozel_notlar',
-            field=models.TextField(blank=True, default=' ', max_length=255),
+            model_name="muayene",
+            name="ozel_notlar",
+            field=models.TextField(blank=True, default=" ", max_length=255),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='yakinma',
-            field=models.TextField(blank=True, default=' ', max_length=255),
+            model_name="muayene",
+            name="yakinma",
+            field=models.TextField(blank=True, default=" ", max_length=255),
         ),
         migrations.AlterField(
-            model_name='rapor',
-            name='tani',
-            field=models.CharField(default=' ', max_length=255),
+            model_name="rapor",
+            name="tani",
+            field=models.CharField(default=" ", max_length=255),
         ),
         migrations.AlterField(
-            model_name='rapor',
-            name='tarih',
+            model_name="rapor",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now, editable=False),
         ),
         migrations.AlterField(
-            model_name='recete',
-            name='tarih',
+            model_name="recete",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now, editable=False),
         ),
     ]

@@ -1,49 +1,55 @@
-__all__ = ["archive", "create", "detail", "list", "prints", "update", "form", "base", "search"]
+__all__ = [
+    "archive",
+    "create",
+    "detail",
+    "list",
+    "prints",
+    "update",
+    "form",
+    "base",
+    "search",
+]
 
-from muayene.views.archive  import (
-    MuayeneArchiveView, 
+from muayene.views.archive import (
+    MuayeneArchiveView,
     MuayeneLastCreatedView,
     MuayeneWeekArchiveView,
     MuayeneMonthArciveView,
-    MuayeneYearArchiveView
+    MuayeneYearArchiveView,
 )
-from muayene.views.create   import (
-    MuayeneCreateView, 
-    IlacCreateView, 
-    MuayeneAliasCreateView
+from muayene.views.create import (
+    MuayeneCreateView,
+    IlacCreateView,
+    MuayeneAliasCreateView,
 )
-from muayene.views.detail   import (
-    MuayeneDetailView, 
+from muayene.views.detail import (
+    MuayeneDetailView,
 )
-from muayene.views.list     import (
+from muayene.views.list import (
     IlacListView,
     LastCreatedLabIstekView,
-    MuayeneAliasListView
+    MuayeneAliasListView,
 )
-from muayene.views.prints   import (
-    RecetePrintView, 
-    RaporPrintView, 
+from muayene.views.prints import (
+    RecetePrintView,
+    RaporPrintView,
     LabIstekPrintView,
     TTFPrintView,
     MultiTTFPrintView,
     AHSevkPrintView,
     ListPrintView,
-    BelgiumMedicalCertPrintView
+    BelgiumMedicalCertPrintView,
 )
-from muayene.views.update   import (
-    MuayeneUpdateView, 
+from muayene.views.update import (
+    MuayeneUpdateView,
 )
-from muayene.views.form     import (
-    ReceteFormView,        
+from muayene.views.form import (
+    ReceteFormView,
     RaporFormView,
     LabIstekFormView,
     FileUploadFormView,
     LabSonucFormView,
-    GetIlacKullanimView
+    GetIlacKullanimView,
 )
-from muayene.views.base     import (
-    MuayeneBaseView        
-)
-from muayene.views.search   import (
-    IlacSearchView
-)
+from muayene.views.base import MuayeneBaseView
+from muayene.views.search import IlacSearchView

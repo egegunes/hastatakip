@@ -9,17 +9,17 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0011_sozlesme'),
+        ("hasta", "0011_sozlesme"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='sozlesme',
-            name='sure',
+            model_name="sozlesme",
+            name="sure",
         ),
         migrations.AddField(
-            model_name='sozlesme',
-            name='baslangic_tarihi',
+            model_name="sozlesme",
+            name="baslangic_tarihi",
             field=models.DateField(default=django.utils.timezone.now),
         ),
     ]

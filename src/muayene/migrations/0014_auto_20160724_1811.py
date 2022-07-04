@@ -9,28 +9,28 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0013_auto_20160724_1807'),
+        ("muayene", "0013_auto_20160724_1807"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='laboratuvaristek',
-            name='tarih',
+            model_name="laboratuvaristek",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='tarih',
+            model_name="muayene",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='rapor',
-            name='tarih',
+            model_name="rapor",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now),
         ),
         migrations.AlterField(
-            model_name='recete',
-            name='tarih',
+            model_name="recete",
+            name="tarih",
             field=models.DateField(default=django.utils.timezone.now),
         ),
     ]

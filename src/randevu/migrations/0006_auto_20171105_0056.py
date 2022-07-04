@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randevu', '0005_auto_20170818_2112'),
+        ("randevu", "0005_auto_20170818_2112"),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='randevu',
+            name="randevu",
             unique_together=set([]),
         ),
     ]

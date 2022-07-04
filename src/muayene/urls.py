@@ -1,129 +1,65 @@
 # -*- coding: utf-8 -*-
 
-from django.conf.urls   import url
+from django.conf.urls import url
 
 from muayene import views
 
-app_name = 'muayene'
+app_name = "muayene"
 urlpatterns = [
+    url(r"^$", views.MuayeneCreateView.as_view(), name="index"),
+    url(r"^(?P<pk>[0-9]+)/$", views.MuayeneBaseView.as_view(), name="detail"),
+    url(r"^(?P<pk>[0-9]+)/duzenle/$", views.MuayeneUpdateView.as_view(), name="update"),
+    url(r"^(?P<pk>[0-9]+)/ttf/$", views.TTFPrintView.as_view(), name="ttf-print"),
+    url(r"^ttf/multi$", views.MultiTTFPrintView.as_view(), name="multi-ttf-print"),
+    url(r"^list-print/$", views.ListPrintView.as_view(), name="list-print"),
+    url(r"^(?P<pk>[0-9]+)/ahsevk/$", views.AHSevkPrintView.as_view(), name="ahsevk"),
     url(
-        r'^$',
-        views.MuayeneCreateView.as_view(),
-        name='index'
-    ),
-    url(
-        r'^(?P<pk>[0-9]+)/$',
-        views.MuayeneBaseView.as_view(),
-        name='detail'
-    ),        
-    url(
-        r'^(?P<pk>[0-9]+)/duzenle/$',
-        views.MuayeneUpdateView.as_view(),
-        name='update'
-    ),        
-    url(
-        r'^(?P<pk>[0-9]+)/ttf/$',
-        views.TTFPrintView.as_view(),
-        name='ttf-print'
-    ),        
-    url(
-        r'^ttf/multi$',
-        views.MultiTTFPrintView.as_view(),
-        name='multi-ttf-print'
-    ),        
-    url(
-        r'^list-print/$',
-        views.ListPrintView.as_view(),
-        name='list-print'
-    ),
-    url(
-        r'^(?P<pk>[0-9]+)/ahsevk/$',
-        views.AHSevkPrintView.as_view(),
-        name='ahsevk'
-    ),
-    url(
-        r'^(?P<pk>[0-9]+)/belgium/$',
+        r"^(?P<pk>[0-9]+)/belgium/$",
         views.BelgiumMedicalCertPrintView.as_view(),
-        name='belgium'
+        name="belgium",
     ),
+    url(r"^yeni/$", views.MuayeneCreateView.as_view(), name="create"),
+    url(r"^arsiv/$", views.MuayeneArchiveView.as_view(), name="archive-custom"),
     url(
-        r'^yeni/$',
-        views.MuayeneCreateView.as_view(),
-        name='create'
-    ),
-    url(
-        r'^arsiv/$',
-        views.MuayeneArchiveView.as_view(),
-        name='archive-custom'
-    ),
-    url(
-        r'^arsiv/(?P<year>[0-9]{4})/hafta/(?P<week>[0-9]+)/$',
+        r"^arsiv/(?P<year>[0-9]{4})/hafta/(?P<week>[0-9]+)/$",
         views.MuayeneWeekArchiveView.as_view(),
-        name = 'archive-week'
+        name="archive-week",
     ),
     url(
-        r'^arsiv/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$',
+        r"^arsiv/(?P<year>[0-9]{4})/(?P<month>[0-9]+)/$",
         views.MuayeneMonthArciveView.as_view(),
-        name = 'archive-month'
+        name="archive-month",
     ),
     url(
-        r'^arsiv/(?P<year>[0-9]{4})/$',
+        r"^arsiv/(?P<year>[0-9]{4})/$",
         views.MuayeneYearArchiveView.as_view(),
-        name = 'archive-year'
+        name="archive-year",
     ),
+    url(r"^list/son/$", views.MuayeneLastCreatedView.as_view(), name="archive-last"),
+    url(r"^list/lab/son/$", views.LastCreatedLabIstekView.as_view(), name="lab-last"),
     url(
-        r'^list/son/$',
-        views.MuayeneLastCreatedView.as_view(),
-        name='archive-last'
-    ),
-    url(
-        r'^list/lab/son/$',
-        views.LastCreatedLabIstekView.as_view(),
-        name='lab-last'
-    ),
-    url(
-        r'^recete/(?P<pk>[0-9]+)/print/$',
+        r"^recete/(?P<pk>[0-9]+)/print/$",
         views.RecetePrintView.as_view(),
-        name='recete-print'
+        name="recete-print",
     ),
     url(
-        r'^rapor/(?P<pk>[0-9]+)/print/$',
+        r"^rapor/(?P<pk>[0-9]+)/print/$",
         views.RaporPrintView.as_view(),
-        name='rapor-print'
+        name="rapor-print",
     ),
     url(
-        r'^lab/(?P<pk>[0-9]+)/print/$',
+        r"^lab/(?P<pk>[0-9]+)/print/$",
         views.LabIstekPrintView.as_view(),
-        name='lab-print'
+        name="lab-print",
     ),
     url(
-        r'^lab/(?P<pk>[0-9]+)/sonuc/$',
+        r"^lab/(?P<pk>[0-9]+)/sonuc/$",
         views.LabSonucFormView.as_view(),
-        name='lab-sonuc'
+        name="lab-sonuc",
     ),
-    url(
-        r'^ilac/ekle/$',
-        views.IlacCreateView.as_view(),
-        name='ilac-create'
-    ),
-    url(
-        r'^ilac/list/$',
-        views.IlacListView.as_view(),
-        name='ilac-list'
-    ),
-    url(
-        r'^ilac/ara/$',
-        views.IlacSearchView.as_view(),
-        name='ilac-ara'
-    ),
-    url(
-        r'^alias/list/$',
-        views.MuayeneAliasListView.as_view(),
-        name='alias-list'
-    ),
-    url(
-        r'^alias/ekle/$',
-        views.MuayeneAliasCreateView.as_view(),
-        name="alias-create"
-    )
+    url(r"^ilac/ekle/$", views.IlacCreateView.as_view(), name="ilac-create"),
+    url(r"^ilac/list/$", views.IlacListView.as_view(), name="ilac-list"),
+    url(r"^ilac/ara/$", views.IlacSearchView.as_view(), name="ilac-ara"),
+    url(r"^alias/list/$", views.MuayeneAliasListView.as_view(), name="alias-list"),
+    url(r"^alias/ekle/$", views.MuayeneAliasCreateView.as_view(), name="alias-create"),
 ]

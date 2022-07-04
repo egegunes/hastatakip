@@ -11,15 +11,17 @@ from hasta.models import Hasta
 
 
 class HastaLastCreatedView(LoginRequiredMixin, View):
-    login_url = '/login/'
-    template_name = 'hasta/hasta_list.html'
+    login_url = "/login/"
+    template_name = "hasta/hasta_list.html"
 
     def get(self, request, *args, **kwargs):
         today = datetime.date.today()
         yesterday = datetime.date.today() - datetime.timedelta(days=1)
-        queryset = Hasta.objects.filter(kayit_tarihi__gte=yesterday, kayit_tarihi__lte=today)
+        queryset = Hasta.objects.filter(
+            kayit_tarihi__gte=yesterday, kayit_tarihi__lte=today
+        )
 
-        return TemplateResponse(request, self.template_name, {'hasta_list': queryset})
+        return TemplateResponse(request, self.template_name, {"hasta_list": queryset})
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])

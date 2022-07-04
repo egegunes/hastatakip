@@ -9,16 +9,29 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0010_auto_20160727_1530'),
+        ("hasta", "0010_auto_20160727_1530"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Sozlesme',
+            name="Sozlesme",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('sure', models.CharField(blank=True, max_length=10)),
-                ('hasta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hasta.Hasta')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("sure", models.CharField(blank=True, max_length=10)),
+                (
+                    "hasta",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="hasta.Hasta"
+                    ),
+                ),
             ],
         ),
     ]

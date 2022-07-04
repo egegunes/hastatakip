@@ -8,13 +8,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0027_auto_20160823_1656'),
+        ("muayene", "0027_auto_20160823_1656"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='laboratuvaristek',
-            name='og11',
-            field=models.BooleanField(default=False, verbose_name='OGTT (75 gr Glikoz ile 0-60-120-180 dakikalarda)'),
+            model_name="laboratuvaristek",
+            name="og11",
+            field=models.BooleanField(
+                default=False,
+                verbose_name="OGTT (75 gr Glikoz ile 0-60-120-180 dakikalarda)",
+            ),
         ),
     ]

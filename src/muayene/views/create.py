@@ -3,36 +3,35 @@
 import datetime
 import json
 
-from django.contrib.auth.mixins     import LoginRequiredMixin
-from django.views.generic.edit      import CreateView, View
-from django.urls       import reverse
-from django.shortcuts               import redirect
-from django.http                    import HttpResponse, HttpResponseRedirect, Http404
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.edit import CreateView, View
+from django.urls import reverse
+from django.shortcuts import redirect
+from django.http import HttpResponse, HttpResponseRedirect, Http404
 
 from muayene.models import (
-    Muayene, 
-    Ilac, 
-    Recete, 
-    Rapor, 
-    LaboratuvarIstek, 
+    Muayene,
+    Ilac,
+    Recete,
+    Rapor,
+    LaboratuvarIstek,
     MuayeneRelatedFile,
-    MuayeneAlias
+    MuayeneAlias,
 )
 from muayene.forms import (
-    MuayeneCreateForm, 
-    ReceteCreateForm, 
-    IlacCreateForm, 
-    RaporCreateForm, 
-    LaboratuvarIstekForm, 
-    DateRangeForm, 
+    MuayeneCreateForm,
+    ReceteCreateForm,
+    IlacCreateForm,
+    RaporCreateForm,
+    LaboratuvarIstekForm,
+    DateRangeForm,
     MuayeneRelatedFileForm,
-    MuayeneAliasCreateForm
+    MuayeneAliasCreateForm,
 )
-from muayene.views.prints import (
-    AHSevkPrintView        
-)
+from muayene.views.prints import AHSevkPrintView
 
-from hasta.models                   import Hasta
+from hasta.models import Hasta
+
 
 class MuayeneCreateView(LoginRequiredMixin, CreateView):
     """
@@ -51,20 +50,22 @@ class MuayeneCreateView(LoginRequiredMixin, CreateView):
     URL: /muayene/yeni
     """
 
-    login_url = '/login/'
+    login_url = "/login/"
     model = Muayene
     form_class = MuayeneCreateForm
 
     def get(self, request, *args, **kwargs):
-        if 'slug' in self.kwargs:
-            slug = self.kwargs['slug']
+        if "slug" in self.kwargs:
+            slug = self.kwargs["slug"]
             hasta = Hasta.objects.get(slug=slug)
             qs = Muayene.objects.filter(hasta=hasta)
             today = datetime.date.today()
 
             if qs.filter(tarih=today).count() > 0:
                 muayene = Muayene.objects.get(hasta=hasta, tarih=today)
-                return HttpResponseRedirect(reverse('muayene:detail', kwargs={'pk': muayene.pk}))
+                return HttpResponseRedirect(
+                    reverse("muayene:detail", kwargs={"pk": muayene.pk})
+                )
             else:
                 return super(MuayeneCreateView, self).get(request, *args, **kwargs)
 
@@ -75,44 +76,45 @@ class MuayeneCreateView(LoginRequiredMixin, CreateView):
         if request.is_ajax():
             return self.ajax(request)
 
-        hasta_id = request.POST.get('hasta', '')
+        hasta_id = request.POST.get("hasta", "")
         hasta = Hasta.objects.get(pk=hasta_id)
         qs = Muayene.objects.filter(hasta=hasta)
         today = datetime.date.today()
 
         if qs.filter(tarih=today).count() > 0:
             muayene = Muayene.objects.get(hasta=hasta, tarih=today)
-            return HttpResponseRedirect(reverse('muayene:detail', kwargs={'pk': muayene.pk}))
+            return HttpResponseRedirect(
+                reverse("muayene:detail", kwargs={"pk": muayene.pk})
+            )
         else:
             return super(MuayeneCreateView, self).post(request, *args, **kwargs)
 
     def ajax(self, request):
         response_dict = {
-            'success': True,
+            "success": True,
         }
 
-        data = request.POST.get('shorthand', '')
-        terms = data.split() 
+        data = request.POST.get("shorthand", "")
+        terms = data.split()
         response = []
 
         for term in terms:
             response.append(MuayeneAlias.objects.get(shorthand=term).longhand)
 
-        response_str = ' '.join(response)
+        response_str = " ".join(response)
 
-        response_dict = {
-            'longhand': response_str 
-        }
+        response_dict = {"longhand": response_str}
 
         return HttpResponse(json.dumps(response_dict))
 
     def get_initial(self, **kwargs):
-        if 'slug' in self.kwargs:
-            slug = self.kwargs['slug']
+        if "slug" in self.kwargs:
+            slug = self.kwargs["slug"]
             hasta = Hasta.objects.get(slug=slug)
-            return {'hasta': hasta.pk}
+            return {"hasta": hasta.pk}
         else:
             return {}
+
 
 class IlacCreateView(LoginRequiredMixin, CreateView):
     """
@@ -121,12 +123,12 @@ class IlacCreateView(LoginRequiredMixin, CreateView):
     URL: /muayene/ilac/ekle
     """
 
-    login_url = '/login/'
+    login_url = "/login/"
     model = Ilac
     form_class = IlacCreateForm
 
+
 class MuayeneAliasCreateView(LoginRequiredMixin, CreateView):
-    login_url = '/login/'
+    login_url = "/login/"
     model = MuayeneAlias
     form_class = MuayeneAliasCreateForm
-

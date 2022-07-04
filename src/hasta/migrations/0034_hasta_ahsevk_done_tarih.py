@@ -9,13 +9,15 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0033_auto_20160919_2143'),
+        ("hasta", "0033_auto_20160919_2143"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='hasta',
-            name='ahsevk_done_tarih',
-            field=models.DateField(blank=True, default=django.utils.timezone.now, editable=False, null=True),
+            model_name="hasta",
+            name="ahsevk_done_tarih",
+            field=models.DateField(
+                blank=True, default=django.utils.timezone.now, editable=False, null=True
+            ),
         ),
     ]

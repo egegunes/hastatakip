@@ -2,28 +2,37 @@
 
 import os, datetime, random, string
 
-from django.core.exceptions         import ImproperlyConfigured
-from django.contrib.auth.mixins     import LoginRequiredMixin
-from django.utils.translation       import ugettext_lazy as _
-from django.views.generic           import View
-from django.http                    import HttpResponse, Http404, HttpResponseNotAllowed
-from django.conf                    import settings
+from django.core.exceptions import ImproperlyConfigured
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.translation import ugettext_lazy as _
+from django.views.generic import View
+from django.http import HttpResponse, Http404, HttpResponseNotAllowed
+from django.conf import settings
 
-from io                             import BytesIO
-from PyPDF2                         import PdfFileWriter, PdfFileReader, PdfFileMerger
-from reportlab.lib.colors           import Color
-from reportlab.pdfgen               import canvas
-from reportlab.pdfbase              import pdfmetrics
-from reportlab.pdfbase.pdfmetrics   import stringWidth
-from reportlab.pdfbase.ttfonts      import TTFont
-from reportlab.lib.pagesizes        import letter, landscape
-from reportlab.lib.units            import inch, cm
-from reportlab.lib.styles           import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus             import Paragraph, SimpleDocTemplate, Frame, FrameBreak, PageTemplate, Table, TableStyle
+from io import BytesIO
+from PyPDF2 import PdfFileWriter, PdfFileReader, PdfFileMerger
+from reportlab.lib.colors import Color
+from reportlab.pdfgen import canvas
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.pdfmetrics import stringWidth
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.lib.pagesizes import letter, landscape
+from reportlab.lib.units import inch, cm
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import (
+    Paragraph,
+    SimpleDocTemplate,
+    Frame,
+    FrameBreak,
+    PageTemplate,
+    Table,
+    TableStyle,
+)
 
-from unidecode                      import unidecode
+from unidecode import unidecode
 
-from muayene.models                 import Muayene, Recete, Rapor, LaboratuvarIstek
+from muayene.models import Muayene, Recete, Rapor, LaboratuvarIstek
+
 
 class PrintMixin(object):
     """
@@ -33,21 +42,24 @@ class PrintMixin(object):
     model = None
     font = None
     queryset = None
-    base_style = ParagraphStyle(name="base",
-                                fontName="PFS",
-                                textColor=Color(0, 0.3984375, 0.69921875))
+    base_style = ParagraphStyle(
+        name="base", fontName="PFS", textColor=Color(0, 0.3984375, 0.69921875)
+    )
 
     def get_queryset(self):
         if self.queryset is None:
             if self.model:
                 return self.model._default_manager.all()
             else:
-                raise ImproperlyConfigured("%(cls) is missing a QuerySet. Define %(cls)s.model" % {'cls': self.__class__.__name__})
+                raise ImproperlyConfigured(
+                    "%(cls) is missing a QuerySet. Define %(cls)s.model"
+                    % {"cls": self.__class__.__name__}
+                )
 
         return self.queryset.all()
 
     def get_object(self, queryset=None):
-        pk = self.kwargs.get('pk')
+        pk = self.kwargs.get("pk")
 
         if queryset is None:
             queryset = self.get_queryset()
@@ -60,7 +72,10 @@ class PrintMixin(object):
         try:
             obj = queryset.get()
         except queryset.model.DoesNotExist:
-            raise Http404(_("No %(verbose_name)s found matching the query") % {'verbose_name': queryset.model._meta.verbose_name})
+            raise Http404(
+                _("No %(verbose_name)s found matching the query")
+                % {"verbose_name": queryset.model._meta.verbose_name}
+            )
 
         return obj
 
@@ -70,8 +85,9 @@ class PrintMixin(object):
         pdfmetrics.registerFont(TTFont("PFS", font))
         pdfmetrics.registerFont(TTFont("Vera", "Vera.ttf"))
 
+
 class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     model = Recete
 
     def get(self, request, *args, **kwargs):
@@ -85,86 +101,108 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
         title = unidecode("%s-%s-recete-%s-%s" % (ad, soyad, pk, muayene_tarihi))
         filename = title + ".pdf"
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         buff = BytesIO()
 
-        doc = SimpleDocTemplate(buff,
-                                pagesize=letter,
-                                title=title,
-                                author="Dr. Ziya T. Güneş",
-                                rightMargin=inch/4,
-                                leftMargin=inch/4,
-                                topMargin=inch/2,
-                                bottomMargin=inch/4,
-                                showBoundary=0)
+        doc = SimpleDocTemplate(
+            buff,
+            pagesize=letter,
+            title=title,
+            author="Dr. Ziya T. Güneş",
+            rightMargin=inch / 4,
+            leftMargin=inch / 4,
+            topMargin=inch / 2,
+            bottomMargin=inch / 4,
+            showBoundary=0,
+        )
 
-        frame1 = Frame(doc.leftMargin,
-                       doc.bottomMargin,
-                       doc.width,
-                       doc.height / 8,
-                       id="footer")
-        frame2 = Frame(doc.leftMargin,
-                       doc.bottomMargin + doc.height / 8 + 6,
-                       doc.width,
-                       doc.height * 6 / 8,
-                       id="body")
-        frame3 = Frame(doc.leftMargin,
-                       doc.bottomMargin + doc.height * 7 / 8 + 12,
-                       doc.width * 3 / 4 - 6,
-                       doc.height / 8,
-                       id="header_right")
-        frame4 = Frame(doc.leftMargin + doc.width * 3 / 4 + 6,
-                       doc.bottomMargin + doc.height * 7 / 8 + 12,
-                       doc.width / 4 - 6,
-                       doc.height / 8,
-                       id="header_left")
+        frame1 = Frame(
+            doc.leftMargin, doc.bottomMargin, doc.width, doc.height / 8, id="footer"
+        )
+        frame2 = Frame(
+            doc.leftMargin,
+            doc.bottomMargin + doc.height / 8 + 6,
+            doc.width,
+            doc.height * 6 / 8,
+            id="body",
+        )
+        frame3 = Frame(
+            doc.leftMargin,
+            doc.bottomMargin + doc.height * 7 / 8 + 12,
+            doc.width * 3 / 4 - 6,
+            doc.height / 8,
+            id="header_right",
+        )
+        frame4 = Frame(
+            doc.leftMargin + doc.width * 3 / 4 + 6,
+            doc.bottomMargin + doc.height * 7 / 8 + 12,
+            doc.width / 4 - 6,
+            doc.height / 8,
+            id="header_left",
+        )
 
         receteTemplate = PageTemplate(frames=[frame1, frame2, frame3, frame4])
         doc.addPageTemplates(receteTemplate)
 
         self.register_font()
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="footer",
-                                  fontName="Vera",
-                                  fontSize=10,
-                                  alignment=2,
-                                  leading=20))
-        styles.add(ParagraphStyle(name="heading",
-                                  parent=self.base_style,
-                                  fontSize=20,
-                                  alignment=0,
-                                  spaceAfter=40))
-        styles.add(ParagraphStyle(name="ilac_ad",
-                                  parent=self.base_style,
-                                  fontSize=14,
-                                  alignment=0,
-                                  leftIndent=30,
-                                  spaceAfter=10,
-                                  leading=20))
-        styles.add(ParagraphStyle(name="ilac_kullanim",
-                                  parent=self.base_style,
-                                  fontSize=12,
-                                  alignment=0,
-                                  leftIndent=50,
-                                  spaceAfter=20,
-                                  leading=20))
-        styles.add(ParagraphStyle(name="header_left",
-                                  parent=self.base_style,
-                                  fontSize=12,
-                                  alignment=0))
-        styles.add(ParagraphStyle(name="header_right",
-                                  parent=self.base_style,
-                                  fontSize=12,
-                                  alignment=2))
+        styles.add(
+            ParagraphStyle(
+                name="footer", fontName="Vera", fontSize=10, alignment=2, leading=20
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="heading",
+                parent=self.base_style,
+                fontSize=20,
+                alignment=0,
+                spaceAfter=40,
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="ilac_ad",
+                parent=self.base_style,
+                fontSize=14,
+                alignment=0,
+                leftIndent=30,
+                spaceAfter=10,
+                leading=20,
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="ilac_kullanim",
+                parent=self.base_style,
+                fontSize=12,
+                alignment=0,
+                leftIndent=50,
+                spaceAfter=20,
+                leading=20,
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="header_left", parent=self.base_style, fontSize=12, alignment=0
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="header_right", parent=self.base_style, fontSize=12, alignment=2
+            )
+        )
 
         story = []
 
-        ad = Paragraph("Dr. Ziya T. GÜNEŞ", styles['footer'])
-        tel = Paragraph("0(232) 422 00 56", styles['footer'])
-        mail = Paragraph("info@ziyagunes.com", styles['footer'])
-        adres = Paragraph("Işılay Saygın Sokak No:17 Kat:2 Alsancak/İzmir", styles['footer'])
+        ad = Paragraph("Dr. Ziya T. GÜNEŞ", styles["footer"])
+        tel = Paragraph("0(232) 422 00 56", styles["footer"])
+        mail = Paragraph("info@ziyagunes.com", styles["footer"])
+        adres = Paragraph(
+            "Işılay Saygın Sokak No:17 Kat:2 Alsancak/İzmir", styles["footer"]
+        )
 
         story.append(ad)
         story.append(tel)
@@ -173,49 +211,73 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
 
         story.append(FrameBreak())
 
-        heading = Paragraph("R<u>p/</u>", styles['heading'])
+        heading = Paragraph("R<u>p/</u>", styles["heading"])
 
         story.append(heading)
 
-        ilac1 = Paragraph("1. %s (%d kutu)" % (recete.ilac1.ad, recete.ilac1_kutu), styles['ilac_ad'])
-        ilac1_kullanim = Paragraph("S: %s" % (recete.ilac1_kullanim), styles['ilac_kullanim'])
+        ilac1 = Paragraph(
+            "1. %s (%d kutu)" % (recete.ilac1.ad, recete.ilac1_kutu), styles["ilac_ad"]
+        )
+        ilac1_kullanim = Paragraph(
+            "S: %s" % (recete.ilac1_kullanim), styles["ilac_kullanim"]
+        )
         story.append(ilac1)
         story.append(ilac1_kullanim)
 
         if recete.ilac2:
-            ilac2 = Paragraph("2. %s (%d kutu)" % (recete.ilac2.ad, recete.ilac2_kutu), styles['ilac_ad'])
-            ilac2_kullanim = Paragraph("S: %s" % (recete.ilac2_kullanim), styles['ilac_kullanim'])
+            ilac2 = Paragraph(
+                "2. %s (%d kutu)" % (recete.ilac2.ad, recete.ilac2_kutu),
+                styles["ilac_ad"],
+            )
+            ilac2_kullanim = Paragraph(
+                "S: %s" % (recete.ilac2_kullanim), styles["ilac_kullanim"]
+            )
             story.append(ilac2)
             story.append(ilac2_kullanim)
 
         if recete.ilac3:
-            ilac3 = Paragraph("3. %s (%d kutu)" % (recete.ilac3.ad, recete.ilac3_kutu), styles['ilac_ad'])
-            ilac3_kullanim = Paragraph("S: %s" % (recete.ilac3_kullanim), styles['ilac_kullanim'])
+            ilac3 = Paragraph(
+                "3. %s (%d kutu)" % (recete.ilac3.ad, recete.ilac3_kutu),
+                styles["ilac_ad"],
+            )
+            ilac3_kullanim = Paragraph(
+                "S: %s" % (recete.ilac3_kullanim), styles["ilac_kullanim"]
+            )
             story.append(ilac3)
             story.append(ilac3_kullanim)
 
         if recete.ilac4:
-            ilac4 = Paragraph("4. %s (%d kutu)" % (recete.ilac4.ad, recete.ilac4_kutu), styles['ilac_ad'])
-            ilac4_kullanim = Paragraph("S: %s" % (recete.ilac4_kullanim), styles['ilac_kullanim'])
+            ilac4 = Paragraph(
+                "4. %s (%d kutu)" % (recete.ilac4.ad, recete.ilac4_kutu),
+                styles["ilac_ad"],
+            )
+            ilac4_kullanim = Paragraph(
+                "S: %s" % (recete.ilac4_kullanim), styles["ilac_kullanim"]
+            )
             story.append(ilac4)
             story.append(ilac4_kullanim)
 
         if recete.ilac5:
-            ilac5 = Paragraph("5. %s (%d kutu)" % (recete.ilac5.ad, recete.ilac5_kutu), styles['ilac_ad'])
-            ilac5_kullanim = Paragraph("S: %s" % (recete.ilac5_kullanim), styles['ilac_kullanim'])
+            ilac5 = Paragraph(
+                "5. %s (%d kutu)" % (recete.ilac5.ad, recete.ilac5_kutu),
+                styles["ilac_ad"],
+            )
+            ilac5_kullanim = Paragraph(
+                "S: %s" % (recete.ilac5_kullanim), styles["ilac_kullanim"]
+            )
             story.append(ilac5)
             story.append(ilac5_kullanim)
 
         story.append(FrameBreak())
 
         hasta = str(recete.hasta)
-        hasta_paragraph = Paragraph(hasta, styles['header_left'])
+        hasta_paragraph = Paragraph(hasta, styles["header_left"])
 
         story.append(hasta_paragraph)
 
         story.append(FrameBreak())
 
-        tarih_paragraph = Paragraph(muayene_tarihi, styles['header_right'])
+        tarih_paragraph = Paragraph(muayene_tarihi, styles["header_right"])
 
         story.append(tarih_paragraph)
 
@@ -227,10 +289,11 @@ class RecetePrintView(PrintMixin, LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     model = Rapor
 
     def get(self, request, *args, **kwargs):
@@ -244,59 +307,66 @@ class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
         title = unidecode("%s-%s-rapor-%s-%s" % (ad, soyad, pk, muayene_tarihi))
         filename = title + ".pdf"
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         buff = BytesIO()
 
-        doc = SimpleDocTemplate(buff,
-                                pagesize=letter,
-                                title=title,
-                                author="Dr. Ziya T. Güneş",
-                                topMargin=inch/2,
-                                bottomMargin=inch/4,
-                                leftMargin=inch/4,
-                                rightMargin=inch/4)
+        doc = SimpleDocTemplate(
+            buff,
+            pagesize=letter,
+            title=title,
+            author="Dr. Ziya T. Güneş",
+            topMargin=inch / 2,
+            bottomMargin=inch / 4,
+            leftMargin=inch / 4,
+            rightMargin=inch / 4,
+        )
 
-        frame1 = Frame(doc.leftMargin,
-                       doc.bottomMargin,
-                       doc.width,
-                       doc.height / 8,
-                       id="footer")
-        frame2 = Frame(doc.leftMargin,
-                       doc.bottomMargin + doc.height / 8 + 6,
-                       doc.width,
-                       doc.height * 6 / 8,
-                       id="body")
-        frame3 = Frame(doc.leftMargin,
-                       doc.bottomMargin + doc.height * 7 / 8 + 6,
-                       doc.width,
-                       doc.height / 8,
-                       id="header")
+        frame1 = Frame(
+            doc.leftMargin, doc.bottomMargin, doc.width, doc.height / 8, id="footer"
+        )
+        frame2 = Frame(
+            doc.leftMargin,
+            doc.bottomMargin + doc.height / 8 + 6,
+            doc.width,
+            doc.height * 6 / 8,
+            id="body",
+        )
+        frame3 = Frame(
+            doc.leftMargin,
+            doc.bottomMargin + doc.height * 7 / 8 + 6,
+            doc.width,
+            doc.height / 8,
+            id="header",
+        )
 
-        receteTemplate = PageTemplate(frames=[frame1, frame2,frame3])
+        receteTemplate = PageTemplate(frames=[frame1, frame2, frame3])
         doc.addPageTemplates(receteTemplate)
 
         self.register_font()
 
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="centered",
-                                  parent=self.base_style,
-                                  alignment=1,
-                                  fontSize=24,
-                                  spaceAfter=30))
-        styles.add(ParagraphStyle(name="body",
-                                  parent=self.base_style,
-                                  fontSize=12,
-                                  leading=20))
-        styles.add(ParagraphStyle(name="footer",
-                                  fontName="Vera",
-                                  fontSize=10,
-                                  leading=20,
-                                  alignment=2))
-        styleH = styles['centered']
-        styleB = styles['body']
-        styleF = styles['footer']
+        styles.add(
+            ParagraphStyle(
+                name="centered",
+                parent=self.base_style,
+                alignment=1,
+                fontSize=24,
+                spaceAfter=30,
+            )
+        )
+        styles.add(
+            ParagraphStyle(name="body", parent=self.base_style, fontSize=12, leading=20)
+        )
+        styles.add(
+            ParagraphStyle(
+                name="footer", fontName="Vera", fontSize=10, leading=20, alignment=2
+            )
+        )
+        styleH = styles["centered"]
+        styleB = styles["body"]
+        styleF = styles["footer"]
 
         story = []
 
@@ -306,7 +376,10 @@ class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
         gun = str(rapor.gun)
 
         heading = "RAPOR"
-        body = "%s tarihinde başvuran, %s doğum tarihli %s'ın %s tanısı ile %s gün istirahati uygundur." % (muayene_tarihi, dogum_tarihi, hasta, tani, gun)
+        body = (
+            "%s tarihinde başvuran, %s doğum tarihli %s'ın %s tanısı ile %s gün istirahati uygundur."
+            % (muayene_tarihi, dogum_tarihi, hasta, tani, gun)
+        )
         tel = "0(232) 422 00 56"
         mail = "info@ziyagunes.com"
         adres = "Işılay Saygın Sokak No:17 Kat:2 Alsancak/İzmir"
@@ -328,10 +401,11 @@ class RaporPrintView(PrintMixin, LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     model = LaboratuvarIstek
 
     def get(self, request, *args, **kwargs):
@@ -345,79 +419,97 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
         title = unidecode("%s-%s-istek-%s-%s" % (ad, soyad, pk, muayene_tarihi))
         filename = title + ".pdf"
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         buff = BytesIO()
 
-        doc = SimpleDocTemplate(buff,
-                                pagesize=letter,
-                                title=title,
-                                author="Dr. Ziya T. Güneş",
-                                rightMargin=inch/4,
-                                leftMargin=inch/4,
-                                topMargin=inch/2,
-                                bottomMargin=inch/4,
-                                showBoundary=0)
+        doc = SimpleDocTemplate(
+            buff,
+            pagesize=letter,
+            title=title,
+            author="Dr. Ziya T. Güneş",
+            rightMargin=inch / 4,
+            leftMargin=inch / 4,
+            topMargin=inch / 2,
+            bottomMargin=inch / 4,
+            showBoundary=0,
+        )
 
-        frame1 = Frame(doc.leftMargin,
-                       doc.bottomMargin,
-                       doc.width,
-                       doc.height / 8,
-                       id="footer")
-        frame2 = Frame(doc.leftMargin,
-                       doc.bottomMargin + doc.height / 8 + 6,
-                       doc.width,
-                       doc.height * 6 / 8,
-                       id="body")
-        frame3 = Frame(doc.leftMargin,
-                       doc.bottomMargin + doc.height * 7 / 8 + 12,
-                       doc.width * 3 / 4 - 6,
-                       doc.height / 8,
-                       id="header_right")
-        frame4 = Frame(doc.leftMargin + doc.width * 3 / 4 + 6,
-                       doc.bottomMargin + doc.height * 7 / 8 + 12,
-                       doc.width / 4 - 6,
-                       doc.height / 8,
-                       id="header_left")
+        frame1 = Frame(
+            doc.leftMargin, doc.bottomMargin, doc.width, doc.height / 8, id="footer"
+        )
+        frame2 = Frame(
+            doc.leftMargin,
+            doc.bottomMargin + doc.height / 8 + 6,
+            doc.width,
+            doc.height * 6 / 8,
+            id="body",
+        )
+        frame3 = Frame(
+            doc.leftMargin,
+            doc.bottomMargin + doc.height * 7 / 8 + 12,
+            doc.width * 3 / 4 - 6,
+            doc.height / 8,
+            id="header_right",
+        )
+        frame4 = Frame(
+            doc.leftMargin + doc.width * 3 / 4 + 6,
+            doc.bottomMargin + doc.height * 7 / 8 + 12,
+            doc.width / 4 - 6,
+            doc.height / 8,
+            id="header_left",
+        )
 
         receteTemplate = PageTemplate(frames=[frame1, frame2, frame3, frame4])
         doc.addPageTemplates(receteTemplate)
 
         self.register_font()
         styles = getSampleStyleSheet()
-        styles.add(ParagraphStyle(name="footer",
-                                  fontName="Vera",
-                                  fontSize=10,
-                                  alignment=2,
-                                  leading=20))
-        styles.add(ParagraphStyle(name="heading",
-                                  parent=self.base_style,
-                                  fontSize=16,
-                                  alignment=1,
-                                  spaceAfter=30))
-        styles.add(ParagraphStyle(name="body",
-                                  parent=self.base_style,
-                                  fontSize=10,
-                                  alignment=0,
-                                  leftIndent=30,
-                                  spaceAfter=0,
-                                  leading=20))
-        styles.add(ParagraphStyle(name="header_left",
-                                  parent=self.base_style,
-                                  fontSize=12,
-                                  alignment=0))
-        styles.add(ParagraphStyle(name="header_right",
-                                  parent=self.base_style,
-                                  fontSize=12,
-                                  alignment=2))
+        styles.add(
+            ParagraphStyle(
+                name="footer", fontName="Vera", fontSize=10, alignment=2, leading=20
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="heading",
+                parent=self.base_style,
+                fontSize=16,
+                alignment=1,
+                spaceAfter=30,
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="body",
+                parent=self.base_style,
+                fontSize=10,
+                alignment=0,
+                leftIndent=30,
+                spaceAfter=0,
+                leading=20,
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="header_left", parent=self.base_style, fontSize=12, alignment=0
+            )
+        )
+        styles.add(
+            ParagraphStyle(
+                name="header_right", parent=self.base_style, fontSize=12, alignment=2
+            )
+        )
 
         story = []
 
-        ad = Paragraph("Dr. Ziya T. GÜNEŞ", styles['footer'])
-        tel = Paragraph("0(232) 422 00 56", styles['footer'])
-        mail = Paragraph("info@ziyagunes.com", styles['footer'])
-        adres = Paragraph("Işılay Saygın Sokak No:17 Kat:2 Alsancak/İzmir", styles['footer'])
+        ad = Paragraph("Dr. Ziya T. GÜNEŞ", styles["footer"])
+        tel = Paragraph("0(232) 422 00 56", styles["footer"])
+        mail = Paragraph("info@ziyagunes.com", styles["footer"])
+        adres = Paragraph(
+            "Işılay Saygın Sokak No:17 Kat:2 Alsancak/İzmir", styles["footer"]
+        )
 
         story.append(ad)
         story.append(tel)
@@ -426,24 +518,24 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
 
         story.append(FrameBreak())
 
-        heading = Paragraph("TETKİK İSTEM", styles['heading'])
+        heading = Paragraph("TETKİK İSTEM", styles["heading"])
 
         story.append(heading)
 
         for name in istek.get_true_fields():
-            par1 = Paragraph("* %s" % (name), styles['body'])
+            par1 = Paragraph("* %s" % (name), styles["body"])
             story.append(par1)
 
         story.append(FrameBreak())
 
         hasta = str(istek.hasta)
-        hasta_paragraph = Paragraph(hasta, styles['header_left'])
+        hasta_paragraph = Paragraph(hasta, styles["header_left"])
 
         story.append(hasta_paragraph)
 
         story.append(FrameBreak())
 
-        tarih_paragraph = Paragraph(muayene_tarihi, styles['header_right'])
+        tarih_paragraph = Paragraph(muayene_tarihi, styles["header_right"])
 
         story.append(tarih_paragraph)
 
@@ -455,10 +547,11 @@ class LabIstekPrintView(PrintMixin, LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     model = Muayene
 
     def get(self, request, *args, **kwargs):
@@ -481,8 +574,8 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         title = unidecode("%s-%s-ttf-%s-%s" % (ad, soyad, pk, muayene_tarihi))
         filename = title + ".pdf"
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         buff = BytesIO()
 
@@ -507,7 +600,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         line1_width = line2_width = line3_width = 0
 
         for word in yakinma_words:
-            line1_width = stringWidth(' '.join(yakinma_line1), 'PFS', 7)
+            line1_width = stringWidth(" ".join(yakinma_line1), "PFS", 7)
             if line1_width < 270:
                 yakinma_line1.append(word)
             else:
@@ -518,7 +611,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         if line1_width > 270:
             for word in leftovers:
                 yakinma_line2.append(word)
-                line2_width = stringWidth(' '.join(yakinma_line2), "PFS", 7)
+                line2_width = stringWidth(" ".join(yakinma_line2), "PFS", 7)
                 if line2_width > 500:
                     word_index = leftovers.index(word)
                     yakinma_line2 = leftovers[:word_index]
@@ -528,16 +621,16 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         if line2_width > 500:
             for word in leftovers:
                 yakinma_line3.append(word)
-                line3_width = stringWidth(' '.join(yakinma_line3), "PFS", 7)
+                line3_width = stringWidth(" ".join(yakinma_line3), "PFS", 7)
                 if line3_width > 500:
                     word_index = leftovers.index(word)
                     yakinma_line3 = yakinma_line2[:word_index]
                     leftovers = leftovers[word_index:]
                     break
 
-        can.drawString(250, 513, ' '.join(yakinma_line1))
-        can.drawString(70, 503, ' '.join(yakinma_line2))
-        can.drawString(70, 493, ' '.join(yakinma_line3))
+        can.drawString(250, 513, " ".join(yakinma_line1))
+        can.drawString(70, 503, " ".join(yakinma_line2))
+        can.drawString(70, 493, " ".join(yakinma_line3))
 
         ilaclar = kullandigi_ilaclar.split("/")
         ilaclar_line1 = []
@@ -545,12 +638,12 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         for ilac in ilaclar:
             ilaclar_line1.append(ilac)
-            width = stringWidth(','.join(ilaclar_line1), "PFS", 7)
+            width = stringWidth(",".join(ilaclar_line1), "PFS", 7)
             if width > 315:
                 ilaclar_line2.append(ilaclar_line1.pop())
 
-        ilac_line1 = ','.join(ilaclar_line1)
-        ilac_line2 = ','.join(ilaclar_line2)
+        ilac_line1 = ",".join(ilaclar_line1)
+        ilac_line2 = ",".join(ilaclar_line2)
 
         can.drawString(250, 412, ilac_line1)
         can.drawString(60, 400, ilac_line2)
@@ -563,7 +656,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         line1_width = line2_width = line3_width = 0
 
         for word in baki_words:
-            line1_width = stringWidth(' '.join(baki_line1), 'PFS', 7)
+            line1_width = stringWidth(" ".join(baki_line1), "PFS", 7)
             if line1_width < 270:
                 baki_line1.append(word)
             else:
@@ -574,7 +667,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         if line1_width > 270:
             for word in leftovers:
                 baki_line2.append(word)
-                line2_width = stringWidth(' '.join(baki_line2), "PFS", 7)
+                line2_width = stringWidth(" ".join(baki_line2), "PFS", 7)
                 if line2_width > 500:
                     word_index = leftovers.index(word)
                     baki_line2 = leftovers[:word_index]
@@ -584,16 +677,16 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         if line2_width > 500:
             for word in leftovers:
                 baki_line3.append(word)
-                line3_width = stringWidth(' '.join(baki_line3), "PFS", 7)
+                line3_width = stringWidth(" ".join(baki_line3), "PFS", 7)
                 if line3_width > 500:
                     word_index = leftovers.index(word)
                     baki_line3 = leftovers[:word_index]
                     leftovers = leftovers[word_index:]
                     break
 
-        can.drawString(250, 375, ' '.join(baki_line1))
-        can.drawString(60, 360, ' '.join(baki_line2))
-        can.drawString(60, 345, ' '.join(baki_line3))
+        can.drawString(250, 375, " ".join(baki_line1))
+        can.drawString(60, 360, " ".join(baki_line2))
+        can.drawString(60, 345, " ".join(baki_line3))
 
         tani_words = tani.split()
         leftovers = []
@@ -603,7 +696,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         line1_width = line2_width = line3_width = 0
 
         for word in tani_words:
-            line1_width = stringWidth(' '.join(tani_line1), 'PFS', 7)
+            line1_width = stringWidth(" ".join(tani_line1), "PFS", 7)
             if line1_width < 90:
                 tani_line1.append(word)
             else:
@@ -614,7 +707,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         if line1_width > 90:
             for word in leftovers:
                 tani_line2.append(word)
-                line2_width = stringWidth(' '.join(tani_line2), "PFS", 7)
+                line2_width = stringWidth(" ".join(tani_line2), "PFS", 7)
                 if line2_width > 300:
                     word_index = leftovers.index(word)
                     tani_line2 = leftovers[:word_index]
@@ -624,16 +717,16 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         if line2_width > 300:
             for word in leftovers:
                 tani_line3.append(word)
-                line3_width = stringWidth(' '.join(tani_line3), "PFS", 7)
+                line3_width = stringWidth(" ".join(tani_line3), "PFS", 7)
                 if line3_width > 300:
                     word_index = leftovers.index(word)
                     tani_line3 = leftovers[:word_index]
                     leftovers = leftovers[word_index:]
                     break
 
-        can.drawString(250, 280, ' '.join(tani_line1))
-        can.drawString(60, 265, ' '.join(tani_line2))
-        can.drawString(60, 245, ' '.join(tani_line3))
+        can.drawString(250, 280, " ".join(tani_line1))
+        can.drawString(60, 265, " ".join(tani_line2))
+        can.drawString(60, 245, " ".join(tani_line3))
 
         yas = muayene.hasta.age()
         if yas > 18:
@@ -649,7 +742,7 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         ttf_filled = PdfFileReader(buff)
 
-        FILE = os.path.join(settings.BASE_DIR, 'staticfiles/TTF.pdf')
+        FILE = os.path.join(settings.BASE_DIR, "staticfiles/TTF.pdf")
         ttf_empty = PdfFileReader(open(FILE, "rb"))
 
         output = PdfFileWriter()
@@ -665,27 +758,28 @@ class TTFPrintView(PrintMixin, LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     queryset = Muayene.objects.all()
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['GET'])
+        return HttpResponseNotAllowed(["GET"])
 
     def post(self, request, *args, **kwargs):
-        start = request.POST.get('start', '')
-        end = request.POST.get('end', '')
+        start = request.POST.get("start", "")
+        end = request.POST.get("end", "")
 
-        qs = self.queryset.filter(tarih__gte=start,tarih__lte=end)
+        qs = self.queryset.filter(tarih__gte=start, tarih__lte=end)
 
         self.register_font()
 
         files = []
 
         for muayene in qs:
-            filename = ''.join(random.choice(string.ascii_lowercase) for i in range(10))
+            filename = "".join(random.choice(string.ascii_lowercase) for i in range(10))
 
             buff = BytesIO()
             can = canvas.Canvas(buff, pagesize=letter)
@@ -722,7 +816,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             line1_width = line2_width = line3_width = 0
 
             for word in yakinma_words:
-                line1_width = stringWidth(' '.join(yakinma_line1), 'PFS', 7)
+                line1_width = stringWidth(" ".join(yakinma_line1), "PFS", 7)
                 if line1_width < 270:
                     yakinma_line1.append(word)
                 else:
@@ -733,7 +827,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             if line1_width > 270:
                 for word in leftovers:
                     yakinma_line2.append(word)
-                    line2_width = stringWidth(' '.join(yakinma_line2), "PFS", 7)
+                    line2_width = stringWidth(" ".join(yakinma_line2), "PFS", 7)
                     if line2_width > 500:
                         word_index = leftovers.index(word)
                         yakinma_line2 = leftovers[:word_index]
@@ -743,16 +837,16 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             if line2_width > 500:
                 for word in leftovers:
                     yakinma_line3.append(word)
-                    line3_width = stringWidth(' '.join(yakinma_line3), "PFS", 7)
+                    line3_width = stringWidth(" ".join(yakinma_line3), "PFS", 7)
                     if line3_width > 500:
                         word_index = leftovers.index(word)
                         yakinma_line3 = yakinma_line2[:word_index]
                         leftovers = leftovers[word_index:]
                         break
 
-            can.drawString(250, 513, ' '.join(yakinma_line1))
-            can.drawString(70, 503, ' '.join(yakinma_line2))
-            can.drawString(70, 493, ' '.join(yakinma_line3))
+            can.drawString(250, 513, " ".join(yakinma_line1))
+            can.drawString(70, 503, " ".join(yakinma_line2))
+            can.drawString(70, 493, " ".join(yakinma_line3))
 
             ilaclar = kullandigi_ilaclar.split("/")
             ilaclar_line1 = []
@@ -760,12 +854,12 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
             for ilac in ilaclar:
                 ilaclar_line1.append(ilac)
-                width = stringWidth(','.join(ilaclar_line1), "PFS", 7)
+                width = stringWidth(",".join(ilaclar_line1), "PFS", 7)
                 if width > 315:
                     ilaclar_line2.append(ilaclar_line1.pop())
 
-            ilac_line1 = ','.join(ilaclar_line1)
-            ilac_line2 = ','.join(ilaclar_line2)
+            ilac_line1 = ",".join(ilaclar_line1)
+            ilac_line2 = ",".join(ilaclar_line2)
 
             can.drawString(250, 412, ilac_line1)
             can.drawString(60, 400, ilac_line2)
@@ -778,7 +872,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             line1_width = line2_width = line3_width = 0
 
             for word in baki_words:
-                line1_width = stringWidth(' '.join(baki_line1), 'PFS', 7)
+                line1_width = stringWidth(" ".join(baki_line1), "PFS", 7)
                 if line1_width < 270:
                     baki_line1.append(word)
                 else:
@@ -789,7 +883,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             if line1_width > 270:
                 for word in leftovers:
                     baki_line2.append(word)
-                    line2_width = stringWidth(' '.join(baki_line2), "PFS", 7)
+                    line2_width = stringWidth(" ".join(baki_line2), "PFS", 7)
                     if line2_width > 500:
                         word_index = leftovers.index(word)
                         baki_line2 = leftovers[:word_index]
@@ -799,16 +893,16 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             if line2_width > 500:
                 for word in leftovers:
                     baki_line3.append(word)
-                    line3_width = stringWidth(' '.join(baki_line3), "PFS", 7)
+                    line3_width = stringWidth(" ".join(baki_line3), "PFS", 7)
                     if line3_width > 500:
                         word_index = leftovers.index(word)
                         baki_line3 = leftovers[:word_index]
                         leftovers = leftovers[word_index:]
                         break
 
-            can.drawString(250, 375, ' '.join(baki_line1))
-            can.drawString(60, 360, ' '.join(baki_line2))
-            can.drawString(60, 345, ' '.join(baki_line3))
+            can.drawString(250, 375, " ".join(baki_line1))
+            can.drawString(60, 360, " ".join(baki_line2))
+            can.drawString(60, 345, " ".join(baki_line3))
 
             tani_words = tani.split()
             leftovers = []
@@ -818,7 +912,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             line1_width = line2_width = line3_width = 0
 
             for word in tani_words:
-                line1_width = stringWidth(' '.join(tani_line1), 'PFS', 7)
+                line1_width = stringWidth(" ".join(tani_line1), "PFS", 7)
                 if line1_width < 90:
                     tani_line1.append(word)
                 else:
@@ -829,7 +923,7 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             if line1_width > 90:
                 for word in leftovers:
                     tani_line2.append(word)
-                    line2_width = stringWidth(' '.join(tani_line2), "PFS", 7)
+                    line2_width = stringWidth(" ".join(tani_line2), "PFS", 7)
                     if line2_width > 300:
                         word_index = leftovers.index(word)
                         tani_line2 = leftovers[:word_index]
@@ -839,16 +933,16 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             if line2_width > 300:
                 for word in leftovers:
                     tani_line3.append(word)
-                    line3_width = stringWidth(' '.join(tani_line3), "PFS", 7)
+                    line3_width = stringWidth(" ".join(tani_line3), "PFS", 7)
                     if line3_width > 300:
                         word_index = leftovers.index(word)
                         tani_line3 = leftovers[:word_index]
                         leftovers = leftovers[word_index:]
                         break
 
-            can.drawString(250, 280, ' '.join(tani_line1))
-            can.drawString(60, 265, ' '.join(tani_line2))
-            can.drawString(60, 245, ' '.join(tani_line3))
+            can.drawString(250, 280, " ".join(tani_line1))
+            can.drawString(60, 265, " ".join(tani_line2))
+            can.drawString(60, 245, " ".join(tani_line3))
 
             yas = muayene.hasta.age()
             if yas > 18:
@@ -860,7 +954,9 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             can.save()
 
             ttf_filled = PdfFileReader(buff)
-            ttf_empty = PdfFileReader(open(os.path.join(settings.BASE_DIR, 'staticfiles/TTF.pdf'), "rb"))
+            ttf_empty = PdfFileReader(
+                open(os.path.join(settings.BASE_DIR, "staticfiles/TTF.pdf"), "rb")
+            )
 
             output = PdfFileWriter()
 
@@ -868,16 +964,16 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
             page.mergePage(ttf_filled.getPage(0))
             output.addPage(page)
 
-            outputStream = open('/tmp/%s.pdf' % filename, 'wb')
+            outputStream = open("/tmp/%s.pdf" % filename, "wb")
             output.write(outputStream)
             outputStream.close()
 
-            files.append('/tmp/%s.pdf' % filename)
+            files.append("/tmp/%s.pdf" % filename)
 
         merger = PdfFileMerger()
 
         for f in files:
-            merger.append(PdfFileReader(open(f, 'rb')))
+            merger.append(PdfFileReader(open(f, "rb")))
             os.remove(f)
 
         start_date = str(start)
@@ -888,10 +984,10 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         merger.write("/tmp/%s" % final_filename)
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % final_filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % final_filename
 
-        pdf = open("/tmp/%s" % final_filename, 'rb').read()
+        pdf = open("/tmp/%s" % final_filename, "rb").read()
 
         response.write(pdf)
 
@@ -899,8 +995,9 @@ class MultiTTFPrintView(PrintMixin, LoginRequiredMixin, View):
 
         return response
 
+
 class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     model = Muayene
 
     def get(self, request, *args, **kwargs):
@@ -918,8 +1015,8 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
         title = unidecode("%s-%s-ahsevk-%s-%s" % (ad, soyad, pk, muayene_tarihi))
         filename = title + ".pdf"
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         buff = BytesIO()
 
@@ -936,67 +1033,67 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
 
         if yas < 19:
             # Hemogram
-            can.drawString(27, 660, 'X')
+            can.drawString(27, 660, "X")
             # Sedim
-            can.drawString(27, 646, 'X')
+            can.drawString(27, 646, "X")
             # Tam İdrar
-            can.drawString(27, 633, 'X')
+            can.drawString(27, 633, "X")
         elif yas >= 19 and yas < 41:
             # Hemogram
-            can.drawString(27, 660, 'X')
+            can.drawString(27, 660, "X")
             # Sedim
-            can.drawString(27, 646, 'X')
+            can.drawString(27, 646, "X")
             # Tam İdrar
-            can.drawString(27, 633, 'X')
+            can.drawString(27, 633, "X")
             # Açlık Kan
-            can.drawString(27, 619, 'X')
+            can.drawString(27, 619, "X")
             # Total Kolesterol
-            can.drawString(27, 606, 'X')
+            can.drawString(27, 606, "X")
             # HDL Kolesterol
-            can.drawString(27, 592, 'X')
+            can.drawString(27, 592, "X")
             # Kreatinin
-            can.drawString(27, 565, 'X')
+            can.drawString(27, 565, "X")
             # SGOT
-            can.drawString(27, 552, 'X')
+            can.drawString(27, 552, "X")
             # SGPT
-            can.drawString(27, 512, 'X')
+            can.drawString(27, 512, "X")
             # EKG
-            can.drawString(201, 660, 'X')
+            can.drawString(201, 660, "X")
             # PA
-            can.drawString(201, 646, 'X')
+            can.drawString(201, 646, "X")
         elif yas >= 41:
             # Hemogram
-            can.drawString(27, 660, 'X')
+            can.drawString(27, 660, "X")
             # Sedim
-            can.drawString(27, 646, 'X')
+            can.drawString(27, 646, "X")
             # Tam İdrar
-            can.drawString(27, 633, 'X')
+            can.drawString(27, 633, "X")
             # Açlık Kan
-            can.drawString(27, 619, 'X')
+            can.drawString(27, 619, "X")
             # Total Kolesterol
-            can.drawString(27, 606, 'X')
+            can.drawString(27, 606, "X")
             # HDL Kolesterol
-            can.drawString(27, 592, 'X')
+            can.drawString(27, 592, "X")
             # LDL Kolesterol
-            can.drawString(27, 579, 'X')
+            can.drawString(27, 579, "X")
             # Kreatinin
-            can.drawString(27, 565, 'X')
+            can.drawString(27, 565, "X")
             # SGOT
-            can.drawString(27, 552, 'X')
+            can.drawString(27, 552, "X")
             # Ürik Asit
-            can.drawString(27, 539, 'X')
+            can.drawString(27, 539, "X")
             # SGPT
-            can.drawString(27, 512, 'X')
+            can.drawString(27, 512, "X")
             # EKG
-            can.drawString(201, 660, 'X')
+            can.drawString(201, 660, "X")
             # PA
-            can.drawString(201, 646, 'X')
+            can.drawString(201, 646, "X")
 
         can.drawString(90, 90, str(muayene.hasta))
 
         can.drawString(420, 72, str(muayene.tarih.day))
         can.drawString(450, 72, str(muayene.tarih.month))
-        can.drawString(490, 72, str(muayene.tarih.strftime('%y')))
+        can.drawString(490, 72, str(muayene.tarih.strftime("%y")))
 
         can.setTitle(title)
 
@@ -1006,7 +1103,7 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
 
         ah_filled = PdfFileReader(buff)
 
-        FILE = os.path.join(settings.BASE_DIR, 'staticfiles/AH_ISTEK.pdf')
+        FILE = os.path.join(settings.BASE_DIR, "staticfiles/AH_ISTEK.pdf")
         ah_empty = PdfFileReader(open(FILE, "rb"))
 
         output = PdfFileWriter()
@@ -1022,45 +1119,48 @@ class AHSevkPrintView(PrintMixin, LoginRequiredMixin, View):
         return response
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class ListPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     queryset = Muayene.objects.all()
 
     def get(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['GET'])
+        return HttpResponseNotAllowed(["GET"])
 
     def post(self, request, *args, **kwargs):
-        start = request.POST.get('start', '')
-        end = request.POST.get('end', '')
+        start = request.POST.get("start", "")
+        end = request.POST.get("end", "")
 
-        qs = self.queryset.filter(tarih__gte=start,tarih__lte=end)
+        qs = self.queryset.filter(tarih__gte=start, tarih__lte=end)
 
-        title = '%s-%s-hasta-list' % (start, end)
+        title = "%s-%s-hasta-list" % (start, end)
         filename = title + ".pdf"
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         buff = BytesIO()
 
         font = os.path.join(settings.BASE_DIR, "staticfiles/fonts/listfont.ttf")
 
-        pdfmetrics.registerFont(TTFont('ListFont', font))
+        pdfmetrics.registerFont(TTFont("ListFont", font))
 
-        doc = SimpleDocTemplate(buff,
-                                pagesize=landscape(letter),
-                                title=title,
-                                author="Dr. Ziya T. Güneş",
-                                rightMargin=inch/4,
-                                leftMargin=inch/4,
-                                topMargin=inch/2,
-                                bottomMargin=inch/4,
-                                showBoundary=0)
+        doc = SimpleDocTemplate(
+            buff,
+            pagesize=landscape(letter),
+            title=title,
+            author="Dr. Ziya T. Güneş",
+            rightMargin=inch / 4,
+            leftMargin=inch / 4,
+            topMargin=inch / 2,
+            bottomMargin=inch / 4,
+            showBoundary=0,
+        )
 
         story = []
-        data = [['', 'TARİH', 'HASTA', 'TANI']]
+        data = [["", "TARİH", "HASTA", "TANI"]]
 
         i = 0
 
@@ -1070,16 +1170,16 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
             tarih = str(muayene.tarih)
             tani = str(muayene.ontani_tani)
 
-            row = ['%s' % i, tarih, hasta, tani]
+            row = ["%s" % i, tarih, hasta, tani]
             data.append(row)
 
         LIST_STYLE = TableStyle(
-             [
-                 ('FONT',           (0,0), (3,-1), 'ListFont', 8),
-                 ('LEFTPADDING',    (0,0), (3,-1), 0.25*cm),
-                 ('RIGHTPADDING',   (0,0), (3,-1), 0.25*cm),
-             ]
-         )
+            [
+                ("FONT", (0, 0), (3, -1), "ListFont", 8),
+                ("LEFTPADDING", (0, 0), (3, -1), 0.25 * cm),
+                ("RIGHTPADDING", (0, 0), (3, -1), 0.25 * cm),
+            ]
+        )
 
         table = Table(data)
         table.setStyle(LIST_STYLE)
@@ -1094,21 +1194,29 @@ class ListPrintView(PrintMixin, LoginRequiredMixin, View):
 
 
 class BelgiumMedicalCertPrintView(PrintMixin, LoginRequiredMixin, View):
-    login_url = '/login/'
+    login_url = "/login/"
     queryset = Muayene.objects.all()
 
     def get(self, request, *args, **kwargs):
         muayene = self.get_object()
 
-        title = unidecode("{}-{}-medical-certificate-{}-{}".format(muayene.hasta.ad, muayene.hasta.soyad, muayene.pk, muayene.tarih))
+        title = unidecode(
+            "{}-{}-medical-certificate-{}-{}".format(
+                muayene.hasta.ad, muayene.hasta.soyad, muayene.pk, muayene.tarih
+            )
+        )
         filename = title + ".pdf"
 
-        temp_path = os.path.join(settings.BASE_DIR, 'staticfiles/medical_certificate.pdf')
+        temp_path = os.path.join(
+            settings.BASE_DIR, "staticfiles/medical_certificate.pdf"
+        )
         if not os.path.exists(temp_path):
-            return HttpResponse("Medical certificate template not found in {}".format(temp_path))
+            return HttpResponse(
+                "Medical certificate template not found in {}".format(temp_path)
+            )
 
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'filename=%s' % filename
+        response = HttpResponse(content_type="application/pdf")
+        response["Content-Disposition"] = "filename=%s" % filename
 
         output = PdfFileWriter()
 
@@ -1133,12 +1241,18 @@ class BelgiumMedicalCertPrintView(PrintMixin, LoginRequiredMixin, View):
 
         can.drawString(280, 635, doctor)
         can.drawString(330, 615, "{} {}".format(prefix, muayene.hasta))
-        can.drawString(180, 545, "{} {}".format(
-            muayene.hasta.dogum_tarihi.strftime("%d %B %Y"),
-            muayene.hasta.dogum_yeri
-        ))
+        can.drawString(
+            180,
+            545,
+            "{} {}".format(
+                muayene.hasta.dogum_tarihi.strftime("%d %B %Y"),
+                muayene.hasta.dogum_yeri,
+            ),
+        )
         can.drawString(130, 565, muayene.hasta.uyruk)
-        can.drawString(130, 520, "{} {}".format(muayene.hasta.adres, muayene.hasta.semt))
+        can.drawString(
+            130, 520, "{} {}".format(muayene.hasta.adres, muayene.hasta.semt)
+        )
 
         try:
             doctor_addr = settings.MEDICAL_CERT_DOCTOR_ADDRESS

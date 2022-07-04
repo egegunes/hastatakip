@@ -8,14 +8,16 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randevu', '0001_initial'),
+        ("randevu", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='randevu',
-            name='state',
-            field=models.CharField(choices=[(1, 'Açık'), (2, 'İptal')], default=1, max_length=1),
+            model_name="randevu",
+            name="state",
+            field=models.CharField(
+                choices=[(1, "Açık"), (2, "İptal")], default=1, max_length=1
+            ),
             preserve_default=False,
         ),
     ]

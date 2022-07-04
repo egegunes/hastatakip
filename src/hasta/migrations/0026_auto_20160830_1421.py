@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0025_auto_20160830_1413'),
+        ("hasta", "0025_auto_20160830_1413"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hasta',
-            name='slug',
+            model_name="hasta",
+            name="slug",
             field=models.SlugField(editable=False, unique=True),
         ),
     ]

@@ -9,13 +9,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0005_auto_20160707_2145'),
+        ("muayene", "0005_auto_20160707_2145"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='muayene',
-            name='muayene_tarihi',
+            model_name="muayene",
+            name="muayene_tarihi",
             field=models.DateField(default=datetime.date(2016, 7, 8)),
         ),
     ]

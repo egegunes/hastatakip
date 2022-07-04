@@ -8,28 +8,35 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0034_auto_20161004_1131'),
+        ("muayene", "0034_auto_20161004_1131"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='ilac',
-            options={'verbose_name': 'İlaç', 'verbose_name_plural': 'İlaçlar'},
+            name="ilac",
+            options={"verbose_name": "İlaç", "verbose_name_plural": "İlaçlar"},
         ),
         migrations.AlterModelOptions(
-            name='laboratuvaristek',
-            options={'verbose_name': 'Laboratuvar Istek', 'verbose_name_plural': 'Laboratuvar Istekleri'},
+            name="laboratuvaristek",
+            options={
+                "verbose_name": "Laboratuvar Istek",
+                "verbose_name_plural": "Laboratuvar Istekleri",
+            },
         ),
         migrations.AlterModelOptions(
-            name='muayene',
-            options={'get_latest_by': 'tarih', 'verbose_name': 'Muayene', 'verbose_name_plural': 'Muayeneler'},
+            name="muayene",
+            options={
+                "get_latest_by": "tarih",
+                "verbose_name": "Muayene",
+                "verbose_name_plural": "Muayeneler",
+            },
         ),
         migrations.AlterModelOptions(
-            name='rapor',
-            options={'verbose_name': 'Rapor', 'verbose_name_plural': 'Raporlar'},
+            name="rapor",
+            options={"verbose_name": "Rapor", "verbose_name_plural": "Raporlar"},
         ),
         migrations.AlterModelOptions(
-            name='recete',
-            options={'verbose_name': 'Reçete', 'verbose_name_plural': 'Reçeteler'},
+            name="recete",
+            options={"verbose_name": "Reçete", "verbose_name_plural": "Reçeteler"},
         ),
     ]

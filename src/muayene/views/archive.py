@@ -2,15 +2,22 @@
 
 import datetime
 
-from django.contrib.auth.mixins     import LoginRequiredMixin
-from django.views.generic.dates     import ArchiveIndexView, TodayArchiveView, WeekArchiveView, MonthArchiveView, YearArchiveView
-from django.views.generic.edit      import FormView 
-from django.views.generic.base      import View 
-from django.template.response       import TemplateResponse
-from django.http                    import HttpResponseNotAllowed
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic.dates import (
+    ArchiveIndexView,
+    TodayArchiveView,
+    WeekArchiveView,
+    MonthArchiveView,
+    YearArchiveView,
+)
+from django.views.generic.edit import FormView
+from django.views.generic.base import View
+from django.template.response import TemplateResponse
+from django.http import HttpResponseNotAllowed
 
-from muayene.forms                  import DateRangeForm
-from muayene.models                 import Muayene
+from muayene.forms import DateRangeForm
+from muayene.models import Muayene
+
 
 class MuayeneArchiveView(LoginRequiredMixin, FormView):
     """
@@ -20,30 +27,28 @@ class MuayeneArchiveView(LoginRequiredMixin, FormView):
     URL: /muayene/arsiv
     """
 
-    login_url = '/login/'
+    login_url = "/login/"
     form_class = DateRangeForm
-    template_name = 'muayene/muayene_archive.html'
+    template_name = "muayene/muayene_archive.html"
 
     def get(self, request, *args, **kwargs):
         form = self.form_class()
         context = {
-            'form': form, 
+            "form": form,
         }
         return TemplateResponse(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         form = self.form_class(request.POST)
         if form.is_valid():
-            start = form.cleaned_data['start_date']
-            end = form.cleaned_data['end_date']
-            queryset = Muayene.objects.filter(tarih__gte=start,tarih__lte=end).order_by('-id')
-            context = {
-                'form': form, 
-                'start': start, 
-                'end': end, 
-                'range_list': queryset
-            }
+            start = form.cleaned_data["start_date"]
+            end = form.cleaned_data["end_date"]
+            queryset = Muayene.objects.filter(
+                tarih__gte=start, tarih__lte=end
+            ).order_by("-id")
+            context = {"form": form, "start": start, "end": end, "range_list": queryset}
             return TemplateResponse(request, self.template_name, context)
+
 
 class MuayeneLastCreatedView(LoginRequiredMixin, View):
     """
@@ -53,18 +58,21 @@ class MuayeneLastCreatedView(LoginRequiredMixin, View):
     URL: /muayene/list/son
     """
 
-    login_url = '/login/'
-    template_name = 'muayene/muayene_list.html'
+    login_url = "/login/"
+    template_name = "muayene/muayene_list.html"
 
     def get(self, request, *args, **kwargs):
         today = datetime.date.today()
         yesterday = today - datetime.timedelta(days=1)
-        queryset = Muayene.objects.filter(tarih__gte=yesterday, tarih__lte=today).order_by('-id')
+        queryset = Muayene.objects.filter(
+            tarih__gte=yesterday, tarih__lte=today
+        ).order_by("-id")
 
-        return TemplateResponse(request, self.template_name, {'muayene_list': queryset})
+        return TemplateResponse(request, self.template_name, {"muayene_list": queryset})
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class MuayeneWeekArchiveView(LoginRequiredMixin, WeekArchiveView):
     """
@@ -78,21 +86,22 @@ class MuayeneWeekArchiveView(LoginRequiredMixin, WeekArchiveView):
     context_object_name: object_list
     """
 
-    login_url = '/login/'
-    date_field = 'tarih'
-    week_format = '%W'
+    login_url = "/login/"
+    date_field = "tarih"
+    week_format = "%W"
     allow_empty = True
     allow_future = True
-    queryset = Muayene.objects.all().order_by('-id')
+    queryset = Muayene.objects.all().order_by("-id")
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class MuayeneMonthArciveView(LoginRequiredMixin, MonthArchiveView):
     """
     List muayene entries created inside current month.
     Ordered by entry id, decreasing.
-    
+
     URL: /muayene/arsiv/<year>/<month>
     <year>: Year with century as a decimal number (e.g 2016, 1995)
     <month>: Month as a decimal number [01,12]
@@ -100,34 +109,35 @@ class MuayeneMonthArciveView(LoginRequiredMixin, MonthArchiveView):
     context_object_name: object_list
     """
 
-    login_url = '/login/'
-    date_field = 'tarih'
-    month_format = '%m'
+    login_url = "/login/"
+    date_field = "tarih"
+    month_format = "%m"
     allow_empty = True
     allow_future = True
-    queryset = Muayene.objects.all().order_by('-id')
+    queryset = Muayene.objects.all().order_by("-id")
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])
+
 
 class MuayeneYearArchiveView(LoginRequiredMixin, YearArchiveView):
     """
     List muayene entries created inside current year.
     Ordered by entry id, decreasing.
-    
+
     URL: /muayene/arsiv/<year>
     <year>: Year with century as a decimal number (e.g 2016, 1995)
 
     context_object_name: object_list
     """
 
-    login_url = '/login/'
-    date_field = 'tarih'
-    year_format = '%Y'
+    login_url = "/login/"
+    date_field = "tarih"
+    year_format = "%Y"
     allow_empty = True
     allow_future = True
     make_object_list = True
-    queryset = Muayene.objects.all().order_by('-id')
+    queryset = Muayene.objects.all().order_by("-id")
 
     def post(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['POST'])
+        return HttpResponseNotAllowed(["POST"])

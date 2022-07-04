@@ -8,23 +8,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0002_auto_20160701_2146'),
+        ("hasta", "0002_auto_20160701_2146"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='hasta',
-            old_name='name',
-            new_name='ad',
+            model_name="hasta",
+            old_name="name",
+            new_name="ad",
         ),
         migrations.RenameField(
-            model_name='hasta',
-            old_name='surname',
-            new_name='soyad',
+            model_name="hasta",
+            old_name="surname",
+            new_name="soyad",
         ),
         migrations.AlterField(
-            model_name='hasta',
-            name='cinsiyet',
-            field=models.CharField(choices=[('K', 'Kadın'), ('E', 'Erkek')], default='K', max_length=1),
+            model_name="hasta",
+            name="cinsiyet",
+            field=models.CharField(
+                choices=[("K", "Kadın"), ("E", "Erkek")], default="K", max_length=1
+            ),
         ),
     ]

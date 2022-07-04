@@ -8,18 +8,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randevu', '0004_auto_20170810_0002'),
+        ("randevu", "0004_auto_20170810_0002"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='randevu',
-            name='contact_phone',
-            field=models.CharField(max_length=13, verbose_name='İrtibat No'),
+            model_name="randevu",
+            name="contact_phone",
+            field=models.CharField(max_length=13, verbose_name="İrtibat No"),
         ),
         migrations.AlterField(
-            model_name='randevu',
-            name='state',
-            field=models.SmallIntegerField(choices=[(1, 'Açık'), (2, 'İptal')], default=1),
+            model_name="randevu",
+            name="state",
+            field=models.SmallIntegerField(
+                choices=[(1, "Açık"), (2, "İptal")], default=1
+            ),
         ),
     ]

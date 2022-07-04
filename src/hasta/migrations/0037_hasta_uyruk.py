@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0036_hasta_dogum_yeri'),
+        ("hasta", "0036_hasta_dogum_yeri"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='hasta',
-            name='uyruk',
+            model_name="hasta",
+            name="uyruk",
             field=models.CharField(blank=True, max_length=64, null=True),
         ),
     ]

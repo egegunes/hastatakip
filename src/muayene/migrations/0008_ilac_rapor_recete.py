@@ -10,37 +10,83 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0003_auto_20160702_2048'),
-        ('muayene', '0007_auto_20160708_1715'),
+        ("hasta", "0003_auto_20160702_2048"),
+        ("muayene", "0007_auto_20160708_1715"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Ilac',
+            name="Ilac",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('ad', models.CharField(max_length=30)),
-                ('bilgi', models.CharField(max_length=30)),
-                ('kullanim', models.CharField(max_length=30)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("ad", models.CharField(max_length=30)),
+                ("bilgi", models.CharField(max_length=30)),
+                ("kullanim", models.CharField(max_length=30)),
             ],
         ),
         migrations.CreateModel(
-            name='Rapor',
+            name="Rapor",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('yazilma_tarihi', models.DateField(default=django.utils.timezone.now)),
-                ('hasta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hasta.Hasta')),
-                ('muayene', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='muayene.Muayene')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("yazilma_tarihi", models.DateField(default=django.utils.timezone.now)),
+                (
+                    "hasta",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="hasta.Hasta"
+                    ),
+                ),
+                (
+                    "muayene",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="muayene.Muayene",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Recete',
+            name="Recete",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('yazilma_tarihi', models.DateField(default=django.utils.timezone.now)),
-                ('hasta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hasta.Hasta')),
-                ('ilaclar', models.ManyToManyField(to='muayene.Ilac')),
-                ('muayene', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='muayene.Muayene')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("yazilma_tarihi", models.DateField(default=django.utils.timezone.now)),
+                (
+                    "hasta",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="hasta.Hasta"
+                    ),
+                ),
+                ("ilaclar", models.ManyToManyField(to="muayene.Ilac")),
+                (
+                    "muayene",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="muayene.Muayene",
+                    ),
+                ),
             ],
         ),
     ]

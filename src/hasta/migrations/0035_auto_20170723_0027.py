@@ -8,13 +8,17 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0034_hasta_ahsevk_done_tarih'),
+        ("hasta", "0034_hasta_ahsevk_done_tarih"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hasta',
-            name='cinsiyet',
-            field=models.CharField(blank=True, choices=[(' ', ' '), ('K', 'Kadın'), ('E', 'Erkek')], max_length=5),
+            model_name="hasta",
+            name="cinsiyet",
+            field=models.CharField(
+                blank=True,
+                choices=[(" ", " "), ("K", "Kadın"), ("E", "Erkek")],
+                max_length=5,
+            ),
         ),
     ]

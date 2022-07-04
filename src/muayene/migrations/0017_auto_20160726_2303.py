@@ -8,38 +8,38 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0016_auto_20160725_2313'),
+        ("muayene", "0016_auto_20160725_2313"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='laboratuvaristek',
-            old_name='istek',
-            new_name='istekler',
+            model_name="laboratuvaristek",
+            old_name="istek",
+            new_name="istekler",
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='muayene',
+            model_name="muayene",
+            name="muayene",
             field=models.TextField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='yakinma',
+            model_name="muayene",
+            name="yakinma",
             field=models.TextField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='öneri_görüsler',
+            model_name="muayene",
+            name="öneri_görüsler",
             field=models.TextField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='öntani_tani',
+            model_name="muayene",
+            name="öntani_tani",
             field=models.TextField(blank=True, max_length=255, null=True),
         ),
         migrations.AlterField(
-            model_name='muayene',
-            name='özel_notlar',
+            model_name="muayene",
+            name="özel_notlar",
             field=models.TextField(blank=True, max_length=255, null=True),
         ),
     ]

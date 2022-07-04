@@ -9,23 +9,30 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Randevu',
+            name="Randevu",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('hasta', models.CharField(max_length=64)),
-                ('date', models.DateField()),
-                ('time', models.TimeField()),
-                ('person_number', models.IntegerField()),
-                ('contact_phone', models.CharField(max_length=13)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("hasta", models.CharField(max_length=64)),
+                ("date", models.DateField()),
+                ("time", models.TimeField()),
+                ("person_number", models.IntegerField()),
+                ("contact_phone", models.CharField(max_length=13)),
             ],
         ),
         migrations.AlterUniqueTogether(
-            name='randevu',
-            unique_together=set([('date', 'time')]),
+            name="randevu",
+            unique_together=set([("date", "time")]),
         ),
     ]

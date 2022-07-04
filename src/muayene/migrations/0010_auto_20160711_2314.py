@@ -10,66 +10,81 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0003_auto_20160702_2048'),
-        ('muayene', '0009_laboratuvar'),
+        ("hasta", "0003_auto_20160702_2048"),
+        ("muayene", "0009_laboratuvar"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='LaboratuvarIstek',
+            name="LaboratuvarIstek",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('tarih', models.DateField(default=django.utils.timezone.now)),
-                ('hasta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hasta.Hasta')),
-                ('istek', models.ManyToManyField(to='muayene.Laboratuvar')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("tarih", models.DateField(default=django.utils.timezone.now)),
+                (
+                    "hasta",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="hasta.Hasta"
+                    ),
+                ),
+                ("istek", models.ManyToManyField(to="muayene.Laboratuvar")),
             ],
         ),
         migrations.RenameField(
-            model_name='muayene',
-            old_name='muayene_tarihi',
-            new_name='tarih',
+            model_name="muayene",
+            old_name="muayene_tarihi",
+            new_name="tarih",
         ),
         migrations.RenameField(
-            model_name='rapor',
-            old_name='yazilma_tarihi',
-            new_name='tarih',
+            model_name="rapor",
+            old_name="yazilma_tarihi",
+            new_name="tarih",
         ),
         migrations.RenameField(
-            model_name='recete',
-            old_name='yazilma_tarihi',
-            new_name='tarih',
+            model_name="recete",
+            old_name="yazilma_tarihi",
+            new_name="tarih",
         ),
         migrations.AddField(
-            model_name='rapor',
-            name='rapor_gun',
+            model_name="rapor",
+            name="rapor_gun",
             field=models.PositiveSmallIntegerField(default=1),
         ),
         migrations.AddField(
-            model_name='rapor',
-            name='tani',
+            model_name="rapor",
+            name="tani",
             field=models.CharField(blank=True, max_length=255, null=True),
         ),
         migrations.RemoveField(
-            model_name='muayene',
-            name='istenen_tetkikler',
+            model_name="muayene",
+            name="istenen_tetkikler",
         ),
         migrations.AddField(
-            model_name='muayene',
-            name='istenen_tetkikler',
-            field=models.ManyToManyField(to='muayene.Laboratuvar'),
+            model_name="muayene",
+            name="istenen_tetkikler",
+            field=models.ManyToManyField(to="muayene.Laboratuvar"),
         ),
         migrations.RemoveField(
-            model_name='muayene',
-            name='kullandigi_ilaclar',
+            model_name="muayene",
+            name="kullandigi_ilaclar",
         ),
         migrations.AddField(
-            model_name='muayene',
-            name='kullandigi_ilaclar',
-            field=models.ManyToManyField(to='muayene.Ilac'),
+            model_name="muayene",
+            name="kullandigi_ilaclar",
+            field=models.ManyToManyField(to="muayene.Ilac"),
         ),
         migrations.AddField(
-            model_name='laboratuvaristek',
-            name='muayene',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='muayene.Muayene'),
+            model_name="laboratuvaristek",
+            name="muayene",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="muayene.Muayene"
+            ),
         ),
     ]

@@ -8,20 +8,28 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0031_auto_20160919_2015'),
+        ("muayene", "0031_auto_20160919_2015"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MuayeneAlias',
+            name="MuayeneAlias",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('shorthand', models.CharField(max_length=10)),
-                ('longhand', models.CharField(max_length=100)),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("shorthand", models.CharField(max_length=10)),
+                ("longhand", models.CharField(max_length=100)),
             ],
         ),
         migrations.AlterModelOptions(
-            name='muayene',
-            options={'get_latest_by': 'tarih'},
+            name="muayene",
+            options={"get_latest_by": "tarih"},
         ),
     ]

@@ -9,17 +9,24 @@ class Migration(migrations.Migration):
 
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Hasta',
+            name="Hasta",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=30)),
-                ('surname', models.CharField(max_length=30)),
-                ('tc_kimlik_no', models.BigIntegerField()),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=30)),
+                ("surname", models.CharField(max_length=30)),
+                ("tc_kimlik_no", models.BigIntegerField()),
             ],
         ),
     ]

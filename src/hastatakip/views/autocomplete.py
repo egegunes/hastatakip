@@ -2,18 +2,18 @@
 
 import datetime
 
-from django.contrib.auth.mixins         import LoginRequiredMixin
-from django.utils.text                  import slugify
-from django.urls                        import reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.utils.text import slugify
+from django.urls import reverse
 
-from dal                                import autocomplete
+from dal import autocomplete
 
-from hasta.models                       import Hasta
-from muayene.models                     import Ilac
+from hasta.models import Hasta
+from muayene.models import Ilac
 
 
 class HastaAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
-    login_url = '/login/'
+    login_url = "/login/"
 
     def get_queryset(self):
         qs = Hasta.objects.all()
@@ -23,9 +23,10 @@ class HastaAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
             qs = qs.filter(slug__icontains=term)
 
         return qs
-        
+
+
 class IlacAutocomplete(LoginRequiredMixin, autocomplete.Select2QuerySetView):
-    login_url = '/login/'
+    login_url = "/login/"
 
     def get_queryset(self):
         qs = Ilac.objects.all()

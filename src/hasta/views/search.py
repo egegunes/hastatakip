@@ -11,15 +11,14 @@ from hasta.models import Hasta
 
 
 class HastaSearchView(LoginRequiredMixin, View):
-
     def get(self, request, *args, **kwargs):
-        return HttpResponseNotAllowed(['GET'])
+        return HttpResponseNotAllowed(["GET"])
 
     def post(self, request, *args, **kwargs):
-        if 'term' not in request.POST:
+        if "term" not in request.POST:
             return HttpResponseBadRequest()
 
-        term = request.POST['term']
+        term = request.POST["term"]
 
         try:
             term = int(term)
@@ -31,8 +30,4 @@ class HastaSearchView(LoginRequiredMixin, View):
         except ValueError:
             qs = Hasta.objects.filter(slug__icontains=slugify(term))
 
-        return TemplateResponse(
-            request,
-            'hasta/hasta_list.html',
-            {'hasta_list': qs}
-        )
+        return TemplateResponse(request, "hasta/hasta_list.html", {"hasta_list": qs})

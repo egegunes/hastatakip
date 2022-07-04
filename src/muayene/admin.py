@@ -4,32 +4,32 @@ from muayene.models import Ilac, Recete, Muayene, LaboratuvarIstek, Rapor
 
 
 class IlacAdmin(admin.ModelAdmin):
-    list_display = ('id', 'ad', 'kullanim', 'bilgi')
-    search_fields = ('ad',)
+    list_display = ("id", "ad", "kullanim", "bilgi")
+    search_fields = ("ad",)
 
 
 class ReceteAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tarih', 'hasta', 'muayene')
-    readonly_fields = ('hasta', 'muayene')
-    search_fields = ('hasta__ad', 'hasta__soyad')
+    list_display = ("id", "tarih", "hasta", "muayene")
+    readonly_fields = ("hasta", "muayene")
+    search_fields = ("hasta__ad", "hasta__soyad")
 
 
 class MuayeneAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tarih', 'hasta', 'yakinma', 'baki')
-    readonly_fields = ('hasta',)
-    search_fields = ('hasta__ad', 'hasta__soyad')
+    list_display = ("id", "tarih", "hasta", "yakinma", "baki")
+    readonly_fields = ("hasta",)
+    search_fields = ("hasta__ad", "hasta__soyad")
 
 
 class LaboratuvarIstekAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tarih', 'hasta', 'muayene')
-    readonly_fields = ('hasta', 'muayene')
-    search_fields = ('hasta__ad', 'hasta__soyad')
+    list_display = ("id", "tarih", "hasta", "muayene")
+    readonly_fields = ("hasta", "muayene")
+    search_fields = ("hasta__ad", "hasta__soyad")
 
 
 class RaporAdmin(admin.ModelAdmin):
-    list_display = ('id', 'tarih', 'hasta', 'muayene')
-    readonly_fields = ('hasta', 'muayene')
-    search_fields = ('hasta__ad', 'hasta__soyad')
+    list_display = ("id", "tarih", "hasta", "muayene")
+    readonly_fields = ("hasta", "muayene")
+    search_fields = ("hasta__ad", "hasta__soyad")
 
 
 admin.site.register(Ilac, IlacAdmin)

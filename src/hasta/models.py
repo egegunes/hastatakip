@@ -13,53 +13,57 @@ def add_years(date, years):
     try:
         return date.replace(year=date.year + years)
     except ValueError:
-        return date + (datetime.date(date.year + years, 1, 1) - datetime.date(date.year, 1, 1))
+        return date + (
+            datetime.date(date.year + years, 1, 1) - datetime.date(date.year, 1, 1)
+        )
 
 
 class Hasta(models.Model):
-    CINSIYET = (
-        (' ', ' '),
-        ('K', 'Kadın'),
-        ('E', 'Erkek')
-    )
+    CINSIYET = ((" ", " "), ("K", "Kadın"), ("E", "Erkek"))
 
     kayit_tarihi = models.DateField(default=timezone.now, editable=False)
     slug = models.SlugField(max_length=50, editable=False, unique=True)
     ad = models.CharField(max_length=30, blank=False)
     soyad = models.CharField(max_length=30, blank=False)
-    tc_kimlik_no = models.CharField(max_length=11, default=' ', blank=True, null=True)
+    tc_kimlik_no = models.CharField(max_length=11, default=" ", blank=True, null=True)
     cinsiyet = models.CharField(max_length=5, blank=True, choices=CINSIYET)
     dogum_tarihi = models.DateField(blank=False)
     dogum_yeri = models.CharField(max_length=255, null=True, blank=True)
     uyruk = models.CharField(max_length=64, null=True, blank=True)
-    meslek = models.CharField(max_length=30, default=' ', blank=True)
-    es_ad = models.CharField(max_length=30, default=' ', blank=True)
-    es_meslek = models.CharField(max_length=30, default=' ', blank=True)
-    cep_telefon = models.CharField(max_length=13, default=' ', blank=True)
-    ev_telefon = models.CharField(max_length=13, default=' ', blank=True)
-    is_telefon = models.CharField(max_length=13, default=' ', blank=True)
-    adres = models.CharField(max_length=255, default=' ', blank=True)
-    semt = models.CharField(max_length=30, default=' ', blank=True)
-    eposta = models.EmailField(max_length=254, default=' ', blank=True)
-    sigorta = models.CharField(max_length=30, default='', blank=True)
-    cocuklar = models.CharField(max_length=30, default=' ', blank=True)
-    soygecmis = models.CharField(max_length=255, default=' ', blank=True)
-    ozgecmis = models.CharField(max_length=255, default=' ', blank=True)
-    sigara = models.CharField(max_length=30, default=' ', blank=True)
-    alkol = models.CharField(max_length=30, default=' ', blank=True)
+    meslek = models.CharField(max_length=30, default=" ", blank=True)
+    es_ad = models.CharField(max_length=30, default=" ", blank=True)
+    es_meslek = models.CharField(max_length=30, default=" ", blank=True)
+    cep_telefon = models.CharField(max_length=13, default=" ", blank=True)
+    ev_telefon = models.CharField(max_length=13, default=" ", blank=True)
+    is_telefon = models.CharField(max_length=13, default=" ", blank=True)
+    adres = models.CharField(max_length=255, default=" ", blank=True)
+    semt = models.CharField(max_length=30, default=" ", blank=True)
+    eposta = models.EmailField(max_length=254, default=" ", blank=True)
+    sigorta = models.CharField(max_length=30, default="", blank=True)
+    cocuklar = models.CharField(max_length=30, default=" ", blank=True)
+    soygecmis = models.CharField(max_length=255, default=" ", blank=True)
+    ozgecmis = models.CharField(max_length=255, default=" ", blank=True)
+    sigara = models.CharField(max_length=30, default=" ", blank=True)
+    alkol = models.CharField(max_length=30, default=" ", blank=True)
     kilo = models.IntegerField(default=None, blank=True, null=True)
     boy = models.IntegerField(default=None, blank=True, null=True)
-    legacy_epikriz = models.CharField(max_length=20000, default=' ', blank=True, null=True)
-    legacy_ozel_notlar = models.CharField(max_length=1000, default=' ', blank=True, null=True)
+    legacy_epikriz = models.CharField(
+        max_length=20000, default=" ", blank=True, null=True
+    )
+    legacy_ozel_notlar = models.CharField(
+        max_length=1000, default=" ", blank=True, null=True
+    )
     ahsevk_done = models.BooleanField(default=False)
-    ahsevk_done_tarih = models.DateField(blank=True, null=True, default=timezone.now, editable=False)
+    ahsevk_done_tarih = models.DateField(
+        blank=True, null=True, default=timezone.now, editable=False
+    )
 
     def __str__(self):
         hasta = self.ad + " " + self.soyad
         return hasta
 
     def get_absolute_url(self):
-        return reverse('hasta:detail', kwargs={'slug': self.slug})
+        return reverse("hasta:detail", kwargs={"slug": self.slug})
 
     def save(self, **kwargs):
         self.slug = orig = slugify(self.ad + " " + self.soyad)
@@ -67,7 +71,7 @@ class Hasta(models.Model):
         for x in itertools.count(1):
             if not Hasta.objects.filter(slug=self.slug).exists():
                 break
-            self.slug = '%s-%d' % (orig, x)
+            self.slug = "%s-%d" % (orig, x)
 
         self.ad = self.ad.upper()
         self.soyad = self.soyad.upper()
@@ -77,7 +81,9 @@ class Hasta(models.Model):
     def age(self):
         today = datetime.date.today()
         born = self.dogum_tarihi
-        return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        return (
+            today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        )
 
     def vki(self):
 
@@ -105,7 +111,7 @@ class Hasta(models.Model):
 
 
 class Sozlesme(models.Model):
-    hasta = models.ForeignKey('hasta.Hasta', on_delete=models.CASCADE)
+    hasta = models.ForeignKey("hasta.Hasta", on_delete=models.CASCADE)
     baslangic_tarihi = models.DateField(default=timezone.now, blank=False)
     is_active = models.BooleanField(default=False)
 
@@ -122,7 +128,7 @@ class Sozlesme(models.Model):
         return add_years(self.baslangic_tarihi, 1)
 
     def get_absolute_url(self):
-        return reverse('hasta:sözlesme-detail', kwargs={'slug': self.slug})
+        return reverse("hasta:sözlesme-detail", kwargs={"slug": self.slug})
 
     def check_active(self):
         sozlesme_bitis = add_years(self.baslangic_tarihi, 1)

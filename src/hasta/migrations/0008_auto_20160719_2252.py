@@ -8,17 +8,30 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0007_auto_20160719_2239'),
+        ("hasta", "0007_auto_20160719_2239"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='hasta',
-            name='ah_police_no',
+            model_name="hasta",
+            name="ah_police_no",
         ),
         migrations.AddField(
-            model_name='hasta',
-            name='sigorta',
-            field=models.CharField(choices=[('ALZ', 'Allianz'), ('ALZKUR', 'Allianz Kurumsal'), ('EU', 'Euroka'), ('GRP', 'Groupama'), ('MPF', 'Mappfre'), ('AK', 'Ak Sigorta'), ('ACB', 'Acıbadem'), ('CP', 'Check-up')], default='ALZ', max_length=30),
+            model_name="hasta",
+            name="sigorta",
+            field=models.CharField(
+                choices=[
+                    ("ALZ", "Allianz"),
+                    ("ALZKUR", "Allianz Kurumsal"),
+                    ("EU", "Euroka"),
+                    ("GRP", "Groupama"),
+                    ("MPF", "Mappfre"),
+                    ("AK", "Ak Sigorta"),
+                    ("ACB", "Acıbadem"),
+                    ("CP", "Check-up"),
+                ],
+                default="ALZ",
+                max_length=30,
+            ),
         ),
     ]

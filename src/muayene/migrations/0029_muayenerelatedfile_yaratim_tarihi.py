@@ -9,13 +9,13 @@ import django.utils.timezone
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('muayene', '0028_auto_20160824_1218'),
+        ("muayene", "0028_auto_20160824_1218"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='muayenerelatedfile',
-            name='yaratim_tarihi',
+            model_name="muayenerelatedfile",
+            name="yaratim_tarihi",
             field=models.DateField(default=django.utils.timezone.now, editable=False),
         ),
     ]

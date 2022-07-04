@@ -8,6 +8,6 @@ from hasta.forms import HastaCreateForm
 
 
 class HastaUpdateView(LoginRequiredMixin, UpdateView):
-    login_url = '/login/'
+    login_url = "/login/"
     model = Hasta
     form_class = HastaCreateForm

@@ -2,5 +2,6 @@
 
 from django.apps import AppConfig
 
+
 class MuayeneConfig(AppConfig):
-    name = 'muayene'
+    name = "muayene"

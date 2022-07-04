@@ -8,13 +8,25 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0006_auto_20160713_1342'),
+        ("hasta", "0006_auto_20160713_1342"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='hasta',
-            name='ah_police_no',
-            field=models.BigIntegerField(choices=[('ALZ', 'Allianz'), ('ALZKUR', 'Allianz Kurumsal'), ('EU', 'Euroka'), ('GRP', 'Groupama'), ('MPF', 'Mappfre'), ('AK', 'Ak Sigorta'), ('ACB', 'Acıbadem'), ('CP', 'Check-up')], default='ALZ'),
+            model_name="hasta",
+            name="ah_police_no",
+            field=models.BigIntegerField(
+                choices=[
+                    ("ALZ", "Allianz"),
+                    ("ALZKUR", "Allianz Kurumsal"),
+                    ("EU", "Euroka"),
+                    ("GRP", "Groupama"),
+                    ("MPF", "Mappfre"),
+                    ("AK", "Ak Sigorta"),
+                    ("ACB", "Acıbadem"),
+                    ("CP", "Check-up"),
+                ],
+                default="ALZ",
+            ),
         ),
     ]

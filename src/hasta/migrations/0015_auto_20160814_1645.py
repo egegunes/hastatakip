@@ -8,12 +8,12 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0014_auto_20160801_1241'),
+        ("hasta", "0014_auto_20160801_1241"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='sozlesme',
-            options={'get_latest_by': 'baslangic_tarihi'},
+            name="sozlesme",
+            options={"get_latest_by": "baslangic_tarihi"},
         ),
     ]

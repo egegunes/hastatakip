@@ -8,13 +8,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('randevu', '0003_auto_20170809_2313'),
+        ("randevu", "0003_auto_20170809_2313"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='randevu',
-            name='state',
-            field=models.SmallIntegerField(choices=[(1, 'Açık'), (2, 'İptal')]),
+            model_name="randevu",
+            name="state",
+            field=models.SmallIntegerField(choices=[(1, "Açık"), (2, "İptal")]),
         ),
     ]

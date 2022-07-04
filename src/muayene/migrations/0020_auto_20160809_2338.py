@@ -9,37 +9,52 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('hasta', '0014_auto_20160801_1241'),
-        ('muayene', '0019_auto_20160731_1538'),
+        ("hasta", "0014_auto_20160801_1241"),
+        ("muayene", "0019_auto_20160731_1538"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='MuayeneRelatedFile',
+            name="MuayeneRelatedFile",
             fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('dosya', models.FileField(upload_to='uploads/%Y/%m/%d/')),
-                ('hasta', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='hasta.Hasta')),
+                (
+                    "id",
+                    models.AutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("dosya", models.FileField(upload_to="uploads/%Y/%m/%d/")),
+                (
+                    "hasta",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE, to="hasta.Hasta"
+                    ),
+                ),
             ],
         ),
         migrations.RenameField(
-            model_name='muayene',
-            old_name='öneri_görüsler',
-            new_name='oneri_gorusler',
+            model_name="muayene",
+            old_name="öneri_görüsler",
+            new_name="oneri_gorusler",
         ),
         migrations.RenameField(
-            model_name='muayene',
-            old_name='öntani_tani',
-            new_name='ontani_tani',
+            model_name="muayene",
+            old_name="öntani_tani",
+            new_name="ontani_tani",
         ),
         migrations.RenameField(
-            model_name='muayene',
-            old_name='özel_notlar',
-            new_name='ozel_notlar',
+            model_name="muayene",
+            old_name="özel_notlar",
+            new_name="ozel_notlar",
         ),
         migrations.AddField(
-            model_name='muayenerelatedfile',
-            name='muayene',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='muayene.Muayene'),
+            model_name="muayenerelatedfile",
+            name="muayene",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="muayene.Muayene"
+            ),
         ),
     ]
